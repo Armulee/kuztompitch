@@ -1,9 +1,9 @@
-import { MdDiscount } from "react-icons/md"
+// import { MdDiscount } from "react-icons/md"
 import { Microphone } from "../customizer/3d-viewer/microphone"
 import Viewer from "../customizer/3d-viewer/viewer"
 import { useCustomizeContext } from "../customizer/provider"
 import Skeleton from "react-loading-skeleton"
-import { FaMapPin } from "react-icons/fa6"
+// import { FaMapPin } from "react-icons/fa6"
 
 const Details = () => {
     const { pricing, capsule, topHandle, bottomHandle, loading } =
@@ -31,7 +31,10 @@ const Details = () => {
                             </span>
                         ) : (
                             parts.map((part) => (
-                                <div className='text-[#777777] mb-1.5 flex items-center gap-2 text-[10px]'>
+                                <div
+                                    key={`part-${part}`}
+                                    className='text-[#777777] mb-1.5 flex items-center gap-2 text-[10px]'
+                                >
                                     <span className='font-semibold'>
                                         {part.name}:
                                     </span>
