@@ -42,11 +42,14 @@ const Services = () => {
             <div className='flex flex-col md:flex-row gap-4 justify-center items-center text-sm'>
                 {services.map((services, index) => {
                     return (
-                        <div key={`services-${index + 1}`}>
+                        <div
+                            className='flex flex-col gap-4'
+                            key={`services-${index + 1}`}
+                        >
                             {services.map((service) => (
                                 <div
                                     key={service.key}
-                                    className='flex flex-col justify-center items-start bg-gradient-to-tr from-[#5C6A7260] to-[#4E4E4E20] rounded-lg w-full md:h-[400px] lg:h-full p-8'
+                                    className='flex flex-col justify-center gap-6 items-start bg-gradient-to-tr from-[#5C6A7260] to-[#4E4E4E20] rounded-lg w-full md:h-[400px] lg:h-full p-8'
                                 >
                                     <div className='font-bold text-2xl mb-2 text-slate-400'>
                                         {service.topic}

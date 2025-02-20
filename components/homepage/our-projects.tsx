@@ -1,11 +1,12 @@
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6"
 import _ from "lodash"
 import Image from "next/image"
-import { Swiper, SwiperSlide } from "swiper/react"
+import { SwiperSlide } from "swiper/react"
 import dummy from "../../public/assets/dummy-profile-pic.jpg"
 import { useState } from "react"
 import { Swiper as SwiperType } from "swiper/types"
-import { FreeMode } from "swiper/modules"
+// import { FreeMode } from "swiper/modules"
+import FlowCarousel from "../flow-carousel"
 
 const OurProject = () => {
     const srcs = [dummy, dummy, dummy, dummy, dummy, dummy]
@@ -30,7 +31,26 @@ const OurProject = () => {
                         src={_.sample(srcs) ?? ""}
                         alt=''
                     />
-                    <Swiper
+                    <FlowCarousel
+                        className='w-[300px]'
+                        slidesPerView={3}
+                        spaceBetween={14}
+                        onSwiper={(swiper) => setSwiper(swiper)}
+                        onSlideChange={(swiper: SwiperType) =>
+                            setIndex(swiper.realIndex)
+                        }
+                    >
+                        {srcs.map((src, index) => (
+                            <SwiperSlide key={`src-${index}`}>
+                                <Image
+                                    className='rounded user-select-none'
+                                    src={src}
+                                    alt=''
+                                />
+                            </SwiperSlide>
+                        ))}
+                    </FlowCarousel>
+                    {/* <Swiper
                         freeMode
                         className='w-[300px]'
                         slidesPerView={3}
@@ -48,7 +68,7 @@ const OurProject = () => {
                                 />
                             </SwiperSlide>
                         ))}
-                    </Swiper>
+                    </Swiper> */}
                 </div>
                 <FaChevronRight
                     className={`${

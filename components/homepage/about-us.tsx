@@ -1,5 +1,5 @@
 // import aboutUs from "../../public/assets/about-us.png"
-import aboutUs2 from "../../public/assets/about-us-2.jpg"
+import dummy from "../../public/assets/dummy-profile-pic.jpg"
 import ParallaxContent from "./parallax-content"
 
 const AboutUs = () => {
@@ -11,7 +11,7 @@ const AboutUs = () => {
                 <div className='flex flex-col justify-center items-start'>
                     <div className='w-full h-screen relative'>
                         <ParallaxContent
-                            imgUrl={aboutUs2}
+                            imgUrl={dummy}
                             heading='Through Luxury Customization.'
                             subheading='We redefine the essence of band equipment'
                         />
