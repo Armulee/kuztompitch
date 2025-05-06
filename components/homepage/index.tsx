@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import Header from "./header"
 import Menu from "./menu"
 import Hero from "./hero"
@@ -11,11 +11,11 @@ import ContactUs from "./contact-us"
 // import { Swiper, SwiperSlide } from "swiper/react"
 // import { Mousewheel } from "swiper/modules"
 
-export type Navs = {
+export type Nav = {
     name: string
     href: string
     key: string
-}[]
+}
 
 const HomePage = () => {
     useEffect(() => {
@@ -34,13 +34,16 @@ const HomePage = () => {
         }
     }, [])
 
-    const navs: { name: string; href: string; key: string }[] = [
-        { name: "Home", href: "/", key: "home" },
-        { name: "About us", href: "#about", key: "about-us" },
-        { name: "Services", href: "#services", key: "about-us" },
-        { name: "Our Project", href: "#our-projects", key: "our-projects" },
-        { name: "Contact Us", href: "#contact-us", key: "contact-us" },
-    ]
+    const navs: { name: string; href: string; key: string }[] = useMemo(
+        () => [
+            { name: "Home", href: "#home", key: "home" },
+            { name: "About us", href: "#about-us", key: "about-us" },
+            { name: "Services", href: "#services", key: "services" },
+            { name: "Our Project", href: "#our-projects", key: "our-projects" },
+            { name: "Contact Us", href: "#contact-us", key: "contact-us" },
+        ],
+        []
+    )
 
     const [menu, setMenu] = useState<boolean>(false)
     useEffect(() => {
@@ -53,20 +56,91 @@ const HomePage = () => {
         }
     }, [menu])
 
-    // set page when clicked
-    // const [page, setPage] = useState<number>(0)
+    const [active, setActive] = useState<string>("")
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const scrollY = window.scrollY
+            const pageHeight = document.body.scrollHeight
+            const windowHeight = window.innerHeight
+            let current = ""
+
+            navs.forEach((nav) => {
+                const section = document.getElementById(
+                    nav.href.replace("#", "")
+                )
+                if (section) {
+                    const offsetTop = section.offsetTop
+                    const offsetHeight = section.offsetHeight
+
+                    if (
+                        scrollY >= offsetTop - 100 &&
+                        scrollY < offsetTop + offsetHeight - 100
+                    ) {
+                        current = nav.key
+                    }
+                }
+            })
+
+            // 🔽 Near bottom? Force active to "contact-us"
+            if (windowHeight + scrollY >= pageHeight - 150) {
+                const contactNav = navs.find((n) => n.href.includes("contact"))
+                if (contactNav) {
+                    current = contactNav.key
+                }
+            }
+
+            setActive(current)
+        }
+
+        window.addEventListener("scroll", handleScroll)
+        handleScroll() // run on mount
+
+        return () => window.removeEventListener("scroll", handleScroll)
+    }, [navs])
     return (
         <main className='overflow-x-hidden relative'>
-            <Menu navs={navs} menu={menu} />
-            <Header navs={navs} menu={menu} setMenu={setMenu} />
+            <Menu navs={navs} menu={menu} setMenu={setMenu} active={active} />
+            <Header navs={navs} menu={menu} setMenu={setMenu} active={active} />
             <Hero />
             <AboutUs />
             <Services />
-            <OurProject />
-            <OurCustomers />
+            <section id='our-projects'>
+                <OurProject />
+                <OurCustomers />
+            </section>
             <ContactUs />
         </main>
     )
 }
 
 export default HomePage
+
+export const smoothScrollTo = (nav: Nav) => {
+    function smoothScroll(targetY: number, duration: number = 700) {
+        const startY = window.scrollY
+        const startTime = performance.now()
+
+        function scroll(currentTime: number) {
+            const elapsed = currentTime - startTime
+            const progress = Math.min(elapsed / duration, 1)
+            const easeInOutQuad =
+                progress < 0.5
+                    ? 2 * progress * progress
+                    : -1 + (4 - 2 * progress) * progress
+
+            window.scrollTo(0, startY + (targetY - startY) * easeInOutQuad)
+
+            if (elapsed < duration) {
+                requestAnimationFrame(scroll)
+            }
+        }
+
+        requestAnimationFrame(scroll)
+    }
+
+    const section = document.getElementById(nav.href.replace("#", ""))
+    if (section) {
+        smoothScroll(section.offsetTop - 80) // slower, smooth scroll
+    }
+}

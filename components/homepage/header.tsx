@@ -1,16 +1,19 @@
+"use client"
 import Image from "next/image"
 import Link from "next/link"
 import { FaX } from "react-icons/fa6"
 import { GiHamburgerMenu } from "react-icons/gi"
 import whiteLogo from "../../public/assets/white-logo.png"
-import { Navs } from "."
+import { Nav, smoothScrollTo } from "."
 
 const Header = ({
     navs,
     menu,
+    active,
     setMenu,
 }: {
-    navs: Navs
+    navs: Nav[]
+    active: string
     menu: boolean
     setMenu: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
@@ -22,10 +25,16 @@ const Header = ({
                 </Link>
                 <ul className='md:flex gap-4 hidden text-sm'>
                     {navs.map((nav) => (
-                        <li key={nav.key}>
-                            <Link href={nav.href} className=''>
-                                {nav.name}
-                            </Link>
+                        <li
+                            key={nav.key}
+                            onClick={() => smoothScrollTo(nav)}
+                            className={`cursor-pointer underline-offset-4 transition duration-500 ${
+                                active === nav.key
+                                    ? "underline text-white"
+                                    : "hover:underline text-white/70"
+                            }`}
+                        >
+                            {nav.name}
                         </li>
                     ))}
                     <li>

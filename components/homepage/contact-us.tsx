@@ -2,7 +2,7 @@ import SocialMedias from "./social-medias"
 
 const ContactUs = () => {
     return (
-        <section className='container'>
+        <section id='contact-us' className='container'>
             <h6 className='font-bold text-3xl mt-4 mb-5 text-center'>
                 Contact Us
             </h6>

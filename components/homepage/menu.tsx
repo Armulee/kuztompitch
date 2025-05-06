@@ -1,7 +1,17 @@
-import Link from "next/link"
-import { Navs } from "."
+// import Link from "next/link"
+import { Nav, smoothScrollTo } from "."
 
-const Menu = ({ navs, menu }: { navs: Navs; menu: boolean }) => {
+const Menu = ({
+    navs,
+    menu,
+    setMenu,
+    active,
+}: {
+    navs: Nav[]
+    menu: boolean
+    active: string
+    setMenu: React.Dispatch<React.SetStateAction<boolean>>
+}) => {
     return (
         <ul
             className={`w-full h-[100vh] bg-black fixed top-0 left-0 flex flex-col justify-center items-center gap-4 z-50 transition duration-500 ${
@@ -9,8 +19,19 @@ const Menu = ({ navs, menu }: { navs: Navs; menu: boolean }) => {
             }`}
         >
             {navs.map((nav) => (
-                <li className='text-white' key={nav.key}>
-                    <Link href={nav.href}>{nav.name}</Link>
+                <li
+                    className={`text-white cursor-pointer hover:underline ${
+                        active === nav.key
+                            ? "underline text-white"
+                            : "hover:underline text-white/70"
+                    }`}
+                    key={nav.key}
+                    onClick={() => {
+                        smoothScrollTo(nav)
+                        setMenu(false)
+                    }}
+                >
+                    {nav.name}
                 </li>
             ))}
         </ul>

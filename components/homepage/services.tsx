@@ -37,7 +37,7 @@ const Services = () => {
         ],
     ]
     return (
-        <section className='container mb-6'>
+        <section id='services' className='container mt-6'>
             <h6 className='text-3xl font-bold mb-6'>Services</h6>
             <div className='flex flex-col md:flex-row gap-4 justify-center items-center text-sm'>
                 {services.map((services, index) => {

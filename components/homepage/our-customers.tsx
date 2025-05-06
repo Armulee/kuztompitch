@@ -16,7 +16,7 @@ const OurCustomers = () => {
     const handleLeft = () => swiper?.slidePrev()
     const handleRight = () => swiper?.slideNext()
     return (
-        <section className='mb-6'>
+        <div className='mb-6 container'>
             <h6 className='text-3xl font-bold mb-6'>Our Customers</h6>
             <div className='w-full flex justify-between items-center w-[350px] m-auto'>
                 <FaChevronLeft
@@ -50,25 +50,6 @@ const OurCustomers = () => {
                             </SwiperSlide>
                         ))}
                     </FlowCarousel>
-                    {/* <Swiper
-                        freeMode
-                        className='w-[300px]'
-                        slidesPerView={3}
-                        spaceBetween={14}
-                        modules={[FreeMode]}
-                        onSwiper={(swiper) => setSwiper(swiper)}
-                        onSlideChange={(swiper) => setIndex(swiper.realIndex)}
-                    >
-                        {srcs.map((src, index) => (
-                            <SwiperSlide key={`src-${index}`}>
-                                <Image
-                                    className='rounded user-select-none'
-                                    src={src}
-                                    alt=''
-                                />
-                            </SwiperSlide>
-                        ))}
-                    </Swiper> */}
                 </div>
                 <FaChevronRight
                     className={`${
@@ -79,7 +60,7 @@ const OurCustomers = () => {
                     onClick={handleRight}
                 />
             </div>
-        </section>
+        </div>
     )
 }
 

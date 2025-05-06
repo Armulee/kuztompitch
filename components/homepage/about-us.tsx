@@ -6,7 +6,7 @@ const AboutUs = () => {
     // Use the scroll position
 
     return (
-        <section className='flex flex-col md:flex-row shrink-0 mb-8'>
+        <section id='about-us' className='flex flex-col md:flex-row shrink-0'>
             <div className='w-full'>
                 <div className='flex flex-col justify-center items-start'>
                     <div className='w-full h-screen relative'>

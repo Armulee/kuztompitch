@@ -5,14 +5,17 @@ import SocialMedias from "./social-medias"
 
 const Hero = () => {
     return (
-        <section className='w-full h-[100vh] flex flex-col justify-center items-center relative'>
+        <section
+            id='home'
+            className='w-full h-[100vh] flex flex-col justify-center items-center relative'
+        >
             <div>
                 <div className='w-full flex-col justify-center items-center mb-4'>
                     <h1 className='text-[40px] text-center md:text-start'>
                         Kuztom Pitch
                     </h1>
                     <h5 className='text-slate-400 text-[20px] text-center md:text-start'>
-                        Band Equipent Customize
+                        Band Equipment Customize
                     </h5>
                 </div>
                 <div className='flex justify-center items-center gap-8'>

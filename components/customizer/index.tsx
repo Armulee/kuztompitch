@@ -24,7 +24,7 @@ const Customizer = () => {
         <div className='w-full h-[100vh] overflow-hidden z-0 relative'>
             <section
                 className={`w-[100vw] ${
-                    isIphone ? "h-[55vh]" : "h-[67vh]"
+                    isIphone ? "h-[40vh]" : "h-[67vh]"
                 } relative`}
             >
                 <ThreeDimensionViewer />
