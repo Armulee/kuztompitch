@@ -2,19 +2,25 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa6"
 import { useCustomizeContext } from "../../provider"
 
 const Head = () => {
-    const { part, setPart } = useCustomizeContext()
+    const { part, setPart, setFocusedPart, setFocusStartTime } =
+        useCustomizeContext()
+    const proceedTo = (part: string) => {
+        setPart(part)
+        setFocusedPart(part)
+        setFocusStartTime(performance.now())
+    }
     const next = () => {
         if (part === "Capsule") {
-            setPart("Top Handle")
+            proceedTo("Top Handle")
         } else if (part === "Top Handle") {
-            setPart("Bottom Handle")
+            proceedTo("Bottom Handle")
         }
     }
     const prev = () => {
         if (part === "Bottom Handle") {
-            setPart("Top Handle")
+            proceedTo("Top Handle")
         } else if (part === "Top Handle") {
-            setPart("Capsule")
+            proceedTo("Capsule")
         }
     }
     return (

@@ -3,7 +3,7 @@ import { useCustomizeContext } from "../../provider"
 const useMetalic = () => {
     const { part } = useCustomizeContext()
     return {
-        monochromatics: [
+        Monochromatics: [
             {
                 name: "Bright White",
                 code: "#ffffff",

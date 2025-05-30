@@ -7,16 +7,17 @@ const ThreeDimensionViewer = () => {
     return (
         <>
             <div className='w-full h-full'>
-                {/* Side Menu */}
-                <SideMenu />
+                <div className='w-full h-full relative'>
+                    <SideMenu />
+                    <Viewer>
+                        <Microphone
+                            rotation={[0, 0, 0]}
+                            position={[0, -1.2, 0]}
+                            scale={0.55}
+                        />
+                    </Viewer>
+                </div>
                 <Display />
-                <Viewer>
-                    <Microphone
-                        rotation={[0, 0, 0]}
-                        position={[0, -1.3, 0]}
-                        scale={0.55}
-                    />
-                </Viewer>
             </div>
         </>
     )

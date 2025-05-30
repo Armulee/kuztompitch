@@ -4,6 +4,10 @@ import { useMediaQuery } from "react-responsive"
 
 const useProviderSetup = () => {
     const [part, setPart] = useState<string>("Capsule")
+    // focus part when click
+    const [focusedPart, setFocusedPart] = useState<string | null>(null)
+    const [focusStartTime, setFocusStartTime] = useState<number | null>(null)
+
     const [displayStyle, setDisplayStyle] = useState<string>("Solid")
     const [colorName, setColorName] = useState("Default")
     const [displayColor, setDisplayColor] = useState<string | string[]>(
@@ -61,7 +65,7 @@ const useProviderSetup = () => {
     }, [part, capsule, topHandle, bottomHandle])
 
     // Detect Iphone device
-    const isIphone = useMediaQuery({ minWidth: 768 })
+    const isIphone = useMediaQuery({ query: "(max-width: 768px)" })
 
     // Store the capsule, top handle, bottom handle when user refresh
     useEffect(() => {
@@ -111,6 +115,11 @@ const useProviderSetup = () => {
         }
     }, [tour])
 
+    const [logo, setLogo] = useState<string | undefined>(undefined)
+    const [capturing, setCapturing] = useState<boolean>(false)
+    const [snapshot, setSnapshot] = useState<string>("")
+    const [checkout, setCheckout] = useState<boolean>(false)
+
     const value = {
         part,
         setPart,
@@ -137,6 +146,18 @@ const useProviderSetup = () => {
         setTour,
         isRotating,
         setIsRotating,
+        capturing,
+        setCapturing,
+        snapshot,
+        setSnapshot,
+        checkout,
+        setCheckout,
+        logo,
+        setLogo,
+        focusedPart,
+        setFocusedPart,
+        focusStartTime,
+        setFocusStartTime,
     }
 
     return value

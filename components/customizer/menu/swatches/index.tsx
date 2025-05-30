@@ -1,17 +1,18 @@
 import useSolid from "./solid"
-import useMetalic from "./metalic"
+import useMetalic from "./glossy"
 import { useCustomizeContext } from "../../provider"
 import { Swiper, SwiperSlide } from "swiper/react"
 import { FreeMode, Mousewheel } from "swiper/modules"
+import useGlossy from "./glossy"
 
 export type Shade =
-    | "monochromatics"
-    | "yellow"
-    | "orange"
-    | "red"
-    | "pink"
-    | "violet"
-    | "blue"
+    | "Monochromatics"
+    | "Yellow"
+    | "Orange"
+    | "Red"
+    | "Pink"
+    | "Violet"
+    | "Blue"
 export type ShadeColor = {
     [shade: string]: { name: string; code: string; color: string | string[] }[]
 }
@@ -35,15 +36,15 @@ const ColorSwatch = ({
         [style: string]: ShadeColor
     } = {
         solid: useSolid(),
+        glossy: useGlossy(),
+        matte: useSolid(),
         metalic: useMetalic(),
     }
 
     const { style } = useCustomizeContext()
     return (
         <div className='mt-2'>
-            <span>
-                {shade.charAt(0).toUpperCase() + shade.slice(1).toLowerCase()}
-            </span>
+            <span>{shade}</span>
             <Swiper
                 className='pt-1 pb-3 my-3'
                 slidesPerView={15}
@@ -85,7 +86,7 @@ const ColorSwatch = ({
                                     background: `linear-gradient(135deg, ${color.color[0]} 0%, ${color.color[1]} 100%)`,
                                 }}
                                 onClick={() => handleClick(color)}
-                                className={`rounded-md !min-w-[30px] !min-h-[50px] border`}
+                                className={`rounded-md !min-w-[20px] !min-h-[30px] border`}
                             />
                         ) : (
                             <SwiperSlide
@@ -94,7 +95,7 @@ const ColorSwatch = ({
                                     background: `${color.color}`,
                                 }}
                                 onClick={() => handleClick(color)}
-                                className={`rounded-md !min-w-[30px] !min-h-[50px] border`}
+                                className={`rounded-md !min-w-[20px] !min-h-[30px] border`}
                             />
                         )}
                     </>

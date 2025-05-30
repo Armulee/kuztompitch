@@ -4,11 +4,11 @@ Command: npx gltfjsx@6.5.2 assets/normal-microphone.glb -t
 */
 
 import * as THREE from "three"
-import { useGLTF } from "@react-three/drei"
+import { Decal, useGLTF, useTexture } from "@react-three/drei"
 import { GLTF } from "three-stdlib"
 import { useCustomizeContext } from "../provider"
 import { useEffect, useRef } from "react"
-import { useFrame } from "@react-three/fiber"
+import { GroupProps, ThreeEvent, useFrame } from "@react-three/fiber"
 import { usePathname } from "next/navigation"
 
 type GLTFResult = GLTF & {
@@ -27,27 +27,37 @@ type GLTFResult = GLTF & {
     }
 }
 
-export function Microphone({ ...props }) {
+export function Microphone(props: GroupProps) {
     const { nodes, materials } = useGLTF(
         "/assets/normal-microphone.glb"
     ) as GLTFResult
 
-    const { capsule, topHandle, bottomHandle, isRotating, setIsRotating } =
-        useCustomizeContext()
+    const {
+        capsule,
+        topHandle,
+        bottomHandle,
+        isRotating,
+        setIsRotating,
+        logo,
+        setPart,
+        focusedPart,
+        setFocusedPart,
+        focusStartTime,
+        setFocusStartTime,
+    } = useCustomizeContext()
 
+    // Handle the material changing for each style
     useEffect(() => {
         if (capsule) {
             materials["Capsule"].color = new THREE.Color(capsule.color)
             materials["Capsule"].roughness = capsule.roughness
             materials["Capsule"].metalness = capsule.metalness
         }
-
         if (topHandle) {
             materials["Top handle"].color = new THREE.Color(topHandle.color)
             materials["Top handle"].roughness = topHandle.roughness
             materials["Top handle"].metalness = topHandle.metalness
         }
-
         if (bottomHandle) {
             materials["Bottom handle"].color = new THREE.Color(
                 bottomHandle.color
@@ -60,34 +70,122 @@ export function Microphone({ ...props }) {
     // Rotate the model on the y-axis while `isRotating` is true
     const modelRef = useRef<THREE.Group>(null)
     const pathname = usePathname()
+
+    // Handle focused part when click the mesh
+    const handleClick = (e: ThreeEvent<MouseEvent>, part: string) => {
+        e.stopPropagation()
+        if (isOrbiting.current) return // Prevent click if dragging
+
+        setPart(part)
+        setFocusedPart(part)
+        setFocusStartTime(performance.now())
+    }
+    const duration = 1000
     useFrame(() => {
         if (modelRef.current && isRotating && pathname === "/customize") {
             modelRef.current.rotation.y += 0.003
         }
+
+        if (focusedPart && focusStartTime !== null) {
+            const elapsed = performance.now() - focusStartTime
+            const loopDuration = 1000 // 1s loop
+
+            const glowStrength = Math.abs(
+                Math.sin((elapsed / loopDuration) * Math.PI)
+            )
+
+            const partMat =
+                focusedPart === "Capsule"
+                    ? materials["Capsule"]
+                    : focusedPart === "Top Handle"
+                    ? materials["Top handle"]
+                    : focusedPart === "Bottom Handle"
+                    ? materials["Bottom handle"]
+                    : null
+
+            if (partMat) {
+                partMat.emissive = new THREE.Color(0xffffff)
+                partMat.emissiveIntensity = glowStrength
+            }
+
+            if (elapsed > duration) {
+                if (partMat) {
+                    partMat.emissiveIntensity = 0
+                }
+                setFocusedPart(null)
+                setFocusStartTime(null)
+            }
+        }
     })
 
-    // Handlers to toggle rotation on mouse events
-    const handlePointerDown = () => setIsRotating(false)
-    // const handlePointerUp = () => setIsRotating(true)
+    // Handlers to toggle rotation on mouse events and detect is orbiting
+    const pointerDownPos = useRef<{ x: number; y: number } | null>(null)
+    const isOrbiting = useRef(false)
+    const handlePointerDown = (e: ThreeEvent<PointerEvent>) => {
+        setIsRotating(false)
+        pointerDownPos.current = { x: e.clientX, y: e.clientY }
+        isOrbiting.current = false
+    }
+    const handlePointerMove = (e: ThreeEvent<PointerEvent>) => {
+        if (!pointerDownPos.current) return
+        const dx = e.clientX - pointerDownPos.current.x
+        const dy = e.clientY - pointerDownPos.current.y
+        if (Math.sqrt(dx * dx + dy * dy) > 5) {
+            isOrbiting.current = true
+        }
+    }
+
+    // Transform user uploaded image to texture to wrap in decal
+    const logoTexture = useTexture(logo || "/assets/transparent.png")
+    logoTexture.wrapS = THREE.ClampToEdgeWrapping
+    logoTexture.wrapT = THREE.ClampToEdgeWrapping
+    logoTexture.repeat.set(1, 1)
+
     return (
         <group
             dispose={null}
             onPointerDown={handlePointerDown}
-            // onPointerUp={handlePointerUp}
+            onPointerMove={handlePointerMove}
         >
             <group ref={modelRef} {...props}>
                 <mesh
                     geometry={nodes.Shureobj001_2.geometry}
                     material={materials["Capsule"]}
+                    onClick={(e) => handleClick(e, "Capsule")}
+                    castShadow
                 />
                 <mesh
                     geometry={nodes.Shureobj001_3.geometry}
                     material={materials["Top handle"]}
+                    onClick={(e) => handleClick(e, "Top Handle")}
+                    castShadow
                 />
                 <mesh
                     geometry={nodes.Shureobj001_1.geometry}
                     material={materials["Bottom handle"]}
-                />
+                    onClick={(e) => handleClick(e, "Bottom Handle")}
+                    castShadow
+                >
+                    {logo && (
+                        <Decal
+                            debug
+                            position={[0, 2.2, 0]}
+                            rotation={[0, 0, 0]}
+                            scale={[1.2, 1, 1.1]}
+                        >
+                            <meshStandardMaterial
+                                roughness={1}
+                                transparent
+                                polygonOffset
+                                polygonOffsetFactor={-10}
+                                map={logoTexture}
+                                depthTest={true}
+                                depthWrite={false}
+                                side={THREE.FrontSide}
+                            />
+                        </Decal>
+                    )}
+                </mesh>
 
                 {/* Microphone Base */}
                 <mesh

@@ -10,60 +10,63 @@ import Image from "next/image"
 import { useCustomizeContext } from "../provider"
 
 const SideMenu = () => {
-    const { part, setPart } = useCustomizeContext()
+    const { part, setPart, setFocusedPart, setFocusStartTime } =
+        useCustomizeContext()
+    const handleClick = (e: React.MouseEvent<HTMLDivElement>, part: string) => {
+        e.stopPropagation()
+        setPart(part)
+        setFocusedPart(part)
+        setFocusStartTime(performance.now())
+    }
     return (
-        <>
-            <div id='side-menu' className='absolute top-0 right-4 z-10'>
-                <div
-                    onClick={() => setPart("Capsule")}
-                    className={`rounded px-4 py-2 ${
-                        part === "Capsule" ? "bg-black" : "bg-transparent"
-                    } text-center my-2`}
-                >
-                    <Image
-                        className='w-[20px]'
-                        alt=''
-                        src={
-                            part === "Capsule"
-                                ? CapsuleIconWhite
-                                : CapsuleIconBlack
-                        }
-                    />
-                </div>
-                <div
-                    onClick={() => setPart("Top Handle")}
-                    className={`rounded px-4 py-2 ${
-                        part === "Top Handle" ? "bg-black" : "bg-transparent"
-                    } text-center my-2`}
-                >
-                    <Image
-                        className='w-[20px]'
-                        alt=''
-                        src={
-                            part === "Top Handle"
-                                ? TopHandleIconWhite
-                                : TopHandleIconBlack
-                        }
-                    />
-                </div>
-                <div
-                    onClick={() => setPart("Bottom Handle")}
-                    className={`rounded px-4 py-2 ${
-                        part === "Bottom Handle" ? "bg-black" : "bg-transparent"
-                    } text-center my-2`}
-                >
-                    <Image
-                        className='w-[20px]'
-                        alt=''
-                        src={
-                            part === "Bottom Handle"
-                                ? BottomHandleIconWhite
-                                : BottomHandleIconBlack
-                        }
-                    />
-                </div>
+        <div id='side-menu' className='absolute top-0 right-4 z-10'>
+            <div
+                onClick={(e) => handleClick(e, "Capsule")}
+                className={`rounded px-4 py-2 ${
+                    part === "Capsule" ? "bg-black" : "bg-transparent"
+                } text-center my-2`}
+            >
+                <Image
+                    className='w-[20px]'
+                    alt=''
+                    src={
+                        part === "Capsule" ? CapsuleIconWhite : CapsuleIconBlack
+                    }
+                />
             </div>
-        </>
+            <div
+                onClick={(e) => handleClick(e, "Top Handle")}
+                className={`rounded px-4 py-2 ${
+                    part === "Top Handle" ? "bg-black" : "bg-transparent"
+                } text-center my-2`}
+            >
+                <Image
+                    className='w-[20px]'
+                    alt=''
+                    src={
+                        part === "Top Handle"
+                            ? TopHandleIconWhite
+                            : TopHandleIconBlack
+                    }
+                />
+            </div>
+            <div
+                onClick={(e) => handleClick(e, "Bottom Handle")}
+                className={`rounded px-4 py-2 ${
+                    part === "Bottom Handle" ? "bg-black" : "bg-transparent"
+                } text-center my-2`}
+            >
+                <Image
+                    className='w-[20px]'
+                    alt=''
+                    src={
+                        part === "Bottom Handle"
+                            ? BottomHandleIconWhite
+                            : BottomHandleIconBlack
+                    }
+                />
+            </div>
+        </div>
     )
 }
 
