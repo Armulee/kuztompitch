@@ -24,6 +24,18 @@ export type CustomizeContextType = {
     setTour: React.Dispatch<React.SetStateAction<boolean>>
     isRotating: boolean
     setIsRotating: React.Dispatch<React.SetStateAction<boolean>>
+    capturing: boolean
+    setCapturing: React.Dispatch<React.SetStateAction<boolean>>
+    snapshot: string
+    setSnapshot: React.Dispatch<React.SetStateAction<string>>
+    checkout: boolean
+    setCheckout: React.Dispatch<React.SetStateAction<boolean>>
+    logo: string | undefined
+    setLogo: React.Dispatch<React.SetStateAction<string | undefined>>
+    focusedPart: string | null
+    setFocusedPart: React.Dispatch<React.SetStateAction<string | null>>
+    focusStartTime: number | null
+    setFocusStartTime: React.Dispatch<React.SetStateAction<number | null>>
 }
 
 export type Material = {

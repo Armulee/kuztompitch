@@ -1,11 +1,12 @@
 "use client"
 
 import { createContext, useEffect } from "react"
-import { useCustomizeContext } from "./provider"
 import ThreeDimensionViewer from "./3d-viewer"
 import Menu from "./menu"
 import { usePathname } from "next/navigation"
 import Tutorial from "./tutorial"
+import Pricing from "./menu/pricing"
+import { useCustomizeContext } from "./provider"
 
 export const CustomizeContext = createContext(null)
 
@@ -18,27 +19,25 @@ const Customizer = () => {
         return () => document.body.removeAttribute("style")
     }, [pathname])
 
-    const { isIphone } = useCustomizeContext()
+    const { checkout } = useCustomizeContext()
 
     return (
-        <div className='w-full h-[100vh] overflow-hidden z-0 relative'>
-            <section
-                className={`w-[100vw] ${
-                    isIphone ? "h-[40vh]" : "h-[67vh]"
-                } relative`}
-            >
+        <section
+            style={{ overflow: checkout ? "visible" : "hidden" }}
+            className='w-full h-[100dvh] z-0 relative'
+        >
+            <div className={`w-[100vw] h-[60dvh] relative`}>
                 <ThreeDimensionViewer />
-            </section>
+            </div>
 
-            <section
-                className={`w-full ${
-                    isIphone ? "h-[33vh]" : "h-[33vh]"
-                } overflow-hidden relative`}
-            >
+            <div className={`w-full h-[40dvh] overflow-hidden relative`}>
                 <Menu />
-            </section>
+            </div>
+
+            <Pricing />
+
             <Tutorial />
-        </div>
+        </section>
     )
 }
 

@@ -1,6 +1,6 @@
 import { useCustomizeContext } from "../../provider"
 
-const useSolid = () => {
+const useGlossy = () => {
     const { part } = useCustomizeContext()
     return {
         // Monochromatics
@@ -105,4 +105,4 @@ const useSolid = () => {
     }
 }
 
-export default useSolid
+export default useGlossy

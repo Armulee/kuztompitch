@@ -1,15 +1,29 @@
-// import { useState } from "react"
 import { useCustomizeContext } from "../provider"
 import { useCallback, useEffect, useState } from "react"
-
-import ColorSwatch from "./swatches"
+import ColorSwatch, { Shade } from "./swatches"
 import { Swiper, SwiperSlide } from "swiper/react"
 import { Mousewheel } from "swiper/modules"
-import Pricing from "./pricing"
 import { Material } from "../provider/types"
+import {
+    bottomHandleStyle,
+    capsuleStyle,
+    topHandleStyle,
+} from "./styleMaterial"
+import { FaChevronDown, FaChevronUp } from "react-icons/fa6"
+import { Swiper as SwiperType } from "swiper/types"
+
+const shades: Shade[] = [
+    "Monochromatics",
+    "Yellow",
+    "Orange",
+    "Red",
+    "Pink",
+    "Violet",
+    "Blue",
+]
 
 const Menu = () => {
-    const styles = ["Solid", "Metalic"]
+    const styles = ["Solid", "Glossy", "Matte"]
     const {
         part,
         style,
@@ -29,6 +43,9 @@ const Menu = () => {
         color: string | string[]
     } | null>(null)
 
+    const [swiper, setSwiper] = useState<SwiperType | null>(null)
+    const [swiperIndex, setSwiperIndex] = useState<number>(0)
+
     const handleClick = (color: {
         code: string
         name: string
@@ -43,61 +60,79 @@ const Menu = () => {
             setIsRotating(false)
             if (part === "Capsule") {
                 if (style === "Solid") {
-                    const solid = { roughness: 0, metalness: 0.8 }
                     setCapsule((prev: Material) => ({
                         ...prev,
                         color: color,
                         displayColor: displayColor,
-                        ...solid,
+                        ...capsuleStyle.solid,
                         style,
                     }))
-                } else if (style === "Metalic") {
-                    const metalic = { roughness: 0.15, metalness: 1 }
+                } else if (style === "Glossy") {
                     setCapsule((prev: Material) => ({
                         ...prev,
                         color: color,
                         displayColor: displayColor,
-                        ...metalic,
+                        ...capsuleStyle.glossy,
+                        style,
+                    }))
+                } else if (style === "Matte") {
+                    setCapsule((prev: Material) => ({
+                        ...prev,
+                        color: color,
+                        displayColor: displayColor,
+                        ...capsuleStyle.matte,
                         style,
                     }))
                 }
             } else if (part === "Top Handle") {
                 if (style === "Solid") {
-                    const solid = { roughness: 0.8, metalness: 0.7 }
                     setTopHandle((prev: Material) => ({
                         ...prev,
                         color: color,
                         displayColor: displayColor,
-                        ...solid,
+                        ...topHandleStyle.solid,
                         style,
                     }))
-                } else if (style === "Metalic") {
-                    const metalic = { roughness: 0.35, metalness: 1 }
+                } else if (style === "Glossy") {
                     setTopHandle((prev: Material) => ({
                         ...prev,
                         color: color,
                         displayColor: displayColor,
-                        ...metalic,
+                        ...topHandleStyle.glossy,
+                        style,
+                    }))
+                } else if (style === "Matte") {
+                    setTopHandle((prev: Material) => ({
+                        ...prev,
+                        color: color,
+                        displayColor: displayColor,
+                        ...topHandleStyle.matte,
                         style,
                     }))
                 }
             } else if (part === "Bottom Handle") {
                 if (style === "Solid") {
-                    const solid = { roughness: 0.8, metalness: 0.7 }
                     setBottomHandle((prev: Material) => ({
                         ...prev,
                         color: color,
                         displayColor: displayColor,
-                        ...solid,
+                        ...bottomHandleStyle.solid,
                         style,
                     }))
-                } else if (style === "Metalic") {
-                    const metalic = { roughness: 0.35, metalness: 1 }
+                } else if (style === "Glossy") {
                     setBottomHandle((prev: Material) => ({
                         ...prev,
                         color: color,
                         displayColor: displayColor,
-                        ...metalic,
+                        ...bottomHandleStyle.glossy,
+                        style,
+                    }))
+                } else if (style === "Matte") {
+                    setBottomHandle((prev: Material) => ({
+                        ...prev,
+                        color: color,
+                        displayColor: displayColor,
+                        ...bottomHandleStyle.matte,
                         style,
                     }))
                 }
@@ -133,85 +168,89 @@ const Menu = () => {
         handleColor,
     ])
 
-    // const [swiperIndex, setSwiperIndex] = useState<number>(0)
-    // const colorPaginations = [
-    //     "#ffffff",
-    //     "#fee715",
-    //     "#f36944",
-    //     "#dc343b",
-    //     "#e55982",
-    //     "#5f4b8b",
-    //     "#3d428b",
-    // ]
-
-    // useEffect(() => {
-    //     if (swiperIndex) {
-    //         console.log(swiperIndex)
-    //     }
-    // }, [swiperIndex])
     return (
         <div className={`h-full bg-black relative`}>
             <div className={`${isIphone ? "py-4 px-2" : "p-4"} h-full`}>
-                <div id='styles' className='flex justify-start items-center'>
-                    {styles.map((s) => (
-                        <div
-                            key={`style-${s}`}
-                            onClick={() => setStyle(s)}
-                            className={`px-5 py-1.5 text-sm mr-3 mb-3 transition duration-500 ease cursor-pointer ${
-                                style === s
-                                    ? "bg-white text-black"
-                                    : "bg-transparent text-[#aaaaaa]"
-                            } rounded-full border border-[#aaaaaa]`}
-                        >
-                            {s}
-                        </div>
-                    ))}
+                <div className='flex justify-between items-center'>
+                    <div
+                        id='styles'
+                        className='flex justify-start items-center'
+                    >
+                        {styles.map((s) => (
+                            <div
+                                key={`style-${s}`}
+                                onClick={() => setStyle(s)}
+                                className={`px-5 py-1.5 text-sm mr-3 mb-3 transition duration-500 ease cursor-pointer ${
+                                    style === s
+                                        ? "bg-white text-black"
+                                        : "bg-transparent text-[#aaaaaa]"
+                                } rounded-full border border-[#aaaaaa]`}
+                            >
+                                {s}
+                            </div>
+                        ))}
+                    </div>
                 </div>
 
                 <Swiper
-                    // onSwiper={(swiper) => setSwiperIndex(swiper.realIndex)}
-                    // onSlideChange={(swiper) => setSwiperIndex(swiper.realIndex)}
+                    onSwiper={(swiper) => {
+                        setSwiper(swiper)
+                        setSwiperIndex(swiper.realIndex)
+                    }}
+                    onSlideChange={(swiper) => setSwiperIndex(swiper.realIndex)}
                     id='swatches'
                     slidesPerView={1}
                     direction='vertical'
                     modules={[Mousewheel]}
                     mousewheel={{ forceToAxis: true }}
-                    className='h-[15vh] py-[8px] border-0 border-t mt-1'
+                    className='h-[12vh] border-0 border-y border-white/50'
                 >
                     {/* Monochromatics #9a9a9a */}
-                    <SwiperSlide>
-                        <ColorSwatch
-                            shade='monochromatics'
-                            handleClick={handleClick}
-                        />
-                    </SwiperSlide>
                     {/* Yellow #fee715 */}
-                    <SwiperSlide>
-                        <ColorSwatch shade='yellow' handleClick={handleClick} />
-                    </SwiperSlide>
                     {/* Orange #f36944 */}
-                    <SwiperSlide>
-                        <ColorSwatch shade='orange' handleClick={handleClick} />
-                    </SwiperSlide>
                     {/* Red #f36944 */}
-                    <SwiperSlide>
-                        <ColorSwatch shade='red' handleClick={handleClick} />
-                    </SwiperSlide>
                     {/* Pink #d32e5e */}
-                    <SwiperSlide>
-                        <ColorSwatch shade='pink' handleClick={handleClick} />
-                    </SwiperSlide>
                     {/* Violet #773376 */}
-                    <SwiperSlide>
-                        <ColorSwatch shade='violet' handleClick={handleClick} />
-                    </SwiperSlide>
                     {/* Blue #5b7ebd */}
-                    <SwiperSlide>
-                        <ColorSwatch shade='blue' handleClick={handleClick} />
-                    </SwiperSlide>
+                    {shades.map((shade) => (
+                        <SwiperSlide key={`shade-${shade}`}>
+                            <ColorSwatch
+                                shade={shade}
+                                handleClick={handleClick}
+                            />
+                        </SwiperSlide>
+                    ))}
                 </Swiper>
-
-                <Pricing />
+                <div className='max-w-md m-auto flex items-center justify-around pt-3'>
+                    <button
+                        type='button'
+                        className={`w-fit flex items-center gap-3 text-xs text-zinc-300`}
+                        onClick={() => swiper?.slidePrev()}
+                    >
+                        <FaChevronUp
+                            className={`${
+                                swiperIndex === 0
+                                    ? "text-white/50"
+                                    : "text-white"
+                            }`}
+                        />
+                        {shades[swiperIndex - 1]}
+                    </button>
+                    <button
+                        type='button'
+                        className={`w-fit flex items-center gap-3 text-xs text-zinc-300`}
+                        onClick={() => swiper?.slideNext()}
+                    >
+                        {shades[swiperIndex + 1]}
+                        <FaChevronDown
+                            className={`${
+                                swiperIndex === 6
+                                    ? "text-white/50"
+                                    : "text-white"
+                            }`}
+                        />
+                    </button>
+                </div>
             </div>
         </div>
     )
