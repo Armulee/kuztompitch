@@ -1,7 +1,5 @@
 // import { MdDiscount } from "react-icons/md"
 import Image from "next/image"
-import { Microphone } from "../3d-viewer/microphone"
-import Viewer from "../3d-viewer/viewer"
 import { useCustomizeContext } from "../provider"
 import Skeleton from "react-loading-skeleton"
 import { FaBox } from "react-icons/fa6"
