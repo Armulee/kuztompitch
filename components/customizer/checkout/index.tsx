@@ -10,7 +10,8 @@ import Payment from "./payment"
 import Total from "./total"
 
 export default function Checkout() {
-    const { setCheckout } = useCustomizeContext()
+    const { setCheckout, capsule, topHandle, bottomHandle } =
+        useCustomizeContext()
     const [selectedDelivery, setSelectedDelivery] = useState<"ems" | "pickup">(
         "ems"
     )
@@ -28,23 +29,25 @@ export default function Checkout() {
             fullName,
             email,
             telephone,
+            capsule: `${capsule.style}, ${capsule.color} (${capsule.colorName})`,
+            topHandle: `${topHandle.style}, ${topHandle.color} (${topHandle.colorName})`,
+            bottomHandle: `${bottomHandle.style}, ${bottomHandle.color} (${bottomHandle.colorName})`,
             address,
             status: "On Hold",
         }
 
-        try {
-            const res = await fetch(
-                "https://script.google.com/macros/s/AKfycbwf-wJ3ANZdkjBpYsqP-yxKhnOedtxfkDVigjcfVcBxIKER7S3pnliUjtDmNTsRAS8_gA/exec",
-                {
-                    method: "POST",
-                    body: JSON.stringify(data),
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                }
-            )
+        // console.log(data)
 
-            const result = await res.json()
+        try {
+            const response = await fetch("/api/submit-order", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            })
+
+            const result = await response.json()
             if (result.success) {
                 alert(
                     `Order submitted! Your order number is ${result.orderNumber}`
@@ -53,8 +56,9 @@ export default function Checkout() {
                 alert("Submission failed.")
             }
         } catch (error) {
-            console.error("Error submitting to Google Sheet", error)
-            alert("Something went wrong.")
+            const err = error as Error
+            console.error("Error submitting to Google Sheet", err.message)
+            alert(err.message)
         }
     }
     return (
