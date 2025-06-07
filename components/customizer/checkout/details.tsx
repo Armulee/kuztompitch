@@ -42,51 +42,49 @@ const Details = () => {
                             </p>
                         </div>
 
-                        <div className='space-y-3'>
-                            <h4 className='font-semibold text-slate-900'>
-                                Customizations:
-                            </h4>
-                            {loading ? (
-                                <div className='space-y-2'>
-                                    <Skeleton count={3} height={20} />
-                                </div>
-                            ) : (
-                                <div className='space-y-2'>
-                                    {parts.map((part, index) => (
-                                        <div
-                                            key={index}
-                                            className='flex items-center gap-3 p-2 bg-slate-50 rounded-lg'
-                                        >
-                                            <span className='font-medium text-slate-700 min-w-[80px]'>
-                                                {part.name}:
-                                            </span>
-                                            <div
-                                                className='w-6 h-6 rounded-full border-2 border-white shadow-sm'
-                                                style={{
-                                                    backgroundColor:
-                                                        Array.isArray(
-                                                            part.displayColor
-                                                        )
-                                                            ? part
-                                                                  .displayColor[0]
-                                                            : part.displayColor,
-                                                }}
-                                            />
-                                            <span className='text-slate-600'>
-                                                {part.colorName}
-                                            </span>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-
                         <div className='pt-2'>
                             <span className='text-3xl font-bold text-slate-900'>
                                 {pricing} ฿
                             </span>
                         </div>
                     </div>
+                </div>
+
+                <div className='space-y-3 mt-4'>
+                    <h4 className='font-semibold text-slate-900'>
+                        Customizations:
+                    </h4>
+                    {loading ? (
+                        <div className='space-y-2'>
+                            <Skeleton count={3} height={20} />
+                        </div>
+                    ) : (
+                        <div className='space-y-2'>
+                            {parts.map((part, index) => (
+                                <div
+                                    key={index}
+                                    className='w-fit flex items-center gap-3 p-2 bg-slate-50 rounded-lg'
+                                >
+                                    <span className='font-medium text-slate-700 min-w-[80px]'>
+                                        {part.name}:
+                                    </span>
+                                    <div
+                                        className='w-6 h-6 rounded-full border-2 border-white shadow-sm'
+                                        style={{
+                                            backgroundColor: Array.isArray(
+                                                part.displayColor
+                                            )
+                                                ? part.displayColor[0]
+                                                : part.displayColor,
+                                        }}
+                                    />
+                                    <span className='text-slate-600'>
+                                        {part.colorName}
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

@@ -8,12 +8,12 @@ const useProviderSetup = () => {
     const [focusedPart, setFocusedPart] = useState<string | null>(null)
     const [focusStartTime, setFocusStartTime] = useState<number | null>(null)
 
-    const [displayStyle, setDisplayStyle] = useState<string>("Solid")
+    const [displayStyle, setDisplayStyle] = useState<string>("Glossy")
     const [colorName, setColorName] = useState("Default")
     const [displayColor, setDisplayColor] = useState<string | string[]>(
         "#9a9a9a"
     )
-    const [style, setStyle] = useState<string>("Solid")
+    const [style, setStyle] = useState<string>("Glossy")
     const [capsule, setCapsule] = useState<Material>({
         color: "#9a9a9a",
         displayColor: "#9a9a9a",
@@ -115,7 +115,19 @@ const useProviderSetup = () => {
         }
     }, [tour])
 
-    const [logo, setLogo] = useState<string | undefined>(undefined)
+    const [logo, setLogo] = useState<{
+        fileName: string
+        position: number[]
+        image: string
+        aspect: number
+    }>({
+        fileName: "",
+        position: [0, 2.2, 0.5],
+        image: "",
+        aspect: 0,
+    })
+    const [editLogo, setEditLogo] = useState<boolean>(false)
+    const [bgOffsetY, setBgOffsetY] = useState<number>(-250)
     const [capturing, setCapturing] = useState<boolean>(false)
     const [snapshot, setSnapshot] = useState<string>("")
     const [checkout, setCheckout] = useState<boolean>(false)
@@ -154,10 +166,14 @@ const useProviderSetup = () => {
         setCheckout,
         logo,
         setLogo,
+        editLogo,
+        setEditLogo,
         focusedPart,
         setFocusedPart,
         focusStartTime,
         setFocusStartTime,
+        bgOffsetY,
+        setBgOffsetY,
     }
 
     return value
