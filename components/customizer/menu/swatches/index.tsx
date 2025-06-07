@@ -4,6 +4,8 @@ import { useCustomizeContext } from "../../provider"
 import { Swiper, SwiperSlide } from "swiper/react"
 import { FreeMode, Mousewheel } from "swiper/modules"
 import useGlossy from "./glossy"
+import { Color } from ".."
+import { FaCheck } from "react-icons/fa6"
 
 export type Shade =
     | "Monochromatics"
@@ -20,25 +22,27 @@ export type ShadeColor = {
 const ColorSwatch = ({
     shade,
     handleClick,
+    color,
 }: {
     shade: Shade
     handleClick: ({
         name,
         code,
         color,
+        style,
     }: {
         name: string
         code: string
         color: string | string[]
+        style: string
     }) => void
+    color: Color
 }) => {
     const colors: {
         [style: string]: ShadeColor
     } = {
-        solid: useSolid(),
         glossy: useGlossy(),
         matte: useSolid(),
-        metalic: useMetalic(),
     }
 
     const { style } = useCustomizeContext()
@@ -77,29 +81,36 @@ const ColorSwatch = ({
                 modules={[FreeMode, Mousewheel]}
                 freeMode
             >
-                {colors?.[style?.toLowerCase()]?.[shade]?.map((color) => (
-                    <>
-                        {style === "Metalic" ? (
-                            <SwiperSlide
-                                key={`metalic-${color.name}`}
-                                style={{
-                                    background: `linear-gradient(135deg, ${color.color[0]} 0%, ${color.color[1]} 100%)`,
-                                }}
-                                onClick={() => handleClick(color)}
-                                className={`rounded-md !min-w-[20px] !min-h-[30px] border`}
-                            />
-                        ) : (
-                            <SwiperSlide
-                                key={`solid-${color.name}`}
-                                style={{
-                                    background: `${color.color}`,
-                                }}
-                                onClick={() => handleClick(color)}
-                                className={`rounded-md !min-w-[20px] !min-h-[30px] border`}
-                            />
-                        )}
-                    </>
-                ))}
+                {colors?.[style?.toLowerCase()]?.[shade]?.map((c) => {
+                    return (
+                        <>
+                            {style === "Metalic" ? (
+                                <SwiperSlide
+                                    key={`metalic-${c.name}`}
+                                    style={{
+                                        background: `linear-gradient(135deg, ${c.color[0]} 0%, ${c.color[1]} 100%)`,
+                                    }}
+                                    onClick={() => handleClick({ ...c, style })}
+                                    className={`rounded-md !min-w-[20px] !min-h-[30px] border`}
+                                />
+                            ) : (
+                                <SwiperSlide
+                                    key={`solid-${c.name}`}
+                                    style={{
+                                        background: `${c.color}`,
+                                    }}
+                                    onClick={() => handleClick({ ...c, style })}
+                                    className={`rounded-md !min-w-[20px] !min-h-[30px] border relative`}
+                                >
+                                    {/* {color?.code === c.code &&
+                                    color?.style === style ? (
+                                        <FaCheck className='absolute inset-0 flex items-center justify-center text-white text-xs z-10' />
+                                    ) : null} */}
+                                </SwiperSlide>
+                            )}
+                        </>
+                    )
+                })}
             </Swiper>
         </div>
     )

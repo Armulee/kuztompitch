@@ -53,6 +53,7 @@ const Address = ({
                         <div className='relative'>
                             <FaUser className='absolute left-3 top-3 h-4 w-4 text-slate-400' />
                             <input
+                                required
                                 id='name'
                                 name='fullName'
                                 type='text'
@@ -74,6 +75,7 @@ const Address = ({
                         <div className='relative'>
                             <FaEnvelope className='absolute left-3 top-3 h-4 w-4 text-slate-400' />
                             <input
+                                required
                                 id='email'
                                 name='email'
                                 type='email'
@@ -94,6 +96,7 @@ const Address = ({
                         <div className='relative'>
                             <FaPhone className='absolute left-3 top-3 h-4 w-4 text-slate-400' />
                             <input
+                                required
                                 id='phone'
                                 name='telephone'
                                 type='tel'
@@ -114,6 +117,7 @@ const Address = ({
                         <div className='relative'>
                             <FaRoad className='absolute left-3 top-3 h-4 w-4 text-slate-400' />
                             <input
+                                required
                                 id='address'
                                 name='address'
                                 type='text'
@@ -134,6 +138,7 @@ const Address = ({
                         <div className='relative'>
                             <FaMapPin className='absolute left-3 top-3 h-4 w-4 text-slate-400' />
                             <input
+                                required
                                 id='district'
                                 name='district'
                                 type='text'
@@ -154,6 +159,7 @@ const Address = ({
                         <div className='relative'>
                             <FaMapPin className='absolute left-3 top-3 h-4 w-4 text-slate-400' />
                             <input
+                                required
                                 id='subDstrict'
                                 name='subDistrict'
                                 type='text'
@@ -174,6 +180,7 @@ const Address = ({
                         <div className='relative'>
                             <FaMapMarkerAlt className='absolute left-3 top-3 h-4 w-4 text-slate-400' />
                             <input
+                                required
                                 id='province'
                                 name='province'
                                 type='text'
@@ -194,6 +201,7 @@ const Address = ({
                         <div className='relative'>
                             <FaHashtag className='absolute left-3 top-3 h-4 w-4 text-slate-400' />
                             <input
+                                required
                                 id='postal'
                                 type='text'
                                 className='w-full pl-10 pr-4 py-2 text-slate-700 border border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-colors'

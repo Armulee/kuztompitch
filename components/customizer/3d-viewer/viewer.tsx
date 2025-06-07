@@ -1,20 +1,23 @@
 "use client"
 
 import { Canvas } from "@react-three/fiber"
-import { Suspense } from "react"
+import { LegacyRef, RefObject, Suspense, useRef } from "react"
 import { ContactShadows, Environment, OrbitControls } from "@react-three/drei"
 import Capture from "./capture"
+import { OrbitControls as OrbitControlsElement } from "three-stdlib"
 
 const Viewer = ({
     className = "bg-[#efefef]",
     children,
     position,
     noOrbit = false,
+    orbitControlsRef,
 }: {
     className?: string
     children: React.ReactNode
     position?: [number, number, number]
     noOrbit?: boolean
+    orbitControlsRef: RefObject<OrbitControlsElement>
 }) => {
     return (
         <Canvas
@@ -79,7 +82,7 @@ const Viewer = ({
                 {/* Optional: HDR environment reflections */}
                 <Environment preset='studio' />
 
-                <OrbitControls enabled={!noOrbit} />
+                <OrbitControls enabled={!noOrbit} ref={orbitControlsRef} />
 
                 <Capture />
             </Suspense>

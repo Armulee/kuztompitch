@@ -1,7 +1,9 @@
 import Link from "next/link"
 import SocialMedias from "./social-medias"
+import Image from "next/image"
 // import Image from "next/image"
 // import hero from "@/public/assets/hero.png"
+import test from "@/public/assets/test-copy.png"
 
 const Hero = () => {
     return (
@@ -29,6 +31,15 @@ const Hero = () => {
             </div>
             {/* <Image className='absolute' alt='kuztom pitch' src={hero} /> */}
             {/* MP4 */}
+            <video
+                className='absolute bottom-10 right-4 w-full h-[80dvh] object-cover -z-10'
+                autoPlay
+                muted
+                playsInline
+                loop
+            >
+                {/* <source src='/assets/hero.mp4' type='video/mp4' /> */}
+            </video>
             <div className='absolute bottom-0 w-full h-[70px] bg-gradient-to-t from-white to-black opacity-50' />
         </section>
     )

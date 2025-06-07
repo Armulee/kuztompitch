@@ -5,11 +5,12 @@ Command: npx gltfjsx@6.5.2 assets/normal-microphone.glb -t
 
 import * as THREE from "three"
 import { Decal, useGLTF, useTexture } from "@react-three/drei"
-import { GLTF } from "three-stdlib"
+import { GLTF, OrbitControls } from "three-stdlib"
 import { useCustomizeContext } from "../provider"
-import { useEffect, useRef } from "react"
-import { GroupProps, ThreeEvent, useFrame } from "@react-three/fiber"
+import { LegacyRef, RefObject, useEffect, useRef, useState } from "react"
+import { GroupProps, ThreeEvent, useFrame, Vector3 } from "@react-three/fiber"
 import { usePathname } from "next/navigation"
+import { useControls } from "leva"
 
 type GLTFResult = GLTF & {
     nodes: {
@@ -27,7 +28,9 @@ type GLTFResult = GLTF & {
     }
 }
 
-export function Microphone(props: GroupProps) {
+export function Microphone(
+    props: GroupProps & { orbitControlsRef: RefObject<OrbitControls> }
+) {
     const { nodes, materials } = useGLTF(
         "/assets/normal-microphone.glb"
     ) as GLTFResult
@@ -44,6 +47,8 @@ export function Microphone(props: GroupProps) {
         setFocusedPart,
         focusStartTime,
         setFocusStartTime,
+        setEditLogo,
+        setLogo,
     } = useCustomizeContext()
 
     // Handle the material changing for each style
@@ -136,11 +141,60 @@ export function Microphone(props: GroupProps) {
     }
 
     // Transform user uploaded image to texture to wrap in decal
-    const logoTexture = useTexture(logo || "/assets/transparent.png")
-    logoTexture.wrapS = THREE.ClampToEdgeWrapping
-    logoTexture.wrapT = THREE.ClampToEdgeWrapping
-    logoTexture.repeat.set(1, 1)
+    const logoTexture = useTexture(logo?.image || "/assets/transparent.png")
 
+    // logoTexture.wrapS = THREE.ClampToEdgeWrapping
+    // logoTexture.wrapT = THREE.ClampToEdgeWrapping
+    // logoTexture.repeat.set(0, 1)
+    // const transformControls = useControls("Decal Adjustment", {
+    //     position: {
+    //         value: { x: 0, y: 2.2, z: 0.5 },
+    //         step: 0.01,
+    //     },
+    //     rotation: {
+    //         value: { x: 0, y: 0, z: 0 },
+    //         step: 0.01,
+    //     },
+    //     scale: {
+    //         value: { x: 1, y: 1, z: 1 },
+    //         step: 0.01,
+    //     },
+    // })
+
+    // handle decal adjusting by dragging the Decal component
+    // const [isDragging, setIsDragging] = useState(false)
+    // const [startY, setStartY] = useState<number | null>(null)
+    // const handlePointerDownDecal = (e: ThreeEvent<PointerEvent>) => {
+    //     e.stopPropagation()
+    //     setEditLogo(true)
+    //     setIsDragging(true)
+    //     setStartY(e.clientY)
+    // }
+    // const handlePointerUpDecal = (e: ThreeEvent<PointerEvent>) => {
+    //     e.stopPropagation()
+    //     setIsDragging(false)
+    //     setStartY(null)
+    // }
+    // const handlePointerMoveDecal = (e: ThreeEvent<PointerEvent>) => {
+    //     if (isDragging && startY !== null) {
+    //         e.stopPropagation()
+    //         const deltaY = (e.clientY - startY) * -0.01 // Adjust sensitivity
+    //         setStartY(e.clientY)
+
+    //         setLogo((prev) => {
+    //             const newY = parseFloat((prev.position[1] + deltaY).toFixed(2))
+    //             return {
+    //                 ...prev,
+    //                 position: [prev.position[0], newY, prev.position[2]],
+    //             }
+    //         })
+    //     }
+    // }
+    // useEffect(() => {
+    //     if (props.orbitControlsRef?.current && isDragging) {
+    //         props.orbitControlsRef.current.enabled = !isDragging
+    //     }
+    // }, [isDragging])
     return (
         <group
             dispose={null}
@@ -159,25 +213,61 @@ export function Microphone(props: GroupProps) {
                     material={materials["Top handle"]}
                     onClick={(e) => handleClick(e, "Top Handle")}
                     castShadow
-                />
+                >
+                    {logo?.image && (
+                        <Decal
+                            // debug
+                            // position={[
+                            //     transformControls.position.x,
+                            //     transformControls.position.y,
+                            //     transformControls.position.z,
+                            // ]}
+                            position={logo.position as Vector3}
+                            rotation={[0, 0, 0]}
+                            scale={[1.2, 0.9, 1.2]}
+                            // onPointerDown={handlePointerDownDecal}
+                            // onPointerUp={handlePointerUpDecal}
+                            // onPointerMove={handlePointerMoveDecal}
+                        >
+                            <meshStandardMaterial
+                                roughness={1}
+                                transparent
+                                polygonOffset
+                                polygonOffsetFactor={-1}
+                                map={logoTexture}
+                                depthTest={true}
+                                depthWrite={false}
+                                side={THREE.FrontSide}
+                            />
+                        </Decal>
+                    )}
+                </mesh>
                 <mesh
                     geometry={nodes.Shureobj001_1.geometry}
                     material={materials["Bottom handle"]}
                     onClick={(e) => handleClick(e, "Bottom Handle")}
                     castShadow
                 >
-                    {logo && (
+                    {logo?.image && (
                         <Decal
-                            debug
-                            position={[0, 2.2, 0]}
+                            // debug
+                            // position={[
+                            //     transformControls.position.x,
+                            //     transformControls.position.y,
+                            //     transformControls.position.z,
+                            // ]}
+                            position={logo.position as Vector3}
                             rotation={[0, 0, 0]}
-                            scale={[1.2, 1, 1.1]}
+                            scale={[1.2, 1.2, 1.2]}
+                            // onPointerDown={handlePointerDownDecal}
+                            // onPointerUp={handlePointerUpDecal}
+                            // onPointerMove={handlePointerMoveDecal}
                         >
                             <meshStandardMaterial
                                 roughness={1}
                                 transparent
                                 polygonOffset
-                                polygonOffsetFactor={-10}
+                                polygonOffsetFactor={-1}
                                 map={logoTexture}
                                 depthTest={true}
                                 depthWrite={false}

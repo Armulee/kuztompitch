@@ -30,12 +30,28 @@ export type CustomizeContextType = {
     setSnapshot: React.Dispatch<React.SetStateAction<string>>
     checkout: boolean
     setCheckout: React.Dispatch<React.SetStateAction<boolean>>
-    logo: string | undefined
-    setLogo: React.Dispatch<React.SetStateAction<string | undefined>>
+    logo: {
+        fileName: string
+        position: number[]
+        image: string
+        aspect: number
+    }
+    setLogo: React.Dispatch<
+        React.SetStateAction<{
+            fileName: string
+            position: number[]
+            image: string
+            aspect: number
+        }>
+    >
+    bgOffsetY: number
+    setBgOffsetY: React.Dispatch<React.SetStateAction<number>>
     focusedPart: string | null
     setFocusedPart: React.Dispatch<React.SetStateAction<string | null>>
     focusStartTime: number | null
     setFocusStartTime: React.Dispatch<React.SetStateAction<number | null>>
+    editLogo: boolean
+    setEditLogo: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export type Material = {
