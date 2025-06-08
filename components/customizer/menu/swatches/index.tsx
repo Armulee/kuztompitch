@@ -37,7 +37,7 @@ const ColorSwatch = ({
         [style: string]: ShadeColor
     } = {
         glossy: useGlossy(),
-        matte: useSolid(),
+        matte: useGlossy(),
     }
 
     const { style } = useCustomizeContext()
@@ -96,12 +96,7 @@ const ColorSwatch = ({
                                     }}
                                     onClick={() => handleClick({ ...c, style })}
                                     className={`rounded-md !min-w-[20px] !min-h-[30px] border relative`}
-                                >
-                                    {/* {color?.code === c.code &&
-                                    color?.style === style ? (
-                                        <FaCheck className='absolute inset-0 flex items-center justify-center text-white text-xs z-10' />
-                                    ) : null} */}
-                                </SwiperSlide>
+                                ></SwiperSlide>
                             )}
                         </>
                     )

@@ -37,15 +37,16 @@ const Menu = () => {
         (color: string, displayColor: string | string[]) => {
             setIsRotating(false)
             if (part === "Capsule") {
-                if (style === "Solid") {
-                    setCapsule((prev: Material) => ({
-                        ...prev,
-                        color: color,
-                        displayColor: displayColor,
-                        ...capsuleStyle.solid,
-                        style,
-                    }))
-                } else if (style === "Glossy") {
+                // if (style === "Solid") {
+                //     setCapsule((prev: Material) => ({
+                //         ...prev,
+                //         color: color,
+                //         displayColor: displayColor,
+                //         ...capsuleStyle.solid,
+                //         style,
+                //     }))
+                // } else
+                if (style === "Glossy") {
                     setCapsule((prev: Material) => ({
                         ...prev,
                         color: color,
@@ -63,15 +64,16 @@ const Menu = () => {
                     }))
                 }
             } else if (part === "Top Handle") {
-                if (style === "Solid") {
-                    setTopHandle((prev: Material) => ({
-                        ...prev,
-                        color: color,
-                        displayColor: displayColor,
-                        ...topHandleStyle.solid,
-                        style,
-                    }))
-                } else if (style === "Glossy") {
+                // if (style === "Solid") {
+                //     setTopHandle((prev: Material) => ({
+                //         ...prev,
+                //         color: color,
+                //         displayColor: displayColor,
+                //         ...topHandleStyle.solid,
+                //         style,
+                //     }))
+                // } else
+                if (style === "Glossy") {
                     setTopHandle((prev: Material) => ({
                         ...prev,
                         color: color,
@@ -89,15 +91,16 @@ const Menu = () => {
                     }))
                 }
             } else if (part === "Bottom Handle") {
-                if (style === "Solid") {
-                    setBottomHandle((prev: Material) => ({
-                        ...prev,
-                        color: color,
-                        displayColor: displayColor,
-                        ...bottomHandleStyle.solid,
-                        style,
-                    }))
-                } else if (style === "Glossy") {
+                // if (style === "Solid") {
+                //     setBottomHandle((prev: Material) => ({
+                //         ...prev,
+                //         color: color,
+                //         displayColor: displayColor,
+                //         ...bottomHandleStyle.solid,
+                //         style,
+                //     }))
+                // } else
+                if (style === "Glossy") {
                     setBottomHandle((prev: Material) => ({
                         ...prev,
                         color: color,

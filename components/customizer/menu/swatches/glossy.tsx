@@ -18,7 +18,15 @@ const useGlossy = () => {
             },
             { name: "Castor Gray", code: "#646762", color: "#646762" },
             { name: "Black Ink", code: "#44413c", color: "#44413c" },
-            { name: "Jet Black", code: "#2d2c2f", color: "#2d2c2f" },
+            {
+                name:
+                    part === "Top Handle" || part === "Bottom Handle"
+                        ? "Default"
+                        : "Jet Black",
+                code: "#2d2c2f",
+                color: "#2d2c2f",
+            },
+            { name: "Complete Black", code: "#000000", color: "#000000" },
         ],
         // Yellow
         Yellow: [
@@ -106,3 +114,64 @@ const useGlossy = () => {
 }
 
 export default useGlossy
+
+// Monochromatics: [
+//     {
+//         name: "Bright White",
+//         code: part === "Capsule" ? "#ffffff" : "#bbbbbb",
+//         color: "#ffffff",
+//     },
+//     {
+//         name: "Snow White",
+//         code: part === "Capsule" ? "#f2f0eb" : "#aaab95",
+//         color: "#f2f0eb",
+//     },
+//     {
+//         name: "Blanc de Blanc",
+//         code: part === "Capsule" ? "#e7e9e7" : "#868786",
+//         color: "#e7e9e7",
+//     },
+//     {
+//         name: "Silver Birch",
+//         code: part === "Capsule" ? "#d2cfc4" : "#78786b",
+//         color: "#d2cfc4",
+//     },
+//     {
+//         name: "Glacier Gray",
+//         code: part === "Capsule" ? "#c5c6c7" : "#696868",
+//         color: "#c5c6c7",
+//     },
+//     {
+//         name: "High-Rise",
+//         code: part === "Capsule" ? "#aeb2b5" : "#5d6063",
+//         color: "#aeb2b5",
+//     },
+//     {
+//         name: part === "Capsule" ? "Default" : "Rockstar",
+//         code: part === "Capsule" ? "#9a9a9a" : "#5c5b56",
+//         color: "#9a9a9a",
+//     },
+//     {
+//         name: "Castor Gray",
+//         code: part === "Capsule" ? "#646762" : "#3b3d3a",
+//         color: "#646762",
+//     },
+//     {
+//         name: "Black Ink",
+//         code: part === "Capsule" ? "#44413c" : "#24241f",
+//         color: "#44413c",
+//     },
+//     {
+//         name:
+//             part === "Top Handle" || part === "Bottom Handle"
+//                 ? "Default"
+//                 : "Jet Black",
+//         code: part === "Capsule" ? "#2d2c2f" : "#1b1c1c",
+//         color: "#2d2c2f",
+//     },
+//     {
+//         name: "Complete Black",
+//         code: "#000000",
+//         color: "#000000",
+//     },
+// ],
