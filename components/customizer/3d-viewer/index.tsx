@@ -2,8 +2,6 @@ import Display from "./display"
 import { Microphone } from "./microphone"
 import Viewer from "./viewer"
 import SideMenu from "./side-menu"
-import { OrbitControls } from "three-stdlib"
-import { useRef } from "react"
 
 const ThreeDimensionViewer = () => {
     return (

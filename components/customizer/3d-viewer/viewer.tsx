@@ -1,10 +1,9 @@
 "use client"
 
 import { Canvas } from "@react-three/fiber"
-import { LegacyRef, RefObject, Suspense, useRef } from "react"
+import { Suspense } from "react"
 import { ContactShadows, Environment, OrbitControls } from "@react-three/drei"
 import Capture from "./capture"
-import { OrbitControls as OrbitControlsElement } from "three-stdlib"
 
 const Viewer = ({
     className = "bg-[#efefef]",

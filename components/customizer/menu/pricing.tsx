@@ -2,7 +2,6 @@ import { useCustomizeContext } from "../provider"
 import Checkout from "../checkout"
 import { useRef } from "react"
 import { FaTrash } from "react-icons/fa6"
-import { FaEdit } from "react-icons/fa"
 
 const Pricing = () => {
     const {

@@ -15,8 +15,8 @@ export type CustomizeContextType = {
     setColorName: React.Dispatch<React.SetStateAction<string>>
     displayColor: string | string[]
     setDisplayColor: React.Dispatch<React.SetStateAction<string | string[]>>
-    pricing: number | "xx,xxx"
-    setPricing: React.Dispatch<React.SetStateAction<number | "xx,xxx">>
+    pricing: string
+    setPricing: React.Dispatch<React.SetStateAction<string>>
     isIphone: boolean
     loading: boolean
     setLoading: React.Dispatch<React.SetStateAction<boolean>>
