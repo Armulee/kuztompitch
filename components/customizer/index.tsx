@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation"
 import Tutorial from "./tutorial"
 import Pricing from "./menu/pricing"
 import { useCustomizeContext } from "./provider"
+import Display from "./menu/display"
 
 export const CustomizeContext = createContext(null)
 
@@ -26,11 +27,12 @@ const Customizer = () => {
             style={{ overflow: checkout ? "visible" : "hidden" }}
             className='w-full h-[100dvh] z-0 relative'
         >
-            <div className={`w-[100vw] h-[60dvh] relative`}>
+            <div className={`w-[100vw] h-[52dvh] relative`}>
                 <ThreeDimensionViewer />
             </div>
 
-            <div className={`w-full h-[40dvh] overflow-hidden relative`}>
+            <div className={`w-full h-[48dvh] overflow-x-hidden relative`}>
+                <Display />
                 <Menu />
             </div>
 

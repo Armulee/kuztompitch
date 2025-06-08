@@ -1,11 +1,9 @@
 import { useCallback } from "react"
 import { useCustomizeContext } from "../../provider"
 import Head from "./head"
-import { IoIosHelpCircle } from "react-icons/io"
 
 const Display = () => {
-    const { displayStyle, displayColor, colorName, setTour } =
-        useCustomizeContext()
+    const { displayStyle, displayColor, colorName } = useCustomizeContext()
 
     const color = useCallback(() => {
         const monochromatics = [
@@ -19,6 +17,7 @@ const Display = () => {
             "#646762",
             "#44413c",
             "#2d2c2f",
+            "#000000",
         ]
 
         if (Array.isArray(displayColor)) {
@@ -34,7 +33,7 @@ const Display = () => {
         }
     }, [displayColor])
     return (
-        <div className='w-full absolute bottom-0 left-1/2 -translate-x-1/2 z-10'>
+        <div className='w-full relative'>
             <Head />
             <div className='bg-black'>
                 <div
@@ -74,10 +73,6 @@ const Display = () => {
                         />
                     )}
                 </div>
-                <IoIosHelpCircle
-                    onClick={() => setTour(true)}
-                    className='w-10 h-10 text-black absolute bottom-[60px] right-2 z-20'
-                />
             </div>
         </div>
     )
