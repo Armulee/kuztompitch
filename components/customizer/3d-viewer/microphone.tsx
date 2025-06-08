@@ -5,12 +5,11 @@ Command: npx gltfjsx@6.5.2 assets/normal-microphone.glb -t
 
 import * as THREE from "three"
 import { Decal, useGLTF, useTexture } from "@react-three/drei"
-import { GLTF, OrbitControls } from "three-stdlib"
+import { GLTF } from "three-stdlib"
 import { useCustomizeContext } from "../provider"
-import { LegacyRef, RefObject, useEffect, useRef, useState } from "react"
+import { useEffect, useRef } from "react"
 import { GroupProps, ThreeEvent, useFrame, Vector3 } from "@react-three/fiber"
 import { usePathname } from "next/navigation"
-import { useControls } from "leva"
 
 type GLTFResult = GLTF & {
     nodes: {
@@ -28,9 +27,7 @@ type GLTFResult = GLTF & {
     }
 }
 
-export function Microphone(
-    props: GroupProps & { orbitControlsRef: RefObject<OrbitControls> }
-) {
+export function Microphone(props: GroupProps) {
     const { nodes, materials } = useGLTF(
         "/assets/normal-microphone.glb"
     ) as GLTFResult
@@ -47,8 +44,6 @@ export function Microphone(
         setFocusedPart,
         focusStartTime,
         setFocusStartTime,
-        setEditLogo,
-        setLogo,
     } = useCustomizeContext()
 
     // Handle the material changing for each style

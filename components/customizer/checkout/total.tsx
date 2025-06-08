@@ -14,7 +14,7 @@ const Total = ({ selectedDelivery }: { selectedDelivery: string }) => {
                     <div className='space-y-3'>
                         <div className='flex justify-between text-slate-600'>
                             <span>Subtotal</span>
-                            <span>{pricing} ฿</span>
+                            <span>{pricing}</span>
                         </div>
 
                         <div className='flex justify-between text-slate-600'>
@@ -28,7 +28,7 @@ const Total = ({ selectedDelivery }: { selectedDelivery: string }) => {
                             >
                                 {selectedDelivery === "pickup"
                                     ? "Free"
-                                    : "55 ฿"}
+                                    : "60 ฿"}
                             </span>
                         </div>
 
@@ -40,12 +40,7 @@ const Total = ({ selectedDelivery }: { selectedDelivery: string }) => {
                         <div className='border-t border-slate-200 pt-3'>
                             <div className='flex justify-between text-lg font-bold text-slate-900'>
                                 <span>Total</span>
-                                <span>
-                                    {selectedDelivery === "pickup"
-                                        ? "2,675"
-                                        : "2,730"}{" "}
-                                    ฿
-                                </span>
+                                <span>{pricing}</span>
                             </div>
                         </div>
                     </div>

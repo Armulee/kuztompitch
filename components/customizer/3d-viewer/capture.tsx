@@ -4,24 +4,23 @@ import { useEffect } from "react"
 
 const Capture = () => {
     const { gl, scene, camera } = useThree()
-    const { capturing, setCapturing, snapshot, setSnapshot } =
-        useCustomizeContext()
+    const { capturing, setCapturing, setSnapshot } = useCustomizeContext()
 
     useEffect(() => {
-        if (capturing && !snapshot) {
+        if (capturing) {
             // Wait a moment in case scene is not ready yet
             const timeout = setTimeout(() => {
                 gl.render(scene, camera)
                 const dataUrl = gl.domElement.toDataURL("image/png")
                 setSnapshot(dataUrl)
+                setCapturing(false)
             }, 300)
 
             return () => {
                 clearTimeout(timeout)
-                setCapturing(false)
             }
         }
-    }, [capturing, snapshot, camera, gl, scene, setCapturing, setSnapshot])
+    }, [capturing, camera, gl, scene, setCapturing, setSnapshot])
 
     return null
 }

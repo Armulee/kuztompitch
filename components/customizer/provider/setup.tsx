@@ -42,7 +42,7 @@ const useProviderSetup = () => {
         name: "Bottom Handle",
     })
 
-    const [pricing, setPricing] = useState<number | "xx,xxx">("xx,xxx")
+    const [pricing, setPricing] = useState<string>("xx,xxx ฿")
     const [loading, setLoading] = useState<boolean>(true)
     const [tour, setTour] = useState<boolean>(true)
     const [isRotating, setIsRotating] = useState(true)

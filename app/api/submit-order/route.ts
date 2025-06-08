@@ -11,10 +11,12 @@ export async function POST(req: Request) {
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(data),
+            body: JSON.stringify({ purpose: "create-order", ...data }),
         })
 
         const result = await response.json()
+
+        console.log(result)
         if (result.success) {
             return NextResponse.json(result, { status: 200 })
         } else {
