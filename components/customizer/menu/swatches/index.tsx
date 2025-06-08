@@ -1,4 +1,3 @@
-import useSolid from "./solid"
 import { useCustomizeContext } from "../../provider"
 import { Swiper, SwiperSlide } from "swiper/react"
 import { FreeMode, Mousewheel } from "swiper/modules"
