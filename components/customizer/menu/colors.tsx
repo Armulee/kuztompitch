@@ -81,11 +81,7 @@ const Colors = ({
                 {/* Blue #5b7ebd */}
                 {shades.map((shade) => (
                     <SwiperSlide key={`shade-${shade}`}>
-                        <ColorSwatch
-                            shade={shade}
-                            handleClick={handleClick}
-                            color={color}
-                        />
+                        <ColorSwatch shade={shade} handleClick={handleClick} />
                     </SwiperSlide>
                 ))}
             </Swiper>

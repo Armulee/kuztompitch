@@ -4,7 +4,6 @@ export async function POST(req: Request) {
     const data = await req.json()
     const url =
         "https://script.google.com/macros/s/REDACTED/exec"
-
     try {
         const response = await fetch(url, {
             method: "POST",
