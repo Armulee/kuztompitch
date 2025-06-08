@@ -18,10 +18,8 @@ const shades: Shade[] = [
 ]
 
 const Colors = ({
-    color,
     setColor,
 }: {
-    color: Color
     setColor: React.Dispatch<React.SetStateAction<Color>>
 }) => {
     const styles = ["Glossy", "Matte"]

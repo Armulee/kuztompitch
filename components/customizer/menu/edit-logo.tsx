@@ -78,7 +78,7 @@ const EditLogo = () => {
                 }))
             }
         },
-        [dragging, bgOffsetY, setLogo]
+        [dragging, bgOffsetY, setLogo, setBgOffsetY]
     )
 
     useEffect(() => {
