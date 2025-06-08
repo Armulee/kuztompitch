@@ -1,9 +1,5 @@
 import Link from "next/link"
 import SocialMedias from "./social-medias"
-import Image from "next/image"
-// import Image from "next/image"
-// import hero from "@/public/assets/hero.png"
-import test from "@/public/assets/test-copy.png"
 
 const Hero = () => {
     return (

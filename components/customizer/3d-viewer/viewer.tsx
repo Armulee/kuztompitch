@@ -11,13 +11,11 @@ const Viewer = ({
     children,
     position,
     noOrbit = false,
-    orbitControlsRef,
 }: {
     className?: string
     children: React.ReactNode
     position?: [number, number, number]
     noOrbit?: boolean
-    orbitControlsRef: RefObject<OrbitControlsElement>
 }) => {
     return (
         <Canvas
@@ -82,7 +80,7 @@ const Viewer = ({
                 {/* Optional: HDR environment reflections */}
                 <Environment preset='studio' />
 
-                <OrbitControls enabled={!noOrbit} ref={orbitControlsRef} />
+                <OrbitControls enabled={!noOrbit} />
 
                 <Capture />
             </Suspense>

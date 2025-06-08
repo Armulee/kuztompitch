@@ -29,10 +29,10 @@ const Delivery = ({
                         />
                         <div className='flex-1'>
                             <div className='font-semibold text-slate-900'>
-                                EMS Delivery - 55฿
+                                EMS Delivery - 60฿
                             </div>
                             <p className='text-sm text-slate-600'>
-                                Get it delivered in 2-3 business days
+                                Get it delivered in 7 business days
                             </p>
                         </div>
                         <FaTruck className='h-5 w-5 text-green-600' />

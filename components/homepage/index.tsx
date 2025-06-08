@@ -13,8 +13,9 @@ import ContactUs from "./contact-us"
 
 export type Nav = {
     name: string
-    href: string
+    href?: string
     key: string
+    children?: { name: string; href: string; key: string }[]
 }
 
 const HomePage = () => {
@@ -34,16 +35,22 @@ const HomePage = () => {
         }
     }, [])
 
-    const navs: { name: string; href: string; key: string }[] = useMemo(
-        () => [
-            { name: "Home", href: "#home", key: "home" },
+    const navs: Nav[] = useMemo(() => {
+        const dropdownItems = [
             { name: "About us", href: "#about-us", key: "about-us" },
             { name: "Services", href: "#services", key: "services" },
             { name: "Our Project", href: "#our-projects", key: "our-projects" },
             { name: "Contact Us", href: "#contact-us", key: "contact-us" },
-        ],
-        []
-    )
+        ]
+        return [
+            { name: "Home", key: "home", children: dropdownItems }, // This becomes dropdown
+            {
+                name: "Confirm Payment",
+                href: "/confirm-payment",
+                key: "confirm-payment",
+            },
+        ]
+    }, [])
 
     const [menu, setMenu] = useState<boolean>(false)
     useEffect(() => {
@@ -66,25 +73,35 @@ const HomePage = () => {
             let current = ""
 
             navs.forEach((nav) => {
-                const section = document.getElementById(
-                    nav.href.replace("#", "")
-                )
-                if (section) {
-                    const offsetTop = section.offsetTop
-                    const offsetHeight = section.offsetHeight
+                if (nav.children) {
+                    nav.children.forEach((child) => {
+                        const section = document.getElementById(
+                            child.href.replace("#", "")
+                        )
+                        if (section) {
+                            const offsetTop = section.offsetTop
+                            const offsetHeight = section.offsetHeight
 
-                    if (
-                        scrollY >= offsetTop - 100 &&
-                        scrollY < offsetTop + offsetHeight - 100
-                    ) {
-                        current = nav.key
-                    }
+                            if (
+                                scrollY >= offsetTop - 100 &&
+                                scrollY < offsetTop + offsetHeight - 100
+                            ) {
+                                current = nav.key
+                            }
+                        }
+                    })
                 }
             })
 
             // 🔽 Near bottom? Force active to "contact-us"
             if (windowHeight + scrollY >= pageHeight - 150) {
-                const contactNav = navs.find((n) => n.href.includes("contact"))
+                const contactNav = navs.find((nav) => {
+                    if (nav.children) {
+                        return nav.children.find((n) =>
+                            n.href.includes("contact")
+                        )
+                    }
+                })
                 if (contactNav) {
                     current = contactNav.key
                 }
@@ -116,7 +133,7 @@ const HomePage = () => {
 
 export default HomePage
 
-export const smoothScrollTo = (nav: Nav) => {
+export const smoothScrollTo = (nav: Nav, target: number) => {
     function smoothScroll(targetY: number, duration: number = 700) {
         const startY = window.scrollY
         const startTime = performance.now()
@@ -139,8 +156,12 @@ export const smoothScrollTo = (nav: Nav) => {
         requestAnimationFrame(scroll)
     }
 
-    const section = document.getElementById(nav.href.replace("#", ""))
-    if (section) {
-        smoothScroll(section.offsetTop - 80) // slower, smooth scroll
+    if (nav.children) {
+        const section = document.getElementById(
+            nav.children[target].href.replace("#", "")
+        )
+        if (section) {
+            smoothScroll(section.offsetTop - 80) // slower, smooth scroll
+        }
     }
 }

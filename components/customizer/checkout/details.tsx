@@ -5,7 +5,14 @@ import Skeleton from "react-loading-skeleton"
 import { FaBox } from "react-icons/fa6"
 // import { FaMapPin } from "react-icons/fa6"
 
-const Details = () => {
+const models = ["SM58", "BETA58A", "KSM8"]
+const Details = ({
+    model,
+    setModel,
+}: {
+    model: string
+    setModel: React.Dispatch<React.SetStateAction<string>>
+}) => {
     const { pricing, snapshot, loading, capsule, topHandle, bottomHandle } =
         useCustomizeContext()
     const parts = [capsule, topHandle, bottomHandle]
@@ -34,9 +41,24 @@ const Details = () => {
 
                     <div className='flex-1 space-y-4'>
                         <div>
-                            <h3 className='text-xl font-bold text-slate-900 mb-2'>
-                                Shure SM50
-                            </h3>
+                            <div>
+                                <label className='mr-2 text-black'>
+                                    Model:{" "}
+                                    <span className='text-red-500'>*</span>
+                                </label>
+
+                                <select
+                                    onChange={(e) => setModel(e.target.value)}
+                                    value={model}
+                                    className='text-slate-900 mb-2 border border-black border-2 rounded'
+                                >
+                                    {models.map((model, index) => (
+                                        <option key={index} value={model}>
+                                            {model}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
                             <p className='text-slate-600'>
                                 Professional Dynamic Microphone
                             </p>
@@ -44,7 +66,7 @@ const Details = () => {
 
                         <div className='pt-2'>
                             <span className='text-3xl font-bold text-slate-900'>
-                                {pricing} ฿
+                                {pricing}
                             </span>
                         </div>
                     </div>
