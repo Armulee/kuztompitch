@@ -18,7 +18,7 @@ const Menu = ({
                 !menu ? "translate-x-full" : "translate-x-0"
             }`}
         >
-            {navs.map((nav) => (
+            {navs.map((nav, index) => (
                 <li
                     className={`text-white cursor-pointer hover:underline ${
                         active === nav.key
@@ -27,7 +27,7 @@ const Menu = ({
                     }`}
                     key={nav.key}
                     onClick={() => {
-                        smoothScrollTo(nav)
+                        smoothScrollTo(nav, index)
                         setMenu(false)
                     }}
                 >

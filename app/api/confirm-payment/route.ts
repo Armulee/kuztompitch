@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server"
 
 export async function POST(request: NextRequest) {
     const url =
-        "https://script.google.com/macros/s/AKfycbzVSCRVsMtn_41_gH6vGcn9yWGRBAGVxDj4GJse59kpZ4zGSFrrYPZ1TCU_AEgVK1H_9w/exec"
+        "https://script.google.com/macros/s/AKfycbzpKG1Rg2TAervfsMVe1McR_gmVlODInBUcrY2-cnMLOBZI0Dvd2yJuhn6PCIxyQEJK8A/exec"
 
     try {
         const formData = await request.formData()

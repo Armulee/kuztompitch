@@ -1,11 +1,9 @@
 import useSolid from "./solid"
-import useMetalic from "./glossy"
 import { useCustomizeContext } from "../../provider"
 import { Swiper, SwiperSlide } from "swiper/react"
 import { FreeMode, Mousewheel } from "swiper/modules"
 import useGlossy from "./glossy"
 import { Color } from ".."
-import { FaCheck } from "react-icons/fa6"
 
 export type Shade =
     | "Monochromatics"

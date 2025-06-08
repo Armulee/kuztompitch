@@ -1,6 +1,5 @@
 "use client"
 
-import { FaMinus, FaPlus, FaTrash, FaX } from "react-icons/fa6"
 import { useCustomizeContext } from "../provider"
 import { useRef, useState, useEffect, useCallback } from "react"
 

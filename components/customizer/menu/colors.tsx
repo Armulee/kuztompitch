@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { Swiper as SwiperType } from "swiper/types"
 import { useCustomizeContext } from "../provider"
 import ColorSwatch, { Shade } from "./swatches"
