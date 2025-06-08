@@ -20,7 +20,6 @@ export type ShadeColor = {
 const ColorSwatch = ({
     shade,
     handleClick,
-    color,
 }: {
     shade: Shade
     handleClick: ({
@@ -34,7 +33,6 @@ const ColorSwatch = ({
         color: string | string[]
         style: string
     }) => void
-    color: Color
 }) => {
     const colors: {
         [style: string]: ShadeColor

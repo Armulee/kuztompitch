@@ -154,7 +154,7 @@ export default function PaymentInfo({ orderNumber }: { orderNumber: string }) {
                 <div className='space-y-4'>
                     <Link href='/confirm-payment'>
                         <button className='w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold py-4 rounded-xl shadow-lg transition-all duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 flex items-center justify-center gap-2'>
-                            I've Made the Transfer - Confirm Payment
+                            I&apos;ve Made the Transfer - Confirm Payment
                             <FaArrowRight className='h-4 w-4' />
                         </button>
                     </Link>
