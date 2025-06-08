@@ -3,7 +3,6 @@ import { useCustomizeContext } from "../../provider"
 import { Swiper, SwiperSlide } from "swiper/react"
 import { FreeMode, Mousewheel } from "swiper/modules"
 import useGlossy from "./glossy"
-import { Color } from ".."
 
 export type Shade =
     | "Monochromatics"
