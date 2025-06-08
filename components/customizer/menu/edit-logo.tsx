@@ -16,8 +16,7 @@ const SLOPE = 0.011764706
 const Y_INTERCEPT = 5.141
 
 const EditLogo = () => {
-    const { logo, setLogo, setEditLogo, bgOffsetY, setBgOffsetY } =
-        useCustomizeContext()
+    const { logo, setLogo, bgOffsetY, setBgOffsetY } = useCustomizeContext()
 
     const containerRef = useRef<HTMLDivElement>(null)
     const [dragging, setDragging] = useState<boolean>(false)
@@ -98,26 +97,26 @@ const EditLogo = () => {
     }
 
     // handle change file image
-    const uploader = useRef<HTMLInputElement>(null)
-    const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0]
-        if (!file) return
+    // const uploader = useRef<HTMLInputElement>(null)
+    // const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     const file = e.target.files?.[0]
+    //     if (!file) return
 
-        const reader = new FileReader()
-        reader.onload = () => {
-            const img = new Image()
-            img.onload = () => {
-                setLogo({
-                    fileName: file.name,
-                    image: reader.result as string,
-                    position: [0, 2.2, 0.5],
-                    aspect: img.height / img.width,
-                })
-            }
-            img.src = reader.result as string
-        }
-        reader.readAsDataURL(file)
-    }
+    //     const reader = new FileReader()
+    //     reader.onload = () => {
+    //         const img = new Image()
+    //         img.onload = () => {
+    //             setLogo({
+    //                 fileName: file.name,
+    //                 image: reader.result as string,
+    //                 position: [0, 2.2, 0.5],
+    //                 aspect: img.height / img.width,
+    //             })
+    //         }
+    //         img.src = reader.result as string
+    //     }
+    //     reader.readAsDataURL(file)
+    // }
 
     return (
         <div className='select-none flex flex-col justify-center items-center'>
