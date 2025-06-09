@@ -49,6 +49,8 @@ export default function MainCheckout({
             status: "On Hold",
         }
 
+        console.log(data)
+
         try {
             const response = await fetch("/api/submit-order", {
                 method: "POST",
