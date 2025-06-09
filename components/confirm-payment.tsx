@@ -73,9 +73,9 @@ export default function ConfirmPayment() {
             )
             formDataToSend.append("transferDate", formData.transferDate)
             formDataToSend.append("transferTime", formData.transferTime)
-            if (formData.paymentSlip) {
-                formDataToSend.append("paymentSlip", formData.paymentSlip)
-            }
+            formDataToSend.append("paymentSlip", formData.paymentSlip)
+
+            console.log(formData.paymentSlip)
 
             const response = await fetch("/api/confirm-payment", {
                 method: "POST",
