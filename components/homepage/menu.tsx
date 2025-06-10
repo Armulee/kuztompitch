@@ -1,17 +1,18 @@
 // import Link from "next/link"
 import Link from "next/link"
-import { Nav } from "."
+import { Nav, smoothScrollTo } from "."
+import { FaChevronDown } from "react-icons/fa6"
 
 const Menu = ({
-    // navs,
+    navs,
     menu,
-}: // setMenu,
-// active,
-{
-    // navs: Nav[]
+    setMenu,
+    active,
+}: {
+    navs: Nav[]
     menu: boolean
-    // active: string
-    // setMenu: React.Dispatch<React.SetStateAction<boolean>>
+    active: string
+    setMenu: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
     return (
         <ul
@@ -19,7 +20,35 @@ const Menu = ({
                 !menu ? "translate-x-full" : "translate-x-0"
             }`}
         >
-            <li>
+            <li
+                className='text-lg flex items-center gap-2 cursor-pointer hover:underline'
+                onClick={() => {
+                    smoothScrollTo("home")
+                    setMenu(false)
+                }}
+            >
+                Home <FaChevronDown className='w-3 h-3' />
+            </li>
+            <ul className='text-center'>
+                {navs.map((nav) => (
+                    <li
+                        className={`text-xs text-white cursor-pointer mb-2 hover:underline ${
+                            active === nav.id
+                                ? "underline text-white"
+                                : "hover:underline text-white/70"
+                        }`}
+                        key={nav.id}
+                        onClick={() => {
+                            smoothScrollTo(nav.id)
+                            setMenu(false)
+                        }}
+                    >
+                        {nav.name}
+                    </li>
+                ))}
+            </ul>
+
+            <li className='text-lg mb-4'>
                 <Link
                     href={"/confirm-payment"}
                     className='cursor-pointer text-white/70 hover:text-white'
@@ -30,28 +59,12 @@ const Menu = ({
 
             <li>
                 <Link
-                    className='rounded-full bg-white text-black px-6 py-2 text-sm'
+                    className='rounded-full bg-white text-xl text-black px-10 py-2 text-sm'
                     href={"/customize"}
                 >
-                    <button>Customize</button>
+                    <button>Try Customize</button>
                 </Link>
             </li>
-            {/* {navs.map((nav, index) => (
-                <li
-                    className={`text-white cursor-pointer hover:underline ${
-                        active === nav.key
-                            ? "underline text-white"
-                            : "hover:underline text-white/70"
-                    }`}
-                    key={nav.key}
-                    onClick={() => {
-                        smoothScrollTo(nav, index)
-                        setMenu(false)
-                    }}
-                >
-                    {nav.name}
-                </li>
-            ))} */}
         </ul>
     )
 }

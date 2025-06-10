@@ -18,6 +18,7 @@ export default function Checkout() {
                 {submitted ? (
                     <PaymentInfo orderNumber={orderNumber} />
                 ) : (
+                    
                     <MainCheckout
                         setSubmitted={setSubmiited}
                         setOrderNumber={setOrderNumber}

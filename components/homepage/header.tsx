@@ -4,7 +4,7 @@ import Link from "next/link"
 import { FaChevronDown, FaX } from "react-icons/fa6"
 import { GiHamburgerMenu } from "react-icons/gi"
 import whiteLogo from "../../public/assets/white-logo.png"
-import { Nav } from "."
+import { Nav, smoothScrollTo } from "."
 
 const Header = ({
     navs,
@@ -24,21 +24,21 @@ const Header = ({
                     <Image className='w-auto h-[50px]' src={whiteLogo} alt='' />
                 </Link>
                 <ul className='md:flex gap-4 hidden text-sm'>
-                    {/* <li
-                        className='relative group'
-                        onClick={() => smoothScrollTo("home")}
-                    > */}
-                    {/* <div className='cursor-pointer text-white underline underline-offset-2 flex items-center gap-1'>
-                             Home 
+                    <li className='relative group'>
+                        <div
+                            className='cursor-pointer text-white underline underline-offset-2 flex items-center gap-1'
+                            onClick={() => smoothScrollTo("home")}
+                        >
+                            Home
                             <FaChevronDown className='w-2 h-2 text-white' />
-                        </div> */}
-                    {/* <ul className='absolute top-full left-0 bg-black p-2 hidden group-hover:block space-y-1 min-w-[180px] z-50'>
+                        </div>
+                        <ul className='absolute top-full left-0 bg-black p-2 hidden group-hover:block space-y-1 min-w-[180px] z-50'>
                             {navs.map((nav) => (
                                 <li
-                                    key={nav.key}
+                                    key={nav.id}
                                     onClick={() => smoothScrollTo(nav.id)}
                                     className={`cursor-pointer px-3 py-1 hover:bg-white/10 ${
-                                        active === nav.key
+                                        active === nav.id
                                             ? "text-white underline"
                                             : "text-white/70"
                                     }`}
@@ -46,8 +46,8 @@ const Header = ({
                                     {nav.name}
                                 </li>
                             ))}
-                        </ul> */}
-                    {/* </li> */}
+                        </ul>
+                    </li>
 
                     <li>
                         <Link
