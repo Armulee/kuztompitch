@@ -1,5 +1,5 @@
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6"
-import { useCustomizeContext } from "../../provider"
+import { useCustomizeContext } from "../provider"
 
 const Head = () => {
     const { part, setPart, setFocusedPart, setFocusStartTime } =
@@ -26,7 +26,7 @@ const Head = () => {
     return (
         <div
             id='head'
-            className='w-full text-center mb-2 flex justify-center items-center z-10'
+            className='w-full text-center mb-2 flex justify-center items-center z-10 absolute bottom-0'
         >
             <FaChevronLeft
                 className={`${

@@ -13,9 +13,8 @@ import ContactUs from "./contact-us"
 
 export type Nav = {
     name: string
-    href?: string
+    id: string
     key: string
-    children?: { name: string; href: string; key: string }[]
 }
 
 const HomePage = () => {
@@ -35,22 +34,15 @@ const HomePage = () => {
         }
     }, [])
 
-    const navs: Nav[] = useMemo(() => {
-        const dropdownItems = [
-            { name: "About us", href: "#about-us", key: "about-us" },
-            { name: "Services", href: "#services", key: "services" },
-            { name: "Our Project", href: "#our-projects", key: "our-projects" },
-            { name: "Contact Us", href: "#contact-us", key: "contact-us" },
-        ]
-        return [
-            { name: "Home", key: "home", children: dropdownItems }, // This becomes dropdown
-            {
-                name: "Confirm Payment",
-                href: "/confirm-payment",
-                key: "confirm-payment",
-            },
-        ]
-    }, [])
+    const navs: Nav[] = useMemo(
+        () => [
+            { name: "About us", id: "about-us", key: "about-us" },
+            { name: "Services", id: "services", key: "services" },
+            { name: "Our Project", id: "our-projects", key: "our-projects" },
+            { name: "Contact Us", id: "contact-us", key: "contact-us" },
+        ],
+        []
+    )
 
     const [menu, setMenu] = useState<boolean>(false)
     useEffect(() => {
@@ -73,35 +65,27 @@ const HomePage = () => {
             let current = ""
 
             navs.forEach((nav) => {
-                if (nav.children) {
-                    nav.children.forEach((child) => {
-                        const section = document.getElementById(
-                            child.href.replace("#", "")
-                        )
-                        if (section) {
-                            const offsetTop = section.offsetTop
-                            const offsetHeight = section.offsetHeight
+                const section = document.getElementById(nav.id)
 
-                            if (
-                                scrollY >= offsetTop - 100 &&
-                                scrollY < offsetTop + offsetHeight - 100
-                            ) {
-                                current = nav.key
-                            }
-                        }
-                    })
+                if (section) {
+                    const offsetTop = section.offsetTop
+                    const offsetHeight = section.offsetHeight
+
+                    if (
+                        scrollY >= offsetTop - 100 &&
+                        scrollY < offsetTop + offsetHeight - 100
+                    ) {
+                        current = nav.key
+                    }
                 }
             })
 
             // 🔽 Near bottom? Force active to "contact-us"
             if (windowHeight + scrollY >= pageHeight - 150) {
                 const contactNav = navs.find((nav) => {
-                    if (nav.children) {
-                        return nav.children.find((n) =>
-                            n.href.includes("contact")
-                        )
-                    }
+                    nav.id.includes("contact")
                 })
+
                 if (contactNav) {
                     current = contactNav.key
                 }
@@ -117,7 +101,12 @@ const HomePage = () => {
     }, [navs])
     return (
         <main className='overflow-x-hidden relative'>
-            <Menu navs={navs} menu={menu} setMenu={setMenu} active={active} />
+            <Menu
+                // navs={navs}
+                menu={menu}
+                // setMenu={setMenu}
+                // active={active}
+            />
             <Header navs={navs} menu={menu} setMenu={setMenu} active={active} />
             <Hero />
             <AboutUs />
@@ -133,35 +122,48 @@ const HomePage = () => {
 
 export default HomePage
 
-export const smoothScrollTo = (nav: Nav, target: number) => {
-    function smoothScroll(targetY: number, duration: number = 700) {
-        const startY = window.scrollY
-        const startTime = performance.now()
+// export const smoothScrollTo = (nav: string) => {
+//     // Check if the nav object and its key property exist
 
-        function scroll(currentTime: number) {
-            const elapsed = currentTime - startTime
-            const progress = Math.min(elapsed / duration, 1)
-            const easeInOutQuad =
-                progress < 0.5
-                    ? 2 * progress * progress
-                    : -1 + (4 - 2 * progress) * progress
+//     // Get the target element by its ID
+//     const targetElement = document.getElementById(nav)
 
-            window.scrollTo(0, startY + (targetY - startY) * easeInOutQuad)
+//     // If the element exists, scroll to it smoothly
+//     if (targetElement) {
+//         targetElement.scrollIntoView({
+//             behavior: "smooth", // Enables smooth scrolling animation
+//             block: "start", // Aligns the top of the element with the top of the scroll area
+//         })
+//     } else {
+//         // Log an error if the element is not found, useful for debugging
+//         console.error(`Element with ID '${nav}' not found for scrolling.`)
+//     }
+// }
 
-            if (elapsed < duration) {
-                requestAnimationFrame(scroll)
-            }
-        }
+// export const smoothScrollTo = (nav: Nav, duration: number = 1000) => {
+//     const startY = window.scrollY
+//     const startTime = performance.now()
 
-        requestAnimationFrame(scroll)
-    }
+//     function scroll(currentTime: number) {
+//         const elapsed = currentTime - startTime
+//         const progress = Math.min(elapsed / duration, 1)
+//         const easeInOutQuad =
+//             progress < 0.5
+//                 ? 2 * progress * progress
+//                 : -1 + (4 - 2 * progress) * progress
 
-    if (nav.children) {
-        const section = document.getElementById(
-            nav.children[target].href.replace("#", "")
-        )
-        if (section) {
-            smoothScroll(section.offsetTop - 80) // slower, smooth scroll
-        }
-    }
-}
+//         window.scrollTo(0, startY + (targetY - startY) * easeInOutQuad)
+
+//         if (elapsed < duration) {
+//             requestAnimationFrame(scroll)
+//         }
+//     }
+
+//     requestAnimationFrame(scroll)
+
+//     const section = document.getElementById(nav.id)
+
+//     if (section) {
+//         scroll(section.offsetTop - 80) // slower, smooth scroll
+//     }
+// }

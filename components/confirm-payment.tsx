@@ -3,14 +3,7 @@
 import type React from "react"
 
 import { useState } from "react"
-import {
-    FaCheckCircle,
-    FaUpload,
-    FaCalendarAlt,
-    FaClock,
-    FaReceipt,
-    FaSpinner,
-} from "react-icons/fa"
+import { FaCheckCircle, FaUpload, FaReceipt, FaSpinner } from "react-icons/fa"
 import Image from "next/image"
 import { FaChevronLeft } from "react-icons/fa6"
 import { useRouter } from "next/navigation"
@@ -27,11 +20,13 @@ const bank = {
 
 export default function ConfirmPayment() {
     const router = useRouter()
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<{
+        orderNumber: string
+        email: string
+        paymentSlip: string
+    }>({
         orderNumber: "",
-        transferredAccount: "",
-        transferDate: "",
-        transferTime: "",
+        email: "",
         paymentSlip: "",
     })
     const [previewImage, setPreviewImage] = useState<string | null>(null)
@@ -52,8 +47,13 @@ export default function ConfirmPayment() {
             const reader = new FileReader()
             reader.onload = (e) => {
                 const slip = e.target?.result as string
-                setFormData((prev) => ({ ...prev, paymentSlip: slip }))
                 setPreviewImage(slip)
+
+                // Save Blob in state to send later
+                setFormData((prev) => ({
+                    ...prev,
+                    paymentSlip: slip,
+                }))
             }
             reader.readAsDataURL(file)
         }
@@ -64,34 +64,28 @@ export default function ConfirmPayment() {
         setIsSubmitting(true)
 
         try {
-            // Dummy fetch logic
-            const formDataToSend = new FormData()
-            formDataToSend.append("orderNumber", formData.orderNumber)
-            formDataToSend.append(
-                "transferredAccount",
-                formData.transferredAccount
-            )
-            formDataToSend.append("transferDate", formData.transferDate)
-            formDataToSend.append("transferTime", formData.transferTime)
-            formDataToSend.append("paymentSlip", formData.paymentSlip)
+            if (formData.paymentSlip) {
+                const formDataToSend = new FormData()
+                formDataToSend.append("orderNumber", formData.orderNumber)
+                formDataToSend.append("email", formData.email)
+                formDataToSend.append("paymentSlip", formData.paymentSlip)
 
-            console.log(formData.paymentSlip)
+                const response = await fetch("/api/confirm-payment", {
+                    method: "POST",
+                    body: formDataToSend,
+                })
 
-            const response = await fetch("/api/confirm-payment", {
-                method: "POST",
-                body: formDataToSend,
-            })
-
-            if (response.ok) {
-                setIsSubmitted(true)
-            } else {
-                throw new Error(
-                    "Something went wrong, please check your order number."
-                )
+                const result = await response.json()
+                if (result.success) {
+                    setIsSubmitted(true)
+                } else {
+                    throw new Error(result.message)
+                }
             }
         } catch (error) {
+            const err = error as Error
             console.error("Error submitting payment confirmation:", error)
-            alert("Failed to submit payment confirmation. Please try again.")
+            alert(err.message)
         } finally {
             setIsSubmitting(false)
         }
@@ -187,7 +181,31 @@ export default function ConfirmPayment() {
                                     value={formData.orderNumber}
                                     onChange={handleInputChange}
                                     className='w-full pl-10 pr-4 py-2 text-slate-700 border border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-colors'
-                                    placeholder='Enter your order number (e.g., ORD-2024-001)'
+                                    placeholder='Enter your order number (e.g., 000000)'
+                                />
+                            </div>
+                        </div>
+
+                        {/* Tel Number */}
+                        <div className='space-y-2'>
+                            <label
+                                htmlFor='orderNumber'
+                                className='block text-sm font-medium text-slate-700'
+                            >
+                                Email
+                                <span className='text-red-500'>*</span>
+                            </label>
+                            <div className='relative'>
+                                <FaReceipt className='absolute left-3 top-3 h-4 w-4 text-slate-400' />
+                                <input
+                                    id='email'
+                                    name='email'
+                                    type='email'
+                                    required
+                                    value={formData.email}
+                                    onChange={handleInputChange}
+                                    className='w-full pl-10 pr-4 py-2 text-slate-700 border border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-colors'
+                                    placeholder='Enter your email (e.g., jane.doe@example.com)'
                                 />
                             </div>
                         </div>
@@ -221,7 +239,7 @@ export default function ConfirmPayment() {
                         </div>
 
                         {/* Transfer Date and Time */}
-                        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                        {/* <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                             <div className='space-y-2'>
                                 <label
                                     htmlFor='transferDate'
@@ -263,7 +281,7 @@ export default function ConfirmPayment() {
                                     />
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
 
                         {/* Payment Slip Upload */}
                         <div className='space-y-2'>
@@ -298,7 +316,11 @@ export default function ConfirmPayment() {
                                                 alt='Payment slip preview'
                                                 width={200}
                                                 height={300}
-                                                className='w-[200px] h-auto mx-auto rounded-lg shadow-sm max-h-60 object-contain'
+                                                style={{
+                                                    width: "auto",
+                                                    height: "auto",
+                                                }}
+                                                className='mx-auto rounded-lg shadow-sm max-h-60 object-contain'
                                             />
                                             <p className='text-sm text-slate-600'>
                                                 Click to change your slip

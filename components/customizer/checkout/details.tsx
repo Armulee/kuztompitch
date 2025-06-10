@@ -41,13 +41,14 @@ const Details = ({
 
                     <div className='flex-1 space-y-4'>
                         <div>
-                            <div>
+                            <div className='w-[180px]'>
                                 <label className='mr-2 text-black'>
-                                    Model:{" "}
+                                    Select your model:{" "}
                                     <span className='text-red-500'>*</span>
                                 </label>
 
                                 <select
+                                    required
                                     onChange={(e) => setModel(e.target.value)}
                                     value={model}
                                     className='text-slate-900 mb-2 border border-black border-2 rounded'

@@ -5,9 +5,9 @@ const Hero = () => {
     return (
         <section
             id='home'
-            className='w-full h-[100dvh] flex flex-col justify-center items-center relative'
+            className='w-full h-[100vh] overflow-hidden flex flex-col justify-center items-center relative'
         >
-            <div className='z-50 absolute top-[18%] md:top-1/2 md:left-1/2 md:-translate-y-1/2'>
+            <div className='z-30 absolute top-[18%] md:top-1/2 md:left-1/2 md:-translate-y-1/2'>
                 <div className='w-full flex-col justify-center items-center mb-4'>
                     <h1 className='text-[40px] md:text-5xl lg:text-7xl text-center md:text-start'>
                         Kuztom Pitch
@@ -25,13 +25,13 @@ const Hero = () => {
                     <SocialMedias className='hidden absolute right-4 top-1/2 md:flex relative translate-y-0 z-50' />
                 </div>
             </div>
-            <SocialMedias className='md:hidden absolute right-4 top-1/2 -translate-y-1/2 flex-col z-50' />
+            <SocialMedias className='md:hidden absolute right-4 top-1/2 -translate-y-1/2 flex-col z-30' />
 
             {/* Video Overlay  */}
-            <div className='bg-black/20 absolute w-full h-full z-20' />
+            <div className='bg-black/20 md:bg-black/20 absolute w-full h-full z-20' />
             {/* MP4 */}
             <video
-                className='absolute -bottom-1/2 right-10 translate-x-0 md:left-1/4 md:-bottom-[25%] md:-translate-x-1/2 w-full h-[120dvh] object-cover -z-10'
+                className='absolute -bottom-1/2 right-10 translate-x-0 md:left-1/4 md:-bottom-[25%] md:-translate-x-1/2 w-full h-[120vh] object-cover -z-10'
                 autoPlay
                 muted
                 playsInline
@@ -39,7 +39,7 @@ const Hero = () => {
             >
                 <source src='/assets/hero.webm' type='video/webm' />
             </video>
-            <div className='absolute bottom-0 w-full h-[70px] bg-gradient-to-t from-white to-black opacity-50 -z-20' />
+            {/* <div className='absolute bottom-0 w-full h-[70px] bg-gradient-to-t from-white to-black opacity-50 -z-20' /> */}
         </section>
     )
 }

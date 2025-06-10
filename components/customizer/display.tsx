@@ -1,6 +1,5 @@
 import { useCallback } from "react"
-import { useCustomizeContext } from "../../provider"
-import Head from "./head"
+import { useCustomizeContext } from "./provider"
 
 const Display = () => {
     const { displayStyle, displayColor, colorName } = useCustomizeContext()
@@ -34,7 +33,6 @@ const Display = () => {
     }, [displayColor])
     return (
         <div className='w-full relative'>
-            <Head />
             <div className='bg-black'>
                 <div
                     style={{

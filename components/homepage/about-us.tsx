@@ -9,7 +9,7 @@ const AboutUs = () => {
         <section id='about-us' className='flex flex-col md:flex-row shrink-0'>
             <div className='w-full'>
                 <div className='flex flex-col justify-center items-start'>
-                    <div className='w-full h-screen relative'>
+                    <div className='w-full h-[70vh] relative'>
                         <ParallaxContent
                             imgUrl={aboutUs}
                             heading='Through Luxury Customization.'

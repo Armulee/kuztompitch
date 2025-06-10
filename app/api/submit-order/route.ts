@@ -15,9 +15,8 @@ export async function POST(req: Request) {
 
         const result = await response.json()
 
-        console.log(result)
         if (result.success) {
-            return NextResponse.json(result, { status: 200 })
+            return NextResponse.json(result, { status: 400 })
         } else {
             return NextResponse.json({ message: "Error" }, { status: 400 })
         }

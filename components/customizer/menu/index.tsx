@@ -151,7 +151,7 @@ const Menu = () => {
 
     return (
         <div className={`h-full bg-black relative`}>
-            <div className={`${isIphone ? "py-4 px-2" : "p-4"} h-full`}>
+            <div className={`${isIphone ? "py-4 px-2" : "p-4"} h-full `}>
                 {!editLogo ? <Colors setColor={setColor} /> : <EditLogo />}
             </div>
         </div>

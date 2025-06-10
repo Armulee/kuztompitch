@@ -8,10 +8,12 @@ export async function POST(request: NextRequest) {
         const formData = await request.formData()
 
         const orderNumber = formData.get("orderNumber") as string
-        const paymentSlip = formData.get("paymentSlip") as File
+        const email = formData.get("email") as string
+        const paymentSlip = formData.get("paymentSlip") as string
 
         const data = {
             orderNumber,
+            email: email.trim().toLowerCase(),
             slip: paymentSlip,
         }
 
