@@ -37,7 +37,7 @@ export default function MainCheckout({
         const data = {
             timestamp,
             fullName,
-            email,
+            email: email.trim().toLowerCase(),
             telephone,
             snapshot,
             decal: logo.image,

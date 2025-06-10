@@ -10,17 +10,6 @@ import { useCustomizeContext } from "../provider"
 export default function PaymentInfo({ orderNumber }: { orderNumber: string }) {
     const router = useRouter()
     const { pricing } = useCustomizeContext()
-    const [copied, setCopied] = useState<boolean>(false)
-
-    const copyToClipboard = async () => {
-        try {
-            await navigator.clipboard.writeText("102-3-21860-3")
-            setCopied(true)
-            setTimeout(() => setCopied(false), 1500)
-        } catch (err) {
-            console.error("Failed to copy text: ", err)
-        }
-    }
 
     return (
         <div className='min-h-screen bg-gradient-to-br from-slate-50 to-slate-100'>
@@ -107,17 +96,6 @@ export default function PaymentInfo({ orderNumber }: { orderNumber: string }) {
                                     <span>เดอะมอลล์ งามวงศ์วาน</span>
                                 </p>
                             </div>
-                            <button
-                                onClick={() => copyToClipboard()}
-                                className='p-2 text-green-600 hover:bg-green-100 rounded-lg transition-colors'
-                                title='Copy bank name'
-                            >
-                                {copied ? (
-                                    <FaCheckCircle className='h-4 w-4' />
-                                ) : (
-                                    <FaCopy className='h-4 w-4' />
-                                )}
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -154,7 +132,7 @@ export default function PaymentInfo({ orderNumber }: { orderNumber: string }) {
                 <div className='space-y-4'>
                     <Link href='/confirm-payment'>
                         <button className='w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold py-4 rounded-xl shadow-lg transition-all duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 flex items-center justify-center gap-2'>
-                            I&apos;ve Made the Transfer - Confirm Payment
+                            Confirm Payment
                             <FaArrowRight className='h-4 w-4' />
                         </button>
                     </Link>
@@ -164,14 +142,6 @@ export default function PaymentInfo({ orderNumber }: { orderNumber: string }) {
                         upload your payment slip
                     </p>
                 </div>
-
-                {/* Copy Success Message */}
-                {copied && (
-                    <div className='fixed bottom-4 right-4 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-2 animate-fade-in'>
-                        <FaCheckCircle className='h-4 w-4' />
-                        Copied to clipboard!
-                    </div>
-                )}
             </div>
         </div>
     )

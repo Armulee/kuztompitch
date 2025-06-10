@@ -74,7 +74,7 @@ const SideMenu = () => {
 
             <IoIosHelpCircle
                 onClick={() => setTour(true)}
-                className='w-10 h-10 text-black absolute -bottom-5 right-4 z-30'
+                className='w-10 h-10 text-black absolute bottom-2 right-4 z-30'
             />
         </>
     )

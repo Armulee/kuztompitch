@@ -34,7 +34,7 @@ const StickyImage = ({ imgUrl }: { imgUrl: StaticImageData }) => {
     return (
         <motion.div
             style={{
-                height: "100vh",
+                height: "70vh",
                 top: IMG_PADDING,
                 scale,
             }}
@@ -46,7 +46,7 @@ const StickyImage = ({ imgUrl }: { imgUrl: StaticImageData }) => {
                 className='w-full h-full'
                 style={{
                     objectFit: "cover",
-                    objectPosition: "center",
+                    objectPosition: "90%",
                 }}
                 src={imgUrl}
             />
@@ -83,7 +83,7 @@ const OverlayCopy = ({
                 opacity,
             }}
             ref={targetRef}
-            className='absolute left-0 top-0 flex h-screen w-full flex-col items-center justify-center text-white'
+            className='absolute left-0 top-0 flex h-[70vh] w-full flex-col items-center justify-center text-white'
         >
             <p className='mb-2 text-center text-xl md:mb-4 md:text-3xl'>
                 {subheading}

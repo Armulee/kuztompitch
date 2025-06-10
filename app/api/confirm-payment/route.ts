@@ -2,16 +2,18 @@ import { type NextRequest, NextResponse } from "next/server"
 
 export async function POST(request: NextRequest) {
     const url =
-        "https://script.google.com/macros/s/AKfycbzABxT3UFQV6djI8E9ZQuHycnylBuIcx3r3KztGYr6G4RvEqgxUI82xsKrd0S9sZp5DKQ/exec"
+        "https://script.google.com/macros/s/AKfycbzOgXH2htjXgefPm4TCrW2Gg8WU-Ak0Em61IF0zRiXiCGXqE4ibYqCe93rbspW0pQ0TQw/exec"
 
     try {
         const formData = await request.formData()
 
         const orderNumber = formData.get("orderNumber") as string
-        const paymentSlip = formData.get("paymentSlip") as File
+        const email = formData.get("email") as string
+        const paymentSlip = formData.get("paymentSlip") as string
 
         const data = {
             orderNumber,
+            email: email.trim().toLowerCase(),
             slip: paymentSlip,
         }
 

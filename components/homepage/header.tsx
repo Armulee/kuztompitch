@@ -4,7 +4,7 @@ import Link from "next/link"
 import { FaChevronDown, FaX } from "react-icons/fa6"
 import { GiHamburgerMenu } from "react-icons/gi"
 import whiteLogo from "../../public/assets/white-logo.png"
-import { Nav, smoothScrollTo } from "."
+import { Nav } from "."
 
 const Header = ({
     navs,
@@ -24,42 +24,39 @@ const Header = ({
                     <Image className='w-auto h-[50px]' src={whiteLogo} alt='' />
                 </Link>
                 <ul className='md:flex gap-4 hidden text-sm'>
-                    {navs.map((nav) =>
-                        nav.children ? (
-                            <li key={nav.key} className='relative group'>
-                                <div className='cursor-pointer text-white underline underline-offset-2 flex items-center gap-1'>
-                                    {nav.name}
-                                    <FaChevronDown className='w-2 h-2 text-white' />
-                                </div>
-                                <ul className='absolute top-full left-0 bg-black p-2 hidden group-hover:block space-y-1 min-w-[180px] z-50'>
-                                    {nav.children.map((child, index) => (
-                                        <li
-                                            key={child.key}
-                                            onClick={() =>
-                                                smoothScrollTo(child, index)
-                                            }
-                                            className={`cursor-pointer px-3 py-1 hover:bg-white/10 ${
-                                                active === child.key
-                                                    ? "text-white underline"
-                                                    : "text-white/70"
-                                            }`}
-                                        >
-                                            {child.name}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </li>
-                        ) : (
-                            <li key={nav.key}>
-                                <Link
-                                    href={nav.href!}
-                                    className='cursor-pointer text-white/70 hover:text-white'
+                    {/* <li
+                        className='relative group'
+                        onClick={() => smoothScrollTo("home")}
+                    > */}
+                    {/* <div className='cursor-pointer text-white underline underline-offset-2 flex items-center gap-1'>
+                             Home 
+                            <FaChevronDown className='w-2 h-2 text-white' />
+                        </div> */}
+                    {/* <ul className='absolute top-full left-0 bg-black p-2 hidden group-hover:block space-y-1 min-w-[180px] z-50'>
+                            {navs.map((nav) => (
+                                <li
+                                    key={nav.key}
+                                    onClick={() => smoothScrollTo(nav.id)}
+                                    className={`cursor-pointer px-3 py-1 hover:bg-white/10 ${
+                                        active === nav.key
+                                            ? "text-white underline"
+                                            : "text-white/70"
+                                    }`}
                                 >
                                     {nav.name}
-                                </Link>
-                            </li>
-                        )
-                    )}
+                                </li>
+                            ))}
+                        </ul> */}
+                    {/* </li> */}
+
+                    <li>
+                        <Link
+                            href={"/confirm-payment"}
+                            className='cursor-pointer text-white/70 hover:text-white'
+                        >
+                            Confirm Payment
+                        </Link>
+                    </li>
 
                     <li>
                         <Link

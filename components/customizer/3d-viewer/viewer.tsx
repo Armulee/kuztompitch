@@ -69,7 +69,7 @@ const Viewer = ({
 
                 {/* Optional: Contact shadows for soft base shadows */}
                 <ContactShadows
-                    position={[0, -1.7, 0]}
+                    position={[0, -1.5, 0]}
                     opacity={0.4}
                     scale={10}
                     blur={2}
