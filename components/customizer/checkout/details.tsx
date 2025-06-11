@@ -5,16 +5,18 @@ import Skeleton from "react-loading-skeleton"
 import { FaBox } from "react-icons/fa6"
 // import { FaMapPin } from "react-icons/fa6"
 
-const models = ["SM58", "BETA58A", "KSM8"]
-const Details = ({
-    model,
-    setModel,
-}: {
-    model: string
-    setModel: React.Dispatch<React.SetStateAction<string>>
-}) => {
-    const { pricing, snapshot, loading, capsule, topHandle, bottomHandle } =
-        useCustomizeContext()
+const models = ["SM58", "BETA58", "KSM8", "NXN8"]
+const Details = () => {
+    const {
+        pricing,
+        snapshot,
+        loading,
+        capsule,
+        topHandle,
+        bottomHandle,
+        model,
+        setModel,
+    } = useCustomizeContext()
     const parts = [capsule, topHandle, bottomHandle]
     return (
         <div className='bg-white rounded-xl shadow-sm border border-slate-200'>
@@ -53,9 +55,9 @@ const Details = ({
                                     value={model}
                                     className='text-slate-900 mb-2 border border-black border-2 rounded'
                                 >
-                                    {models.map((model, index) => (
-                                        <option key={index} value={model}>
-                                            {model}
+                                    {models.map((m, index) => (
+                                        <option key={index} value={m}>
+                                            {m}
                                         </option>
                                     ))}
                                 </select>
@@ -67,7 +69,7 @@ const Details = ({
 
                         <div className='pt-2'>
                             <span className='text-3xl font-bold text-slate-900'>
-                                {pricing}
+                                {pricing.toLocaleString()}฿
                             </span>
                         </div>
                     </div>

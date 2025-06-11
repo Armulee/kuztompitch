@@ -1,13 +1,18 @@
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
-import { FaCheckCircle, FaInfoCircle, FaUniversity } from "react-icons/fa"
-import { FaArrowRight, FaChevronLeft, FaCopy } from "react-icons/fa6"
+import { FaInfoCircle, FaUniversity } from "react-icons/fa"
+import { FaArrowRight, FaChevronLeft } from "react-icons/fa6"
 import kbankLogo from "@/public/assets/kbank-logo.png"
 import { useCustomizeContext } from "../provider"
 
-export default function PaymentInfo({ orderNumber }: { orderNumber: string }) {
+export default function PaymentInfo({
+    orderNumber,
+    total,
+}: {
+    orderNumber: string
+    total: number
+}) {
     const router = useRouter()
     const { pricing } = useCustomizeContext()
 
@@ -57,7 +62,7 @@ export default function PaymentInfo({ orderNumber }: { orderNumber: string }) {
                                 Total Amount:
                             </span>
                             <span className='text-2xl font-bold text-green-600'>
-                                xx,xxx ฿
+                                {total.toLocaleString()}฿
                             </span>
                         </div>
                     </div>
