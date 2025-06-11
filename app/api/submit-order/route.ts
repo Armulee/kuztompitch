@@ -3,7 +3,7 @@ import { NextResponse } from "next/server"
 export async function POST(req: Request) {
     const data = await req.json()
     const url =
-        "https://script.google.com/macros/s/AKfycbzOgXH2htjXgefPm4TCrW2Gg8WU-Ak0Em61IF0zRiXiCGXqE4ibYqCe93rbspW0pQ0TQw/exec"
+        "https://script.google.com/macros/s/AKfycbzu5f7XDqAfWz-OCVaEKpsD1SepgajGuE9dX4yXI_5LDZtIpF-H113n3LAHindxp-l8Ag/exec"
     try {
         const response = await fetch(url, {
             method: "POST",
@@ -16,7 +16,7 @@ export async function POST(req: Request) {
         const result = await response.json()
 
         if (result.success) {
-            return NextResponse.json(result, { status: 400 })
+            return NextResponse.json(result, { status: 200 })
         } else {
             return NextResponse.json({ message: "Error" }, { status: 400 })
         }

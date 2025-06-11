@@ -1,6 +1,12 @@
 import { useCustomizeContext } from "../provider"
 
-const Total = ({ selectedDelivery }: { selectedDelivery: string }) => {
+const Total = ({
+    total,
+    totalDiscount,
+}: {
+    total: number
+    totalDiscount: number
+}) => {
     const { pricing } = useCustomizeContext()
     return (
         <div className='lg:col-span-1'>
@@ -14,33 +20,23 @@ const Total = ({ selectedDelivery }: { selectedDelivery: string }) => {
                     <div className='space-y-3'>
                         <div className='flex justify-between text-slate-600'>
                             <span>Subtotal</span>
-                            <span>{pricing}</span>
+                            <span>{pricing.toLocaleString()}฿</span>
+                        </div>
+
+                        <div className='flex justify-between text-slate-600'>
+                            <span>Discount</span>
+                            <span>-{totalDiscount.toLocaleString()}฿</span>
                         </div>
 
                         <div className='flex justify-between text-slate-600'>
                             <span>Delivery</span>
-                            <span
-                                className={
-                                    selectedDelivery === "pickup"
-                                        ? "text-green-600 font-medium"
-                                        : ""
-                                }
-                            >
-                                {selectedDelivery === "pickup"
-                                    ? "Free"
-                                    : "60 ฿"}
-                            </span>
-                        </div>
-
-                        <div className='flex justify-between text-slate-600'>
-                            <span>Tax (7%)</span>
-                            <span>175 ฿</span>
+                            <span>100฿</span>
                         </div>
 
                         <div className='border-t border-slate-200 pt-3'>
                             <div className='flex justify-between text-lg font-bold text-slate-900'>
                                 <span>Total</span>
-                                <span>{pricing}</span>
+                                <span>{total.toLocaleString()}฿</span>
                             </div>
                         </div>
                     </div>

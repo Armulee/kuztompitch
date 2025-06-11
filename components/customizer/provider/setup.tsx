@@ -48,7 +48,21 @@ const useProviderSetup = () => {
         name: "Bottom Handle",
     })
 
-    const [pricing, setPricing] = useState<string>("xx,xxx ฿")
+    const [model, setModel] = useState<string>("SM58")
+    const [pricing, setPricing] = useState<number>(9900)
+    // Change pricing when model change
+    useEffect(() => {
+        if (model === "SM58") {
+            setPricing(9900)
+        } else if (model === "BETA58") {
+            setPricing(11900)
+        } else if (model === "KSM8") {
+            setPricing(20900)
+        } else if (model === "NXN8") {
+            setPricing(18900)
+        }
+    }, [model])
+
     const [loading, setLoading] = useState<boolean>(true)
     const [tour, setTour] = useState<boolean>(true)
     const [isRotating, setIsRotating] = useState(true)
@@ -180,6 +194,8 @@ const useProviderSetup = () => {
         setFocusStartTime,
         bgOffsetY,
         setBgOffsetY,
+        model,
+        setModel,
     }
 
     return value

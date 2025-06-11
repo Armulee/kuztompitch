@@ -6,31 +6,39 @@ import Payment from "./payment"
 import Total from "./total"
 import { useState } from "react"
 import { FaChevronLeft } from "react-icons/fa6"
+import Discount from "./discount"
 
 export default function MainCheckout({
     setSubmitted,
     setOrderNumber,
     setLoading,
+    total,
+    setDiscount,
+    totalDiscount,
 }: {
     setSubmitted: React.Dispatch<React.SetStateAction<boolean>>
     setOrderNumber: React.Dispatch<React.SetStateAction<string>>
     setLoading: React.Dispatch<React.SetStateAction<boolean>>
+    total: number
+    setDiscount: React.Dispatch<React.SetStateAction<number>>
+    totalDiscount: number
 }) {
-    const { setCheckout, capsule, topHandle, bottomHandle, snapshot, logo } =
-        useCustomizeContext()
-    const [selectedDelivery, setSelectedDelivery] = useState<"ems" | "pickup">(
-        "ems"
-    )
-
+    const {
+        setCheckout,
+        capsule,
+        topHandle,
+        bottomHandle,
+        snapshot,
+        logo,
+        model,
+    } = useCustomizeContext()
     const [fullName, setFullName] = useState<string>("")
     const [email, setEmail] = useState<string>("")
     const [telephone, setTelephone] = useState<string>("")
     const [address, setAddress] = useState<string>("")
-    const [model, setModel] = useState<string>("SM58")
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-
         setLoading(true)
 
         const timestamp = new Date().toISOString()
@@ -46,10 +54,9 @@ export default function MainCheckout({
             topHandle: `${topHandle.style}, ${topHandle.color} (${topHandle.colorName})`,
             bottomHandle: `${bottomHandle.style}, ${bottomHandle.color} (${bottomHandle.colorName})`,
             address,
+            pricing: total,
             status: "On Hold",
         }
-
-        console.log(data)
 
         try {
             const response = await fetch("/api/submit-order", {
@@ -95,11 +102,8 @@ export default function MainCheckout({
             <form onSubmit={handleSubmit} className='grid md:grid-cols-3 gap-8'>
                 {/* Main Content */}
                 <div className='md:col-span-2 space-y-8'>
-                    <Details setModel={setModel} model={model} />
-                    <Delivery
-                        selectedDelivery={selectedDelivery}
-                        setSelectedDelivery={setSelectedDelivery}
-                    />
+                    <Details />
+                    <Delivery />
                     <Address
                         setFullName={setFullName}
                         setEmail={setEmail}
@@ -107,10 +111,11 @@ export default function MainCheckout({
                         setAddress={setAddress}
                     />
                     <Payment />
+                    <Discount setDiscount={setDiscount} />
                 </div>
 
                 {/* Order Summary Sidebar */}
-                <Total selectedDelivery={selectedDelivery} />
+                <Total total={total} totalDiscount={totalDiscount} />
             </form>
         </>
     )

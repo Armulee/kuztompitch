@@ -15,8 +15,8 @@ export type CustomizeContextType = {
     setColorName: React.Dispatch<React.SetStateAction<string>>
     displayColor: string | string[]
     setDisplayColor: React.Dispatch<React.SetStateAction<string | string[]>>
-    pricing: string
-    setPricing: React.Dispatch<React.SetStateAction<string>>
+    pricing: number
+    setPricing: React.Dispatch<React.SetStateAction<number>>
     isIphone: boolean
     loading: boolean
     setLoading: React.Dispatch<React.SetStateAction<boolean>>
@@ -52,6 +52,8 @@ export type CustomizeContextType = {
     setFocusStartTime: React.Dispatch<React.SetStateAction<number | null>>
     editLogo: boolean
     setEditLogo: React.Dispatch<React.SetStateAction<boolean>>
+    model: string
+    setModel: React.Dispatch<React.SetStateAction<string>>
 }
 
 export type Material = {
