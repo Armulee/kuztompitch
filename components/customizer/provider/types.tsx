@@ -35,6 +35,8 @@ export type CustomizeContextType = {
         position: number[]
         image: string
         aspect: number
+        flipHorizontal: boolean
+        flipVertical: boolean
     }
     setLogo: React.Dispatch<
         React.SetStateAction<{
@@ -42,6 +44,8 @@ export type CustomizeContextType = {
             position: number[]
             image: string
             aspect: number
+            flipHorizontal: boolean
+            flipVertical: boolean
         }>
     >
     bgOffsetY: number

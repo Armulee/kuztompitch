@@ -33,6 +33,8 @@ const Pricing = () => {
                     image: reader.result as string,
                     position: [0, 2.2, 0.5],
                     aspect: img.height / img.width,
+                    flipHorizontal: false,
+                    flipVertical: false,
                 })
             }
             img.src = reader.result as string
@@ -113,6 +115,8 @@ const Pricing = () => {
                                         image: "",
                                         position: [0, 2.2, 0.5],
                                         aspect: 0,
+                                        flipHorizontal: false,
+                                        flipVertical: false,
                                     })
                                     setEditLogo(false)
                                 }}

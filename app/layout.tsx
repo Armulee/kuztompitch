@@ -4,6 +4,7 @@ import "./globals.css"
 import "swiper/css"
 import "swiper/css/free-mode"
 import "react-loading-skeleton/dist/skeleton.css"
+import Navbar from "@/components/navbar"
 
 const geistSans = localFont({
     src: "./fonts/GeistVF.woff",
@@ -60,6 +61,7 @@ export default function RootLayout({
             <body
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
+                <Navbar />
                 {children}
             </body>
         </html>

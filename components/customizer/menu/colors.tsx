@@ -39,7 +39,7 @@ const Colors = ({
 
     return (
         <>
-            <div className='flex justify-between items-center'>
+            <div className='flex justify-between items-center pt-4'>
                 <div id='styles' className='flex justify-start items-center'>
                     {styles.map((s) => (
                         <div

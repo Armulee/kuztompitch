@@ -138,9 +138,14 @@ export function Microphone(props: GroupProps) {
     // Transform user uploaded image to texture to wrap in decal
     const logoTexture = useTexture(logo?.image || "/assets/transparent.png")
 
-    // logoTexture.wrapS = THREE.ClampToEdgeWrapping
-    // logoTexture.wrapT = THREE.ClampToEdgeWrapping
-    // logoTexture.repeat.set(0, 1)
+    // Fix texture wrapping to prevent looping
+    if (logoTexture && logo?.image) {
+        logoTexture.wrapS = THREE.ClampToEdgeWrapping
+        logoTexture.wrapT = THREE.ClampToEdgeWrapping
+        logoTexture.repeat.set(1, 1)
+        logoTexture.offset.set(0, 0)
+    }
+
     // const transformControls = useControls("Decal Adjustment", {
     //     position: {
     //         value: { x: 0, y: 2.2, z: 0.5 },
@@ -190,6 +195,7 @@ export function Microphone(props: GroupProps) {
     //         props.orbitControlsRef.current.enabled = !isDragging
     //     }
     // }, [isDragging])
+    console.log(logo.flipHorizontal)
     return (
         <group
             dispose={null}
@@ -211,24 +217,38 @@ export function Microphone(props: GroupProps) {
                 >
                     {logo?.image && (
                         <Decal
-                            // debug
-                            // position={[
-                            //     transformControls.position.x,
-                            //     transformControls.position.y,
-                            //     transformControls.position.z,
-                            // ]}
-                            position={logo.position as Vector3}
-                            rotation={[0, 0, 0]}
-                            scale={[1.2, 0.9, 1.2]}
-                            // onPointerDown={handlePointerDownDecal}
-                            // onPointerUp={handlePointerUpDecal}
-                            // onPointerMove={handlePointerMoveDecal}
+                            position={
+                                [
+                                    Math.sin(logo.position[0]) * 0.5,
+                                    logo.position[1],
+                                    Math.cos(logo.position[0]) * 0.5 + 0.05,
+                                ] as Vector3
+                            }
+                            rotation={[0, logo.position[0], 0]}
+                            scale={
+                                logo.aspect > 1
+                                    ? [
+                                          logo.flipHorizontal ? -1.2 : 1.2,
+                                          logo.flipVertical
+                                              ? -(1.2 / logo.aspect)
+                                              : 1.2 / logo.aspect,
+                                          1.2,
+                                      ]
+                                    : [
+                                          logo.flipHorizontal
+                                              ? -logo.aspect
+                                              : logo.aspect,
+                                          logo.flipVertical ? -1.2 : 1.2,
+                                          1.2,
+                                      ]
+                            }
                         >
                             <meshStandardMaterial
                                 roughness={1}
                                 transparent
                                 polygonOffset
-                                polygonOffsetFactor={-1}
+                                polygonOffsetFactor={-5}
+                                polygonOffsetUnits={-1}
                                 map={logoTexture}
                                 depthTest={true}
                                 depthWrite={false}
@@ -245,24 +265,38 @@ export function Microphone(props: GroupProps) {
                 >
                     {logo?.image && (
                         <Decal
-                            // debug
-                            // position={[
-                            //     transformControls.position.x,
-                            //     transformControls.position.y,
-                            //     transformControls.position.z,
-                            // ]}
-                            position={logo.position as Vector3}
-                            rotation={[0, 0, 0]}
-                            scale={[1.2, 1.2, 1.2]}
-                            // onPointerDown={handlePointerDownDecal}
-                            // onPointerUp={handlePointerUpDecal}
-                            // onPointerMove={handlePointerMoveDecal}
+                            position={
+                                [
+                                    Math.sin(logo.position[0]) * 0.5,
+                                    logo.position[1],
+                                    Math.cos(logo.position[0]) * 0.5 + 0.05,
+                                ] as Vector3
+                            }
+                            rotation={[0, logo.position[0], 0]}
+                            scale={
+                                logo.aspect > 1
+                                    ? [
+                                          logo.flipHorizontal ? -1.2 : 1.2,
+                                          logo.flipVertical
+                                              ? -(1.2 / logo.aspect)
+                                              : 1.2 / logo.aspect,
+                                          1.2,
+                                      ]
+                                    : [
+                                          logo.flipHorizontal
+                                              ? -logo.aspect
+                                              : logo.aspect,
+                                          logo.flipVertical ? -1.2 : 1.2,
+                                          1.2,
+                                      ]
+                            }
                         >
                             <meshStandardMaterial
                                 roughness={1}
                                 transparent
                                 polygonOffset
-                                polygonOffsetFactor={-1}
+                                polygonOffsetFactor={-5}
+                                polygonOffsetUnits={-1}
                                 map={logoTexture}
                                 depthTest={true}
                                 depthWrite={false}
