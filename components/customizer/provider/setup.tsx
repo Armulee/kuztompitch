@@ -135,21 +135,52 @@ const useProviderSetup = () => {
         }
     }, [tour])
 
-    const [logo, setLogo] = useState<{
+    const [logos, setLogos] = useState<{
+        id: string
         fileName: string
         position: number[]
         image: string
         aspect: number
         flipHorizontal: boolean
         flipVertical: boolean
-    }>({
-        fileName: "",
-        position: [0, 2.2, 0.5],
-        image: "",
-        aspect: 0,
-        flipHorizontal: false,
-        flipVertical: false,
-    })
+    }[]>([])
+    const [selectedLogoId, setSelectedLogoId] = useState<string | null>(null)
+
+    // Helper functions for logo management
+    const addLogo = (logoData: Omit<{
+        id: string
+        fileName: string
+        position: number[]
+        image: string
+        aspect: number
+        flipHorizontal: boolean
+        flipVertical: boolean
+    }, 'id'>) => {
+        const newId = Date.now().toString()
+        const newLogo = { ...logoData, id: newId }
+        setLogos(prev => [...prev, newLogo])
+        setSelectedLogoId(newId)
+    }
+
+    const updateLogo = (id: string, updates: Partial<{
+        fileName: string
+        position: number[]
+        image: string
+        aspect: number
+        flipHorizontal: boolean
+        flipVertical: boolean
+    }>) => {
+        setLogos(prev => prev.map(logo => 
+            logo.id === id ? { ...logo, ...updates } : logo
+        ))
+    }
+
+    const deleteLogo = (id: string) => {
+        setLogos(prev => prev.filter(logo => logo.id !== id))
+        if (selectedLogoId === id) {
+            setSelectedLogoId(null)
+        }
+    }
     const [editLogo, setEditLogo] = useState<boolean>(false)
     const [bgOffsetY, setBgOffsetY] = useState<number>(-260)
     const [capturing, setCapturing] = useState<boolean>(false)
@@ -188,8 +219,13 @@ const useProviderSetup = () => {
         setSnapshot,
         checkout,
         setCheckout,
-        logo,
-        setLogo,
+        logos,
+        setLogos,
+        selectedLogoId,
+        setSelectedLogoId,
+        addLogo,
+        updateLogo,
+        deleteLogo,
         editLogo,
         setEditLogo,
         focusedPart,

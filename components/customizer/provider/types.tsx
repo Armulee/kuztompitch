@@ -30,24 +30,46 @@ export type CustomizeContextType = {
     setSnapshot: React.Dispatch<React.SetStateAction<string>>
     checkout: boolean
     setCheckout: React.Dispatch<React.SetStateAction<boolean>>
-    logo: {
+    logos: {
+        id: string
         fileName: string
         position: number[]
         image: string
         aspect: number
         flipHorizontal: boolean
         flipVertical: boolean
-    }
-    setLogo: React.Dispatch<
+    }[]
+    setLogos: React.Dispatch<
         React.SetStateAction<{
+            id: string
             fileName: string
             position: number[]
             image: string
             aspect: number
             flipHorizontal: boolean
             flipVertical: boolean
-        }>
+        }[]>
     >
+    selectedLogoId: string | null
+    setSelectedLogoId: React.Dispatch<React.SetStateAction<string | null>>
+    addLogo: (logo: Omit<{
+        id: string
+        fileName: string
+        position: number[]
+        image: string
+        aspect: number
+        flipHorizontal: boolean
+        flipVertical: boolean
+    }, 'id'>) => void
+    updateLogo: (id: string, updates: Partial<{
+        fileName: string
+        position: number[]
+        image: string
+        aspect: number
+        flipHorizontal: boolean
+        flipVertical: boolean
+    }>) => void
+    deleteLogo: (id: string) => void
     bgOffsetY: number
     setBgOffsetY: React.Dispatch<React.SetStateAction<number>>
     focusedPart: string | null
