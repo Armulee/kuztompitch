@@ -20,8 +20,8 @@ const SLOPE = 0.011764706
 const Y_INTERCEPT = 5.141
 
 const EditLogo = () => {
-    const { logo, setLogo, bgOffsetY, setBgOffsetY } = useCustomizeContext()
-
+    const { logos, selectedLogoId, updateLogo, bgOffsetY, setBgOffsetY } = useCustomizeContext()
+    
     const containerRef = useRef<HTMLDivElement>(null)
     const [dragging, setDragging] = useState<boolean>(false)
     const [hovering, setHovering] = useState<boolean>(false)
@@ -76,6 +76,9 @@ const EditLogo = () => {
         direction: "up" | "down" | "left" | "right",
         amount: number = 5
     ) => {
+        const currentLogo = logos.find(logo => logo.id === selectedLogoId)
+        if (!currentLogo) return
+        
         if (direction === "up" || direction === "down") {
             const newOffsetY = clamp(
                 bgOffsetY + (direction === "up" ? amount : -amount),
@@ -89,10 +92,9 @@ const EditLogo = () => {
 
             const realPositionY = SLOPE * newOffsetY + Y_INTERCEPT
             const realPositionX = bgOffsetX * 0.01
-            setLogo((prev) => ({
-                ...prev,
-                position: [realPositionX, realPositionY, prev.position[2]],
-            }))
+            updateLogo(currentLogo.id, {
+                position: [realPositionX, realPositionY, currentLogo.position[2]],
+            })
         } else {
             // Handle left/right movement
             const newOffsetX =
@@ -101,28 +103,32 @@ const EditLogo = () => {
 
             const realPositionY = SLOPE * bgOffsetY + Y_INTERCEPT
             const realPositionX = newOffsetX * 0.01
-            setLogo((prev) => ({
-                ...prev,
-                position: [realPositionX, realPositionY, prev.position[2]],
-            }))
+            updateLogo(currentLogo.id, {
+                position: [realPositionX, realPositionY, currentLogo.position[2]],
+            })
         }
     }
 
     // Reset to center position
     const resetToCenter = () => {
+        const currentLogo = logos.find(logo => logo.id === selectedLogoId)
+        if (!currentLogo) return
+        
         const centerY = -280
         setBgOffsetY(centerY)
         setBgOffsetX(0)
         const realPosition = SLOPE * centerY + Y_INTERCEPT
-        setLogo((prev) => ({
-            ...prev,
-            position: [0, realPosition, prev.position[2]],
-        }))
+        updateLogo(currentLogo.id, {
+            position: [0, realPosition, currentLogo.position[2]],
+        })
     }
 
     const handleMouseMove = useCallback(
         (e: MouseEvent) => {
             if (!dragging) return
+            
+            const currentLogo = logos.find(logo => logo.id === selectedLogoId)
+            if (!currentLogo) return
 
             // Handle Y-axis movement
             setBgOffsetY((prevY) => {
@@ -151,12 +157,11 @@ const EditLogo = () => {
             const realPositionY = SLOPE * bgOffsetY + Y_INTERCEPT + 0.12
             const realPositionX = bgOffsetX * 0.01 // Convert X offset to 3D position
 
-            setLogo((prev) => ({
-                ...prev,
-                position: [realPositionX, realPositionY, prev.position[2]],
-            }))
+            updateLogo(currentLogo.id, {
+                position: [realPositionX, realPositionY, currentLogo.position[2]],
+            })
         },
-        [dragging, bgOffsetY, bgOffsetX, setLogo, setBgOffsetY, setBgOffsetX]
+        [dragging, bgOffsetY, bgOffsetX, updateLogo, selectedLogoId, setBgOffsetY, setBgOffsetX, logos]
     )
 
     useEffect(() => {
@@ -167,6 +172,12 @@ const EditLogo = () => {
             window.removeEventListener("mouseup", handleMouseUp)
         }
     }, [handleMouseMove])
+
+    // Get the currently selected logo
+    const selectedLogo = logos.find(logo => logo.id === selectedLogoId)
+    
+    // Don't render if no logo is selected
+    if (!selectedLogo) return null
 
     const backgroundPosition = {
         backgroundImage: "url(/assets/projection-background.png)",
@@ -206,22 +217,22 @@ const EditLogo = () => {
                     }}
                 >
                     {/* Logo preview with actual image */}
-                    {logo.image && (
+                    {selectedLogo.image && (
                         <div
                             className='absolute rounded border-2 border-white shadow-lg opacity-80'
                             style={{
                                 width:
-                                    logo.aspect > 1
+                                    selectedLogo.aspect > 1
                                         ? "180px"
-                                        : logo.aspect * 180 + "px",
+                                        : selectedLogo.aspect * 180 + "px",
                                 height:
-                                    logo.aspect > 1
-                                        ? 180 / logo.aspect + "px"
+                                    selectedLogo.aspect > 1
+                                        ? 180 / selectedLogo.aspect + "px"
                                         : "180px",
                                 top: "50%",
                                 left: "50%",
                                 transform: "translate(-50%, -50%)",
-                                backgroundImage: `url(${logo.image})`,
+                                backgroundImage: `url(${selectedLogo.image})`,
                                 backgroundSize: "contain",
                                 backgroundPosition: "center",
                                 backgroundRepeat: "no-repeat",
@@ -246,10 +257,9 @@ const EditLogo = () => {
                     <div className='flex justify-center mb-4 space-x-2'>
                         <button
                             onClick={() =>
-                                setLogo((prev) => ({
-                                    ...prev,
-                                    flipHorizontal: !prev.flipHorizontal,
-                                }))
+                                updateLogo(selectedLogo.id, {
+                                    flipHorizontal: !selectedLogo.flipHorizontal,
+                                })
                             }
                             className='w-8 h-8 bg-white/10 hover:bg-white/20 rounded-t border border-white/20 transition-colors group flex items-center justify-center'
                             title='Flip Horizontal'
@@ -258,10 +268,9 @@ const EditLogo = () => {
                         </button>
                         <button
                             onClick={() =>
-                                setLogo((prev) => ({
-                                    ...prev,
-                                    flipVertical: !prev.flipVertical,
-                                }))
+                                updateLogo(selectedLogo.id, {
+                                    flipVertical: !selectedLogo.flipVertical,
+                                })
                             }
                             className='w-8 h-8 bg-white/10 hover:bg-white/20 rounded-t border border-white/20 transition-colors group flex items-center justify-center'
                             title='Flip Vertical'

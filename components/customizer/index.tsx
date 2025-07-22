@@ -24,7 +24,7 @@ const Customizer = () => {
     const { checkout } = useCustomizeContext()
 
     // handle decal file drop
-    const { setLogo } = useCustomizeContext()
+    const { addLogo } = useCustomizeContext()
     const onDrop = useCallback(
         (acceptedFiles: File[]) => {
             const file = acceptedFiles[0]
@@ -33,7 +33,7 @@ const Customizer = () => {
                 reader.onload = () => {
                     const img = new Image()
                     img.onload = () => {
-                        setLogo({
+                        addLogo({
                             fileName: file.name,
                             image: reader.result as string,
                             position: [0, 2.2, 0.6],
@@ -49,7 +49,7 @@ const Customizer = () => {
 
             setIsRejected(false)
         },
-        [setLogo]
+        [addLogo]
     )
 
     const onDragEnter = () => {

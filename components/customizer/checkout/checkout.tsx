@@ -29,7 +29,7 @@ export default function MainCheckout({
         topHandle,
         bottomHandle,
         snapshot,
-        logo,
+        logos,
         model,
     } = useCustomizeContext()
     const [fullName, setFullName] = useState<string>("")
@@ -48,7 +48,14 @@ export default function MainCheckout({
             email: email.trim().toLowerCase(),
             telephone,
             snapshot,
-            decal: logo.image,
+            decals: logos.map(logo => ({
+                fileName: logo.fileName,
+                image: logo.image,
+                position: logo.position,
+                aspect: logo.aspect,
+                flipHorizontal: logo.flipHorizontal,
+                flipVertical: logo.flipVertical
+            })),
             model,
             capsule: `${capsule.style}, ${capsule.color} (${capsule.colorName})`,
             topHandle: `${topHandle.style}, ${topHandle.color} (${topHandle.colorName})`,

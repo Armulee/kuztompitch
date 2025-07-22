@@ -38,7 +38,7 @@ export function Microphone(props: GroupProps) {
         bottomHandle,
         isRotating,
         setIsRotating,
-        logo,
+        logos,
         setPart,
         focusedPart,
         setFocusedPart,
@@ -135,16 +135,20 @@ export function Microphone(props: GroupProps) {
         }
     }
 
-    // Transform user uploaded image to texture to wrap in decal
-    const logoTexture = useTexture(logo?.image || "/assets/transparent.png")
+    // Transform user uploaded images to textures for multiple decals
+    const logoImages = logos.length > 0 ? logos.map(logo => logo.image) : ["/assets/transparent.png"]
+    const logoTextures = useTexture(logoImages)
+    const texturesArray = Array.isArray(logoTextures) ? logoTextures : [logoTextures]
 
-    // Fix texture wrapping to prevent looping
-    if (logoTexture && logo?.image) {
-        logoTexture.wrapS = THREE.ClampToEdgeWrapping
-        logoTexture.wrapT = THREE.ClampToEdgeWrapping
-        logoTexture.repeat.set(1, 1)
-        logoTexture.offset.set(0, 0)
-    }
+    // Fix texture wrapping to prevent looping for all textures
+    texturesArray.forEach((texture, index) => {
+        if (texture && logos[index]?.image) {
+            texture.wrapS = THREE.ClampToEdgeWrapping
+            texture.wrapT = THREE.ClampToEdgeWrapping
+            texture.repeat.set(1, 1)
+            texture.offset.set(0, 0)
+        }
+    })
 
     // const transformControls = useControls("Decal Adjustment", {
     //     position: {
@@ -195,7 +199,7 @@ export function Microphone(props: GroupProps) {
     //         props.orbitControlsRef.current.enabled = !isDragging
     //     }
     // }, [isDragging])
-    console.log(logo.flipHorizontal)
+    // console.log("Logos:", logos.length)
     return (
         <group
             dispose={null}
@@ -215,8 +219,9 @@ export function Microphone(props: GroupProps) {
                     onClick={(e) => handleClick(e, "Top Handle")}
                     castShadow
                 >
-                    {logo?.image && (
+                    {logos.map((logo, index) => (
                         <Decal
+                            key={logo.id}
                             position={
                                 [
                                     Math.sin(logo.position[0]) * 0.5,
@@ -249,13 +254,13 @@ export function Microphone(props: GroupProps) {
                                 polygonOffset
                                 polygonOffsetFactor={-5}
                                 polygonOffsetUnits={-1}
-                                map={logoTexture}
+                                map={texturesArray[index]}
                                 depthTest={true}
                                 depthWrite={false}
                                 side={THREE.FrontSide}
                             />
                         </Decal>
-                    )}
+                    ))}
                 </mesh>
                 <mesh
                     geometry={nodes.Shureobj001_1.geometry}
@@ -263,8 +268,9 @@ export function Microphone(props: GroupProps) {
                     onClick={(e) => handleClick(e, "Bottom Handle")}
                     castShadow
                 >
-                    {logo?.image && (
+                    {logos.map((logo, index) => (
                         <Decal
+                            key={logo.id}
                             position={
                                 [
                                     Math.sin(logo.position[0]) * 0.5,
@@ -297,13 +303,13 @@ export function Microphone(props: GroupProps) {
                                 polygonOffset
                                 polygonOffsetFactor={-5}
                                 polygonOffsetUnits={-1}
-                                map={logoTexture}
+                                map={texturesArray[index]}
                                 depthTest={true}
                                 depthWrite={false}
                                 side={THREE.FrontSide}
                             />
                         </Decal>
-                    )}
+                    ))}
                 </mesh>
 
                 {/* Microphone Base */}

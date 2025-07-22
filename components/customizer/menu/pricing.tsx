@@ -1,18 +1,25 @@
 import { useCustomizeContext } from "../provider"
 import Checkout from "../checkout"
-import { useRef } from "react"
-import { FaTrash } from "react-icons/fa6"
+import { useRef, useState, useEffect } from "react"
+import { FaTrash, FaChevronDown, FaPlus } from "react-icons/fa6"
 
 const Pricing = () => {
     const {
         setCapturing,
         checkout,
         setCheckout,
-        logo,
-        setLogo,
+        logos,
+        selectedLogoId,
+        setSelectedLogoId,
+        addLogo,
+        deleteLogo,
         editLogo,
         setEditLogo,
     } = useCustomizeContext()
+    
+    const [showDropdown, setShowDropdown] = useState(false)
+    const selectedLogo = logos.find(logo => logo.id === selectedLogoId)
+    const dropdownRef = useRef<HTMLDivElement>(null)
     const handleClick = () => {
         setCapturing(true)
         setCheckout(true)
@@ -28,11 +35,11 @@ const Pricing = () => {
         reader.onload = () => {
             const img = new Image()
             img.onload = () => {
-                setLogo({
+                addLogo({
                     fileName: file.name,
                     image: reader.result as string,
                     position: [0, 2.2, 0.5],
-                    aspect: img.height / img.width,
+                    aspect: img.width / img.height,
                     flipHorizontal: false,
                     flipVertical: false,
                 })
@@ -41,6 +48,23 @@ const Pricing = () => {
         }
         reader.readAsDataURL(file)
     }
+
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setShowDropdown(false)
+            }
+        }
+
+        if (showDropdown) {
+            document.addEventListener('mousedown', handleClickOutside)
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside)
+        }
+    }, [showDropdown])
 
     return (
         <div
@@ -55,16 +79,12 @@ const Pricing = () => {
                     {/* UPLOAD LOGO */}
                     {!editLogo ? (
                         <div className='w-full flex items-center justify-center'>
-                            <div
-                                className={`w-fit px-5 py-1.5 text-sm mr-3 transition duration-500 ease cursor-pointer rounded-full border border-[#aaaaaa]`}
-                                onClick={() => uploader.current?.click()}
-                            >
-                                {logo.image ? (
-                                    <button onClick={() => setEditLogo(true)}>
-                                        Edit Image
-                                    </button>
-                                ) : (
-                                    <>
+                            <div className='relative'>
+                                {logos.length === 0 ? (
+                                    <div
+                                        className={`w-fit px-5 py-1.5 text-sm mr-3 transition duration-500 ease cursor-pointer rounded-full border border-[#aaaaaa]`}
+                                        onClick={() => uploader.current?.click()}
+                                    >
                                         Upload Image
                                         <input
                                             ref={uploader}
@@ -73,7 +93,67 @@ const Pricing = () => {
                                             accept='.jpg,.jpeg,.png'
                                             onChange={handleUpload}
                                         />
-                                    </>
+                                    </div>
+                                ) : (
+                                    <div className='relative' ref={dropdownRef}>
+                                        <div
+                                            className={`w-fit px-5 py-1.5 text-sm mr-3 transition duration-500 ease cursor-pointer rounded-full border border-[#aaaaaa] flex items-center gap-2`}
+                                            onClick={() => setShowDropdown(!showDropdown)}
+                                        >
+                                            Edit Image
+                                            <FaChevronDown className={`w-3 h-3 transition-transform ${showDropdown ? 'rotate-180' : ''}`} />
+                                        </div>
+                                        <input
+                                            ref={uploader}
+                                            className='hidden'
+                                            type='file'
+                                            accept='.jpg,.jpeg,.png'
+                                            onChange={handleUpload}
+                                        />
+                                        
+                                        {showDropdown && (
+                                            <div className='absolute bottom-full left-0 mb-2 w-64 bg-white border border-gray-300 rounded-lg shadow-lg z-50'>
+                                                <div className='p-2'>
+                                                    <div
+                                                        className='w-full px-3 py-2 text-sm cursor-pointer hover:bg-gray-100 rounded border-b border-gray-200 mb-2 flex items-center gap-2'
+                                                        onClick={() => {
+                                                            uploader.current?.click()
+                                                            setShowDropdown(false)
+                                                        }}
+                                                    >
+                                                        Upload Image
+                                                        <FaPlus className='w-3 h-3' />
+                                                    </div>
+                                                    {logos.map((logo) => (
+                                                        <div 
+                                                            key={logo.id} 
+                                                            className='flex items-center justify-between px-3 py-2 text-sm hover:bg-gray-100 rounded'
+                                                        >
+                                                            <span 
+                                                                className='cursor-pointer flex-1 truncate'
+                                                                onClick={() => {
+                                                                    setSelectedLogoId(logo.id)
+                                                                    setEditLogo(true)
+                                                                    setShowDropdown(false)
+                                                                }}
+                                                            >
+                                                                {logo.fileName}
+                                                            </span>
+                                                            <button
+                                                                className='ml-2 p-1 hover:bg-red-100 rounded'
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation()
+                                                                    deleteLogo(logo.id)
+                                                                }}
+                                                            >
+                                                                <FaTrash className='w-3 h-3 text-red-500' />
+                                                            </button>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
                                 )}
                             </div>
                         </div>
@@ -89,14 +169,14 @@ const Pricing = () => {
                     <div className='w-[1px] h-[20px] rounded mr-4 bg-black bg-opacity-80' />
 
                     {/* CHECKOUT */}
-                    {editLogo ? (
+                    {editLogo && selectedLogo ? (
                         <div className='w-full ml-1 flex items-center gap-3'>
                             <div className='flex items-center gap-2'>
                                 <span
                                     className='underline underline-offset-4'
                                     onClick={() => uploader.current?.click()}
                                 >
-                                    {logo.fileName}
+                                    {selectedLogo.fileName}
                                 </span>
                             </div>
 
@@ -110,14 +190,7 @@ const Pricing = () => {
                             <button
                                 className='rounded'
                                 onClick={() => {
-                                    setLogo({
-                                        fileName: "",
-                                        image: "",
-                                        position: [0, 2.2, 0.5],
-                                        aspect: 0,
-                                        flipHorizontal: false,
-                                        flipVertical: false,
-                                    })
+                                    deleteLogo(selectedLogo.id)
                                     setEditLogo(false)
                                 }}
                             >
