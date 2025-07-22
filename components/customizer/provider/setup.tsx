@@ -140,14 +140,18 @@ const useProviderSetup = () => {
         position: number[]
         image: string
         aspect: number
+        flipHorizontal: boolean
+        flipVertical: boolean
     }>({
         fileName: "",
         position: [0, 2.2, 0.5],
         image: "",
         aspect: 0,
+        flipHorizontal: false,
+        flipVertical: false,
     })
     const [editLogo, setEditLogo] = useState<boolean>(false)
-    const [bgOffsetY, setBgOffsetY] = useState<number>(-250)
+    const [bgOffsetY, setBgOffsetY] = useState<number>(-260)
     const [capturing, setCapturing] = useState<boolean>(false)
     const [snapshot, setSnapshot] = useState<string>("")
     const [checkout, setCheckout] = useState<boolean>(false)
