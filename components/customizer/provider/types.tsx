@@ -35,7 +35,9 @@ export type CustomizeContextType = {
         fileName: string
         position: number[]
         image: string
+        cloneImage?: string
         aspect: number
+        scale: number
         flipHorizontal: boolean
         flipVertical: boolean
     }[]
@@ -45,7 +47,9 @@ export type CustomizeContextType = {
             fileName: string
             position: number[]
             image: string
+            cloneImage?: string
             aspect: number
+            scale: number
             flipHorizontal: boolean
             flipVertical: boolean
         }[]>
@@ -57,7 +61,9 @@ export type CustomizeContextType = {
         fileName: string
         position: number[]
         image: string
+        cloneImage?: string
         aspect: number
+        scale: number
         flipHorizontal: boolean
         flipVertical: boolean
     }, 'id'>) => void
@@ -65,7 +71,9 @@ export type CustomizeContextType = {
         fileName: string
         position: number[]
         image: string
+        cloneImage?: string
         aspect: number
+        scale: number
         flipHorizontal: boolean
         flipVertical: boolean
     }>) => void

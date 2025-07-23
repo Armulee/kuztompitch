@@ -9,6 +9,7 @@ import Pricing from "./menu/pricing"
 import { useCustomizeContext } from "./provider"
 import Display from "./display"
 import Dropzone from "react-dropzone"
+import { createImageWithPadding } from "../../utils/imageProcessing"
 
 export const CustomizeContext = createContext(null)
 
@@ -30,17 +31,39 @@ const Customizer = () => {
             const file = acceptedFiles[0]
             if (file) {
                 const reader = new FileReader()
-                reader.onload = () => {
+                reader.onload = async () => {
                     const img = new Image()
-                    img.onload = () => {
-                        addLogo({
-                            fileName: file.name,
-                            image: reader.result as string,
-                            position: [0, 2.2, 0.6],
-                            aspect: img.width / img.height,
-                            flipHorizontal: false,
-                            flipVertical: false,
-                        })
+                    img.onload = async () => {
+                        const imageUrl = reader.result as string
+                        
+                        try {
+                            // Create clone with transparent padding
+                            const cloneImage = await createImageWithPadding(imageUrl, 25)
+                            
+                            addLogo({
+                                fileName: file.name,
+                                image: imageUrl, // Original image
+                                cloneImage: cloneImage, // Clone with padding
+                                position: [0, 2.2, 0.6],
+                                aspect: img.width / img.height,
+                                scale: 1.0,
+                                flipHorizontal: false,
+                                flipVertical: false,
+                            })
+                        } catch (error) {
+                            console.error('Error creating image with padding:', error)
+                            // Fallback to original if padding fails
+                            addLogo({
+                                fileName: file.name,
+                                image: imageUrl,
+                                cloneImage: imageUrl,
+                                position: [0, 2.2, 0.6],
+                                aspect: img.width / img.height,
+                                scale: 1.0,
+                                flipHorizontal: false,
+                                flipVertical: false,
+                            })
+                        }
                     }
                     img.src = reader.result as string
                 }
