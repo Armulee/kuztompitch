@@ -50,7 +50,7 @@ export default function MainCheckout({
             snapshot,
             decals: logos.map(logo => ({
                 fileName: logo.fileName,
-                image: logo.image,
+                image: logo.image, // Only original image, not cloneImage
                 position: logo.position,
                 aspect: logo.aspect,
                 flipHorizontal: logo.flipHorizontal,

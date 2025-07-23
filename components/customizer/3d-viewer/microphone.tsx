@@ -4,12 +4,13 @@ Command: npx gltfjsx@6.5.2 assets/normal-microphone.glb -t
 */
 
 import * as THREE from "three"
-import { Decal, useGLTF, useTexture } from "@react-three/drei"
+import { useGLTF, useTexture } from "@react-three/drei"
 import { GLTF } from "three-stdlib"
 import { useCustomizeContext } from "../provider"
 import { useEffect, useRef } from "react"
-import { GroupProps, ThreeEvent, useFrame, Vector3 } from "@react-three/fiber"
+import { GroupProps, ThreeEvent, useFrame } from "@react-three/fiber"
 import { usePathname } from "next/navigation"
+import ImageDecal from "./decal"
 
 type GLTFResult = GLTF & {
     nodes: {
@@ -27,7 +28,16 @@ type GLTFResult = GLTF & {
     }
 }
 
-export function Microphone(props: GroupProps) {
+interface MicrophoneProps extends GroupProps {
+    draggingId: string | null
+    setDraggingId: React.Dispatch<React.SetStateAction<string | null>>
+}
+
+export function Microphone({
+    draggingId,
+    setDraggingId,
+    ...props
+}: MicrophoneProps) {
     const { nodes, materials } = useGLTF(
         "/assets/normal-microphone.glb"
     ) as GLTFResult
@@ -44,6 +54,7 @@ export function Microphone(props: GroupProps) {
         setFocusedPart,
         focusStartTime,
         setFocusStartTime,
+        updateLogo,
     } = useCustomizeContext()
 
     // Handle the material changing for each style
@@ -136,13 +147,19 @@ export function Microphone(props: GroupProps) {
     }
 
     // Transform user uploaded images to textures for multiple decals
-    const logoImages = logos.length > 0 ? logos.map(logo => logo.image) : ["/assets/transparent.png"]
+    // Use cloneImage for rendering, fallback to original image if cloneImage not available
+    const logoImages =
+        logos.length > 0
+            ? logos.map((logo) => logo.cloneImage || logo.image)
+            : ["/assets/transparent.png"]
     const logoTextures = useTexture(logoImages)
-    const texturesArray = Array.isArray(logoTextures) ? logoTextures : [logoTextures]
+    const texturesArray = Array.isArray(logoTextures)
+        ? logoTextures
+        : [logoTextures]
 
     // Fix texture wrapping to prevent looping for all textures
     texturesArray.forEach((texture, index) => {
-        if (texture && logos[index]?.image) {
+        if (texture && logos[index]) {
             texture.wrapS = THREE.ClampToEdgeWrapping
             texture.wrapT = THREE.ClampToEdgeWrapping
             texture.repeat.set(1, 1)
@@ -150,56 +167,28 @@ export function Microphone(props: GroupProps) {
         }
     })
 
-    // const transformControls = useControls("Decal Adjustment", {
-    //     position: {
-    //         value: { x: 0, y: 2.2, z: 0.5 },
-    //         step: 0.01,
-    //     },
-    //     rotation: {
-    //         value: { x: 0, y: 0, z: 0 },
-    //         step: 0.01,
-    //     },
-    //     scale: {
-    //         value: { x: 1, y: 1, z: 1 },
-    //         step: 0.01,
-    //     },
-    // })
+    // chat's suggestion
 
-    // handle decal adjusting by dragging the Decal component
-    // const [isDragging, setIsDragging] = useState(false)
-    // const [startY, setStartY] = useState<number | null>(null)
-    // const handlePointerDownDecal = (e: ThreeEvent<PointerEvent>) => {
-    //     e.stopPropagation()
-    //     setEditLogo(true)
-    //     setIsDragging(true)
-    //     setStartY(e.clientY)
-    // }
-    // const handlePointerUpDecal = (e: ThreeEvent<PointerEvent>) => {
-    //     e.stopPropagation()
-    //     setIsDragging(false)
-    //     setStartY(null)
-    // }
-    // const handlePointerMoveDecal = (e: ThreeEvent<PointerEvent>) => {
-    //     if (isDragging && startY !== null) {
-    //         e.stopPropagation()
-    //         const deltaY = (e.clientY - startY) * -0.01 // Adjust sensitivity
-    //         setStartY(e.clientY)
+    const meshRef = useRef<THREE.Mesh>(null!)
+    const onPointerMove = (e: ThreeEvent<PointerEvent>) => {
+        if (!draggingId) return
+        e.stopPropagation()
 
-    //         setLogo((prev) => {
-    //             const newY = parseFloat((prev.position[1] + deltaY).toFixed(2))
-    //             return {
-    //                 ...prev,
-    //                 position: [prev.position[0], newY, prev.position[2]],
-    //             }
-    //         })
-    //     }
-    // }
-    // useEffect(() => {
-    //     if (props.orbitControlsRef?.current && isDragging) {
-    //         props.orbitControlsRef.current.enabled = !isDragging
-    //     }
-    // }, [isDragging])
-    // console.log("Logos:", logos.length)
+        // world-space intersection point
+        const worldPoint = e.point.clone()
+
+        // convert to mesh-local coordinates
+        const localPoint = meshRef.current.worldToLocal(worldPoint)
+
+        // compute your decal’s polar coords:
+        const radiusOffset = 0.05 // same offset you used
+        const angle = Math.atan2(localPoint.x, localPoint.z - radiusOffset)
+        const y = localPoint.y
+        // update only that logo’s position
+        updateLogo(draggingId, {
+            position: [angle, y, /* keep your existing Z */ 0],
+        })
+    }
     return (
         <group
             dispose={null}
@@ -220,95 +209,30 @@ export function Microphone(props: GroupProps) {
                     castShadow
                 >
                     {logos.map((logo, index) => (
-                        <Decal
+                        <ImageDecal
+                            setDraggingId={setDraggingId}
                             key={logo.id}
-                            position={
-                                [
-                                    Math.sin(logo.position[0]) * 0.5,
-                                    logo.position[1],
-                                    Math.cos(logo.position[0]) * 0.5 + 0.05,
-                                ] as Vector3
-                            }
-                            rotation={[0, logo.position[0], 0]}
-                            scale={
-                                logo.aspect > 1
-                                    ? [
-                                          logo.flipHorizontal ? -1.2 : 1.2,
-                                          logo.flipVertical
-                                              ? -(1.2 / logo.aspect)
-                                              : 1.2 / logo.aspect,
-                                          1.2,
-                                      ]
-                                    : [
-                                          logo.flipHorizontal
-                                              ? -logo.aspect
-                                              : logo.aspect,
-                                          logo.flipVertical ? -1.2 : 1.2,
-                                          1.2,
-                                      ]
-                            }
-                        >
-                            <meshStandardMaterial
-                                roughness={1}
-                                transparent
-                                polygonOffset
-                                polygonOffsetFactor={-5}
-                                polygonOffsetUnits={-1}
-                                map={texturesArray[index]}
-                                depthTest={true}
-                                depthWrite={false}
-                                side={THREE.FrontSide}
-                            />
-                        </Decal>
+                            logo={logo}
+                            texture={texturesArray[index]}
+                        />
                     ))}
                 </mesh>
                 <mesh
+                    ref={meshRef}
                     geometry={nodes.Shureobj001_1.geometry}
                     material={materials["Bottom handle"]}
                     onClick={(e) => handleClick(e, "Bottom Handle")}
                     castShadow
+                    onPointerMove={onPointerMove}
+                    onPointerMissed={() => setDraggingId(null)}
                 >
                     {logos.map((logo, index) => (
-                        <Decal
+                        <ImageDecal
+                            setDraggingId={setDraggingId}
                             key={logo.id}
-                            position={
-                                [
-                                    Math.sin(logo.position[0]) * 0.5,
-                                    logo.position[1],
-                                    Math.cos(logo.position[0]) * 0.5 + 0.05,
-                                ] as Vector3
-                            }
-                            rotation={[0, logo.position[0], 0]}
-                            scale={
-                                logo.aspect > 1
-                                    ? [
-                                          logo.flipHorizontal ? -1.2 : 1.2,
-                                          logo.flipVertical
-                                              ? -(1.2 / logo.aspect)
-                                              : 1.2 / logo.aspect,
-                                          1.2,
-                                      ]
-                                    : [
-                                          logo.flipHorizontal
-                                              ? -logo.aspect
-                                              : logo.aspect,
-                                          logo.flipVertical ? -1.2 : 1.2,
-                                          1.2,
-                                      ]
-                            }
-                        >
-                            <meshStandardMaterial
-                                roughness={1}
-                                transparent
-                                polygonOffset
-                                polygonOffsetFactor={-5}
-                                polygonOffsetUnits={-1}
-                                map={texturesArray[index]}
-                                depthTest={true}
-                                depthWrite={false}
-                                side={THREE.FrontSide}
-                            />
-                        </Decal>
+                            logo={logo}
+                            texture={texturesArray[index]}
+                        />
                     ))}
                 </mesh>
 

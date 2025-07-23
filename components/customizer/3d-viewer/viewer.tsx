@@ -5,17 +5,19 @@ import { Suspense } from "react"
 import { ContactShadows, Environment, OrbitControls } from "@react-three/drei"
 import Capture from "./capture"
 
+type ViewerProps = {
+    noOrbit?: boolean
+    children: React.ReactNode
+    className?: string
+    position?: [number, number, number]
+}
+
 const Viewer = ({
     className = "bg-[#efefef]",
     children,
     position,
     noOrbit = false,
-}: {
-    className?: string
-    children: React.ReactNode
-    position?: [number, number, number]
-    noOrbit?: boolean
-}) => {
+}: ViewerProps) => {
     return (
         <Canvas
             id='model'
@@ -57,15 +59,6 @@ const Viewer = ({
                 />
 
                 {children}
-
-                {/* <mesh
-                    rotation={[-Math.PI / 2, 0, 0]}
-                    position={[0, -1.35, 0]}
-                    receiveShadow
-                >
-                    <planeGeometry args={[20, 20]} />
-                    <meshStandardMaterial color='#999999' />
-                </mesh> */}
 
                 {/* Optional: Contact shadows for soft base shadows */}
                 <ContactShadows

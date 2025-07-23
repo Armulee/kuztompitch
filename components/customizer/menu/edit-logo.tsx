@@ -11,7 +11,7 @@ import {
 import { LuFlipHorizontal, LuFlipVertical } from "react-icons/lu"
 
 // Base viewport dimensions (HEIGHT stays fixed for consistency)
-const VIEWPORT_HEIGHT = 180
+const VIEWPORT_HEIGHT = 150
 const IMAGE_WIDTH = 400
 const IMAGE_HEIGHT = 800
 
@@ -20,8 +20,9 @@ const SLOPE = 0.011764706
 const Y_INTERCEPT = 5.141
 
 const EditLogo = () => {
-    const { logos, selectedLogoId, updateLogo, bgOffsetY, setBgOffsetY } = useCustomizeContext()
-    
+    const { logos, selectedLogoId, updateLogo, bgOffsetY, setBgOffsetY } =
+        useCustomizeContext()
+
     const containerRef = useRef<HTMLDivElement>(null)
     const [dragging, setDragging] = useState<boolean>(false)
     const [hovering, setHovering] = useState<boolean>(false)
@@ -63,12 +64,56 @@ const EditLogo = () => {
         }
     }, [])
 
-    const handleMouseDown = () => {
-        setDragging(true)
+    const [mouseDownPos, setMouseDownPos] = useState<{
+        x: number
+        y: number
+    } | null>(null)
+    const [isClick, setIsClick] = useState(false)
+
+    const handleMouseDown = (e: React.MouseEvent) => {
+        setMouseDownPos({ x: e.clientX, y: e.clientY })
+        setIsClick(true)
     }
 
     const handleMouseUp = () => {
+        if (isClick && mouseDownPos) {
+            // This was a click - show/hide resizers
+            setShowResizers(!showResizers)
+        }
         setDragging(false)
+        setIsClick(false)
+        setMouseDownPos(null)
+    }
+
+    const handleTouchStart = (e: React.TouchEvent) => {
+        e.preventDefault()
+        setDragging(true)
+    }
+
+    const handleTouchEnd = () => {
+        setDragging(false)
+        setIsResizing(false)
+        setResizeStart(null)
+    }
+
+    const handleResizeStart = (e: React.MouseEvent | React.TouchEvent) => {
+        e.preventDefault()
+        e.stopPropagation()
+
+        const clientX = "touches" in e ? e.touches[0].clientX : e.clientX
+        const clientY = "touches" in e ? e.touches[0].clientY : e.clientY
+
+        setIsResizing(true)
+        setResizeStart({
+            x: clientX,
+            y: clientY,
+            scale: selectedLogo?.scale || 1,
+        })
+    }
+
+    const handleResizeEnd = () => {
+        setIsResizing(false)
+        setResizeStart(null)
     }
 
     // Precision adjustment functions
@@ -76,12 +121,12 @@ const EditLogo = () => {
         direction: "up" | "down" | "left" | "right",
         amount: number = 5
     ) => {
-        const currentLogo = logos.find(logo => logo.id === selectedLogoId)
+        const currentLogo = logos.find((logo) => logo.id === selectedLogoId)
         if (!currentLogo) return
-        
+
         if (direction === "up" || direction === "down") {
             const newOffsetY = clamp(
-                bgOffsetY + (direction === "up" ? amount : -amount),
+                bgOffsetY + (direction === "up" ? -amount : amount),
                 VIEWPORT_HEIGHT - IMAGE_HEIGHT,
                 0
             )
@@ -93,7 +138,11 @@ const EditLogo = () => {
             const realPositionY = SLOPE * newOffsetY + Y_INTERCEPT
             const realPositionX = bgOffsetX * 0.01
             updateLogo(currentLogo.id, {
-                position: [realPositionX, realPositionY, currentLogo.position[2]],
+                position: [
+                    realPositionX,
+                    realPositionY,
+                    currentLogo.position[2],
+                ],
             })
         } else {
             // Handle left/right movement
@@ -104,16 +153,20 @@ const EditLogo = () => {
             const realPositionY = SLOPE * bgOffsetY + Y_INTERCEPT
             const realPositionX = newOffsetX * 0.01
             updateLogo(currentLogo.id, {
-                position: [realPositionX, realPositionY, currentLogo.position[2]],
+                position: [
+                    realPositionX,
+                    realPositionY,
+                    currentLogo.position[2],
+                ],
             })
         }
     }
 
     // Reset to center position
     const resetToCenter = () => {
-        const currentLogo = logos.find(logo => logo.id === selectedLogoId)
+        const currentLogo = logos.find((logo) => logo.id === selectedLogoId)
         if (!currentLogo) return
-        
+
         const centerY = -280
         setBgOffsetY(centerY)
         setBgOffsetX(0)
@@ -123,28 +176,71 @@ const EditLogo = () => {
         })
     }
 
+    const [lastPosition, setLastPosition] = useState<{
+        x: number
+        y: number
+    } | null>(null)
+    const [isResizing, setIsResizing] = useState<boolean>(false)
+    const [resizeStart, setResizeStart] = useState<{
+        x: number
+        y: number
+        scale: number
+    } | null>(null)
+    const [showResizers, setShowResizers] = useState<boolean>(false)
+
+    // Get the currently selected logo
+    const selectedLogo = logos.find((logo) => logo.id === selectedLogoId)
+
     const handleMouseMove = useCallback(
         (e: MouseEvent) => {
-            if (!dragging) return
-            
-            const currentLogo = logos.find(logo => logo.id === selectedLogoId)
+            // Handle resizing
+            if (isResizing && resizeStart && selectedLogo) {
+                const deltaX = e.clientX - resizeStart.x
+                const deltaY = e.clientY - resizeStart.y
+
+                // Calculate scale based on distance from center
+                const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
+                const scaleFactor = distance / 100 // Adjust sensitivity
+
+                // Determine if we're scaling up or down based on movement direction
+                const scaleDirection = deltaX + deltaY > 0 ? 1 : -1
+                const newScale = Math.max(
+                    0.2,
+                    Math.min(
+                        3.0,
+                        resizeStart.scale + scaleFactor * scaleDirection * 0.01
+                    )
+                )
+
+                updateLogo(selectedLogo.id, { scale: newScale })
+                return
+            }
+
+            // Check if this is a drag operation vs click
+            if (mouseDownPos && isClick) {
+                const distance = Math.sqrt(
+                    Math.pow(e.clientX - mouseDownPos.x, 2) +
+                        Math.pow(e.clientY - mouseDownPos.y, 2)
+                )
+                // If mouse moved more than 5px, it's a drag
+                if (distance > 5) {
+                    setIsClick(false)
+                    setDragging(true)
+                }
+            }
+
+            if (!dragging || isClick || showResizers) return // Don't move if it's still considered a click or resizers are shown
+
+            const currentLogo = logos.find((logo) => logo.id === selectedLogoId)
             if (!currentLogo) return
 
-            // Handle Y-axis movement
+            // Handle Y-axis movement (inverted for natural dragging)
             setBgOffsetY((prevY) => {
                 const offsetY = clamp(
-                    prevY + e.movementY,
+                    prevY - e.movementY,
                     VIEWPORT_HEIGHT - IMAGE_HEIGHT,
                     0
                 )
-                // if (offsetY > -160) {
-                //     // No exceed position to capsule
-                //     return -160
-                // } else if (offsetY < -395) {
-                //     // No exceed position to microphone base
-                //     return -395
-                // }
-
                 return offsetY
             })
 
@@ -158,24 +254,149 @@ const EditLogo = () => {
             const realPositionX = bgOffsetX * 0.01 // Convert X offset to 3D position
 
             updateLogo(currentLogo.id, {
-                position: [realPositionX, realPositionY, currentLogo.position[2]],
+                position: [
+                    realPositionX,
+                    realPositionY,
+                    currentLogo.position[2],
+                ],
             })
         },
-        [dragging, bgOffsetY, bgOffsetX, updateLogo, selectedLogoId, setBgOffsetY, setBgOffsetX, logos]
+        [
+            isResizing,
+            resizeStart,
+            selectedLogo,
+            dragging,
+            isClick,
+            mouseDownPos,
+            showResizers,
+            bgOffsetY,
+            bgOffsetX,
+            updateLogo,
+            selectedLogoId,
+            setBgOffsetY,
+            setBgOffsetX,
+            logos,
+        ]
     )
 
+    const handleTouchMove = useCallback(
+        (e: TouchEvent) => {
+            // Handle resizing
+            if (isResizing && resizeStart && selectedLogo) {
+                e.preventDefault()
+                const touch = e.touches[0]
+                const deltaX = touch.clientX - resizeStart.x
+                const deltaY = touch.clientY - resizeStart.y
+
+                // Calculate scale based on distance from center
+                const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
+                const scaleFactor = distance / 100 // Adjust sensitivity
+
+                // Determine if we're scaling up or down based on movement direction
+                const scaleDirection = deltaX + deltaY > 0 ? 1 : -1
+                const newScale = Math.max(
+                    0.2,
+                    Math.min(
+                        3.0,
+                        resizeStart.scale + scaleFactor * scaleDirection * 0.01
+                    )
+                )
+
+                updateLogo(selectedLogo.id, { scale: newScale })
+                return
+            }
+
+            if (!dragging || showResizers) return // Don't move if resizers are shown
+            e.preventDefault()
+
+            const currentLogo = logos.find((logo) => logo.id === selectedLogoId)
+            if (!currentLogo) return
+
+            const touch = e.touches[0]
+            if (!touch || !lastPosition) return
+
+            const movementX = touch.clientX - lastPosition.x
+            const movementY = touch.clientY - lastPosition.y
+
+            // Handle Y-axis movement (inverted for natural dragging)
+            setBgOffsetY((prevY) => {
+                const offsetY = clamp(
+                    prevY - movementY,
+                    VIEWPORT_HEIGHT - IMAGE_HEIGHT,
+                    0
+                )
+                return offsetY
+            })
+
+            // Handle X-axis movement
+            setBgOffsetX((prevX) => {
+                return prevX + movementX
+            })
+
+            // Calculate positions
+            const realPositionY = SLOPE * bgOffsetY + Y_INTERCEPT + 0.12
+            const realPositionX = bgOffsetX * 0.01
+
+            updateLogo(currentLogo.id, {
+                position: [
+                    realPositionX,
+                    realPositionY,
+                    currentLogo.position[2],
+                ],
+            })
+
+            setLastPosition({ x: touch.clientX, y: touch.clientY })
+        },
+        [
+            isResizing,
+            resizeStart,
+            selectedLogo,
+            dragging,
+            showResizers,
+            bgOffsetY,
+            bgOffsetX,
+            updateLogo,
+            selectedLogoId,
+            setBgOffsetY,
+            setBgOffsetX,
+            logos,
+            lastPosition,
+        ]
+    )
+
+
     useEffect(() => {
+        const handleGlobalMouseUp = () => {
+            handleMouseUp()
+            handleResizeEnd()
+        }
+
+        const handleGlobalTouchEnd = () => {
+            handleTouchEnd()
+        }
+
         window.addEventListener("mousemove", handleMouseMove)
-        window.addEventListener("mouseup", handleMouseUp)
+        window.addEventListener("mouseup", handleGlobalMouseUp)
+        window.addEventListener("touchmove", handleTouchMove, {
+            passive: false,
+        })
+        window.addEventListener("touchend", handleGlobalTouchEnd)
+
         return () => {
             window.removeEventListener("mousemove", handleMouseMove)
-            window.removeEventListener("mouseup", handleMouseUp)
+            window.removeEventListener("mouseup", handleGlobalMouseUp)
+            window.removeEventListener("touchmove", handleTouchMove)
+            window.removeEventListener("touchend", handleGlobalTouchEnd)
         }
-    }, [handleMouseMove])
+    }, [
+        handleMouseMove,
+        handleTouchMove,
+    ])
 
-    // Get the currently selected logo
-    const selectedLogo = logos.find(logo => logo.id === selectedLogoId)
-    
+    useEffect(() => {
+        console.log(showResizers)
+    }, [showResizers])
+
     // Don't render if no logo is selected
     if (!selectedLogo) return null
 
@@ -187,7 +408,16 @@ const EditLogo = () => {
     }
 
     return (
-        <div className='select-none flex flex-col items-center'>
+        <div
+            className='select-none flex flex-col items-center'
+            style={{
+                userSelect: "none",
+                WebkitUserSelect: "none",
+                MozUserSelect: "none",
+                msUserSelect: "none",
+                WebkitTouchCallout: "none",
+            }}
+        >
             {/* Header with current part indicator */}
             <div className='w-full text-center'>
                 <h3 className='text-lg font-semibold text-white mb-1'>
@@ -207,28 +437,40 @@ const EditLogo = () => {
                             : "border-gray-500"
                     }`}
                     onMouseDown={handleMouseDown}
+                    onTouchStart={(e) => {
+                        handleTouchStart(e)
+                        const touch = e.touches[0]
+                        setLastPosition({
+                            x: touch.clientX,
+                            y: touch.clientY,
+                        })
+                    }}
                     onMouseEnter={() => setHovering(true)}
-                    onMouseLeave={() => setHovering(false)}
+                    onMouseLeave={() => {
+                        setHovering(false)
+                        if (!dragging && !isResizing) setShowResizers(false)
+                    }}
                     style={{
                         width: viewportWidth,
                         minHeight: VIEWPORT_HEIGHT,
                         ...backgroundPosition,
                         cursor: dragging ? "grabbing" : "grab",
+                        touchAction: "none",
                     }}
                 >
-                    {/* Logo preview with actual image */}
+                    {/* Logo preview - fixed size, only shows resizers */}
                     {selectedLogo.image && (
                         <div
                             className='absolute rounded border-2 border-white shadow-lg opacity-80'
                             style={{
                                 width:
                                     selectedLogo.aspect > 1
-                                        ? "180px"
-                                        : selectedLogo.aspect * 180 + "px",
+                                        ? "140px"
+                                        : `${selectedLogo.aspect * 140}px`,
                                 height:
                                     selectedLogo.aspect > 1
-                                        ? 180 / selectedLogo.aspect + "px"
-                                        : "180px",
+                                        ? `${140 / selectedLogo.aspect}px`
+                                        : "140px",
                                 top: "50%",
                                 left: "50%",
                                 transform: "translate(-50%, -50%)",
@@ -237,17 +479,39 @@ const EditLogo = () => {
                                 backgroundPosition: "center",
                                 backgroundRepeat: "no-repeat",
                             }}
-                        />
-                    )}
-
-                    {/* Drag instruction overlay */}
-                    {!dragging && hovering && (
-                        <div className='absolute inset-0 bg-black/50 flex items-center justify-center'>
-                            <div className='text-white text-center'>
-                                <div className='text-sm opacity-75'>
-                                    Drag to position
-                                </div>
-                            </div>
+                        >
+                            {/* Corner Resizers - only for decal scaling */}
+                            {showResizers && (
+                                <>
+                                    <div
+                                        className='absolute w-3 h-3 bg-blue-500 border border-white rounded-full cursor-nw-resize hover:bg-blue-600 transition-colors'
+                                        style={{ top: "-6px", left: "-6px" }}
+                                        onMouseDown={handleResizeStart}
+                                        onTouchStart={handleResizeStart}
+                                    />
+                                    <div
+                                        className='absolute w-3 h-3 bg-blue-500 border border-white rounded-full cursor-ne-resize hover:bg-blue-600 transition-colors'
+                                        style={{ top: "-6px", right: "-6px" }}
+                                        onMouseDown={handleResizeStart}
+                                        onTouchStart={handleResizeStart}
+                                    />
+                                    <div
+                                        className='absolute w-3 h-3 bg-blue-500 border border-white rounded-full cursor-sw-resize hover:bg-blue-600 transition-colors'
+                                        style={{ bottom: "-6px", left: "-6px" }}
+                                        onMouseDown={handleResizeStart}
+                                        onTouchStart={handleResizeStart}
+                                    />
+                                    <div
+                                        className='absolute w-3 h-3 bg-blue-500 border border-white rounded-full cursor-se-resize hover:bg-blue-600 transition-colors'
+                                        style={{
+                                            bottom: "-6px",
+                                            right: "-6px",
+                                        }}
+                                        onMouseDown={handleResizeStart}
+                                        onTouchStart={handleResizeStart}
+                                    />
+                                </>
+                            )}
                         </div>
                     )}
                 </div>
@@ -258,7 +522,8 @@ const EditLogo = () => {
                         <button
                             onClick={() =>
                                 updateLogo(selectedLogo.id, {
-                                    flipHorizontal: !selectedLogo.flipHorizontal,
+                                    flipHorizontal:
+                                        !selectedLogo.flipHorizontal,
                                 })
                             }
                             className='w-8 h-8 bg-white/10 hover:bg-white/20 rounded-t border border-white/20 transition-colors group flex items-center justify-center'

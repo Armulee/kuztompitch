@@ -2,6 +2,7 @@ import { useCustomizeContext } from "../provider"
 import Checkout from "../checkout"
 import { useRef, useState, useEffect } from "react"
 import { FaTrash, FaChevronDown, FaPlus } from "react-icons/fa6"
+import { createImageWithPadding } from "../../../utils/imageProcessing"
 
 const Pricing = () => {
     const {
@@ -32,17 +33,39 @@ const Pricing = () => {
         if (!file) return
 
         const reader = new FileReader()
-        reader.onload = () => {
+        reader.onload = async () => {
             const img = new Image()
-            img.onload = () => {
-                addLogo({
-                    fileName: file.name,
-                    image: reader.result as string,
-                    position: [0, 2.2, 0.5],
-                    aspect: img.width / img.height,
-                    flipHorizontal: false,
-                    flipVertical: false,
-                })
+            img.onload = async () => {
+                const imageUrl = reader.result as string
+                
+                try {
+                    // Create clone with transparent padding
+                    const cloneImage = await createImageWithPadding(imageUrl, 25)
+                    
+                    addLogo({
+                        fileName: file.name,
+                        image: imageUrl, // Original image
+                        cloneImage: cloneImage, // Clone with padding
+                        position: [0, 2.2, 0.5],
+                        aspect: img.width / img.height,
+                        scale: 1.0,
+                        flipHorizontal: false,
+                        flipVertical: false,
+                    })
+                } catch (error) {
+                    console.error('Error creating image with padding:', error)
+                    // Fallback to original if padding fails
+                    addLogo({
+                        fileName: file.name,
+                        image: imageUrl,
+                        cloneImage: imageUrl,
+                        position: [0, 2.2, 0.5],
+                        aspect: img.width / img.height,
+                        scale: 1.0,
+                        flipHorizontal: false,
+                        flipVertical: false,
+                    })
+                }
             }
             img.src = reader.result as string
         }
@@ -112,7 +135,7 @@ const Pricing = () => {
                                         />
                                         
                                         {showDropdown && (
-                                            <div className='absolute bottom-full left-0 mb-2 w-64 bg-white border border-gray-300 rounded-lg shadow-lg z-50'>
+                                            <div className='absolute bottom-full left-0 mb-2 w-64 max-w-[240px] bg-white border border-gray-300 rounded-lg shadow-lg z-50'>
                                                 <div className='p-2'>
                                                     <div
                                                         className='w-full px-3 py-2 text-sm cursor-pointer hover:bg-gray-100 rounded border-b border-gray-200 mb-2 flex items-center gap-2'
@@ -130,7 +153,9 @@ const Pricing = () => {
                                                             className='flex items-center justify-between px-3 py-2 text-sm hover:bg-gray-100 rounded'
                                                         >
                                                             <span 
-                                                                className='cursor-pointer flex-1 truncate'
+                                                                className='cursor-pointer flex-1 truncate max-w-[200px]'
+                                                                style={{ maxWidth: '200px' }}
+                                                                title={logo.fileName}
                                                                 onClick={() => {
                                                                     setSelectedLogoId(logo.id)
                                                                     setEditLogo(true)
@@ -173,7 +198,9 @@ const Pricing = () => {
                         <div className='w-full ml-1 flex items-center gap-3'>
                             <div className='flex items-center gap-2'>
                                 <span
-                                    className='underline underline-offset-4'
+                                    className='underline underline-offset-4 truncate max-w-[200px] block'
+                                    style={{ maxWidth: '200px' }}
+                                    title={selectedLogo.fileName}
                                     onClick={() => uploader.current?.click()}
                                 >
                                     {selectedLogo.fileName}
