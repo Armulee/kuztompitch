@@ -35,11 +35,14 @@ const Customizer = () => {
                     const img = new Image()
                     img.onload = async () => {
                         const imageUrl = reader.result as string
-                        
+
                         try {
                             // Create clone with transparent padding
-                            const cloneImage = await createImageWithPadding(imageUrl, 25)
-                            
+                            const cloneImage = await createImageWithPadding(
+                                imageUrl,
+                                25
+                            )
+
                             addLogo({
                                 fileName: file.name,
                                 image: imageUrl, // Original image
@@ -51,7 +54,10 @@ const Customizer = () => {
                                 flipVertical: false,
                             })
                         } catch (error) {
-                            console.error('Error creating image with padding:', error)
+                            console.error(
+                                "Error creating image with padding:",
+                                error
+                            )
                             // Fallback to original if padding fails
                             addLogo({
                                 fileName: file.name,

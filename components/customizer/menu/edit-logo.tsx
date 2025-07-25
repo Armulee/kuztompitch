@@ -25,7 +25,7 @@ const EditLogo = () => {
 
     const containerRef = useRef<HTMLDivElement>(null)
     const [dragging, setDragging] = useState<boolean>(false)
-    const [hovering, setHovering] = useState<boolean>(false)
+    const [hovering] = useState<boolean>(false)
     const [bgOffsetX, setBgOffsetX] = useState<number>(0)
     const [viewportWidth, setViewportWidth] = useState<number>(300)
 
@@ -75,15 +75,6 @@ const EditLogo = () => {
         setIsClick(true)
     }
 
-    const handleMouseUp = () => {
-        if (isClick && mouseDownPos) {
-            // This was a click - show/hide resizers
-            setShowResizers(!showResizers)
-        }
-        setDragging(false)
-        setIsClick(false)
-        setMouseDownPos(null)
-    }
 
     const handleTouchStart = (e: React.TouchEvent) => {
         e.preventDefault()
@@ -96,7 +87,10 @@ const EditLogo = () => {
         setResizeStart(null)
     }
 
-    const handleResizeStart = (e: React.MouseEvent | React.TouchEvent) => {
+    const handleResizeStart = (
+        e: React.MouseEvent | React.TouchEvent,
+        corner: "nw" | "ne" | "sw" | "se"
+    ) => {
         e.preventDefault()
         e.stopPropagation()
 
@@ -108,6 +102,7 @@ const EditLogo = () => {
             x: clientX,
             y: clientY,
             scale: selectedLogo?.scale || 1,
+            corner,
         })
     }
 
@@ -185,8 +180,19 @@ const EditLogo = () => {
         x: number
         y: number
         scale: number
+        corner: "nw" | "ne" | "sw" | "se"
     } | null>(null)
     const [showResizers, setShowResizers] = useState<boolean>(false)
+
+    const handleMouseUp = useCallback(() => {
+        if (isClick && mouseDownPos) {
+            // This was a click - show/hide resizers
+            setShowResizers(!showResizers)
+        }
+        setDragging(false)
+        setIsClick(false)
+        setMouseDownPos(null)
+    }, [isClick, mouseDownPos, showResizers])
 
     // Get the currently selected logo
     const selectedLogo = logos.find((logo) => logo.id === selectedLogoId)
@@ -198,18 +204,34 @@ const EditLogo = () => {
                 const deltaX = e.clientX - resizeStart.x
                 const deltaY = e.clientY - resizeStart.y
 
-                // Calculate scale based on distance from center
-                const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
-                const scaleFactor = distance / 100 // Adjust sensitivity
+                // Calculate scale based on corner and mouse movement
+                let scaleFactor = 0
 
-                // Determine if we're scaling up or down based on movement direction
-                const scaleDirection = deltaX + deltaY > 0 ? 1 : -1
+                switch (resizeStart.corner) {
+                    case "nw": // Top-left: increase when moving left or up
+                        scaleFactor = (-deltaX + -deltaY) / 100
+                        break
+                    case "ne": // Top-right: increase when moving right or up
+                        scaleFactor = (deltaX + -deltaY) / 100
+                        break
+                    case "sw": // Bottom-left: increase when moving left or down
+                        scaleFactor = (-deltaX + deltaY) / 100
+                        break
+                    case "se": // Bottom-right: increase when moving right or down
+                        scaleFactor = (deltaX + deltaY) / 100
+                        break
+                }
+
                 const newScale = Math.max(
                     0.2,
-                    Math.min(
-                        3.0,
-                        resizeStart.scale + scaleFactor * scaleDirection * 0.01
-                    )
+                    Math.min(3.0, resizeStart.scale + scaleFactor)
+                )
+
+                console.log(
+                    resizeStart.corner,
+                    resizeStart.scale,
+                    scaleFactor,
+                    newScale
                 )
 
                 updateLogo(selectedLogo.id, { scale: newScale })
@@ -229,7 +251,7 @@ const EditLogo = () => {
                 }
             }
 
-            if (!dragging || isClick || showResizers) return // Don't move if it's still considered a click or resizers are shown
+            if (!dragging || isClick) return // Don't move if it's still considered a click or resizers are shown
 
             const currentLogo = logos.find((logo) => logo.id === selectedLogoId)
             if (!currentLogo) return
@@ -268,7 +290,6 @@ const EditLogo = () => {
             dragging,
             isClick,
             mouseDownPos,
-            showResizers,
             bgOffsetY,
             bgOffsetX,
             updateLogo,
@@ -288,18 +309,27 @@ const EditLogo = () => {
                 const deltaX = touch.clientX - resizeStart.x
                 const deltaY = touch.clientY - resizeStart.y
 
-                // Calculate scale based on distance from center
-                const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
-                const scaleFactor = distance / 100 // Adjust sensitivity
+                // Calculate scale based on corner and touch movement
+                let scaleFactor = 0
 
-                // Determine if we're scaling up or down based on movement direction
-                const scaleDirection = deltaX + deltaY > 0 ? 1 : -1
+                switch (resizeStart.corner) {
+                    case "nw": // Top-left: increase when moving left or up
+                        scaleFactor = (-deltaX + -deltaY) / 100
+                        break
+                    case "ne": // Top-right: increase when moving right or up
+                        scaleFactor = (deltaX + -deltaY) / 100
+                        break
+                    case "sw": // Bottom-left: increase when moving left or down
+                        scaleFactor = (-deltaX + deltaY) / 100
+                        break
+                    case "se": // Bottom-right: increase when moving right or down
+                        scaleFactor = (deltaX + deltaY) / 100
+                        break
+                }
+
                 const newScale = Math.max(
                     0.2,
-                    Math.min(
-                        3.0,
-                        resizeStart.scale + scaleFactor * scaleDirection * 0.01
-                    )
+                    Math.min(3.0, resizeStart.scale + scaleFactor * 0.01)
                 )
 
                 updateLogo(selectedLogo.id, { scale: newScale })
@@ -364,7 +394,6 @@ const EditLogo = () => {
         ]
     )
 
-
     useEffect(() => {
         const handleGlobalMouseUp = () => {
             handleMouseUp()
@@ -388,10 +417,7 @@ const EditLogo = () => {
             window.removeEventListener("touchmove", handleTouchMove)
             window.removeEventListener("touchend", handleGlobalTouchEnd)
         }
-    }, [
-        handleMouseMove,
-        handleTouchMove,
-    ])
+    }, [handleMouseMove, handleTouchMove, handleMouseUp])
 
     useEffect(() => {
         console.log(showResizers)
@@ -445,11 +471,6 @@ const EditLogo = () => {
                             y: touch.clientY,
                         })
                     }}
-                    onMouseEnter={() => setHovering(true)}
-                    onMouseLeave={() => {
-                        setHovering(false)
-                        if (!dragging && !isResizing) setShowResizers(false)
-                    }}
                     style={{
                         width: viewportWidth,
                         minHeight: VIEWPORT_HEIGHT,
@@ -486,20 +507,32 @@ const EditLogo = () => {
                                     <div
                                         className='absolute w-3 h-3 bg-blue-500 border border-white rounded-full cursor-nw-resize hover:bg-blue-600 transition-colors'
                                         style={{ top: "-6px", left: "-6px" }}
-                                        onMouseDown={handleResizeStart}
-                                        onTouchStart={handleResizeStart}
+                                        onMouseDown={(e) =>
+                                            handleResizeStart(e, "nw")
+                                        }
+                                        onTouchStart={(e) =>
+                                            handleResizeStart(e, "nw")
+                                        }
                                     />
                                     <div
                                         className='absolute w-3 h-3 bg-blue-500 border border-white rounded-full cursor-ne-resize hover:bg-blue-600 transition-colors'
                                         style={{ top: "-6px", right: "-6px" }}
-                                        onMouseDown={handleResizeStart}
-                                        onTouchStart={handleResizeStart}
+                                        onMouseDown={(e) =>
+                                            handleResizeStart(e, "ne")
+                                        }
+                                        onTouchStart={(e) =>
+                                            handleResizeStart(e, "ne")
+                                        }
                                     />
                                     <div
                                         className='absolute w-3 h-3 bg-blue-500 border border-white rounded-full cursor-sw-resize hover:bg-blue-600 transition-colors'
                                         style={{ bottom: "-6px", left: "-6px" }}
-                                        onMouseDown={handleResizeStart}
-                                        onTouchStart={handleResizeStart}
+                                        onMouseDown={(e) =>
+                                            handleResizeStart(e, "sw")
+                                        }
+                                        onTouchStart={(e) =>
+                                            handleResizeStart(e, "sw")
+                                        }
                                     />
                                     <div
                                         className='absolute w-3 h-3 bg-blue-500 border border-white rounded-full cursor-se-resize hover:bg-blue-600 transition-colors'
@@ -507,8 +540,12 @@ const EditLogo = () => {
                                             bottom: "-6px",
                                             right: "-6px",
                                         }}
-                                        onMouseDown={handleResizeStart}
-                                        onTouchStart={handleResizeStart}
+                                        onMouseDown={(e) =>
+                                            handleResizeStart(e, "se")
+                                        }
+                                        onTouchStart={(e) =>
+                                            handleResizeStart(e, "se")
+                                        }
                                     />
                                 </>
                             )}

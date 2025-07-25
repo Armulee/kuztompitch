@@ -1,3 +1,15 @@
+export interface Logo {
+    id: string
+    fileName: string
+    position: number[]
+    image: string
+    cloneImage?: string
+    aspect: number
+    scale: number
+    flipHorizontal: boolean
+    flipVertical: boolean
+}
+
 export type CustomizeContextType = {
     part: string
     setPart: React.Dispatch<React.SetStateAction<string>>
@@ -30,53 +42,12 @@ export type CustomizeContextType = {
     setSnapshot: React.Dispatch<React.SetStateAction<string>>
     checkout: boolean
     setCheckout: React.Dispatch<React.SetStateAction<boolean>>
-    logos: {
-        id: string
-        fileName: string
-        position: number[]
-        image: string
-        cloneImage?: string
-        aspect: number
-        scale: number
-        flipHorizontal: boolean
-        flipVertical: boolean
-    }[]
-    setLogos: React.Dispatch<
-        React.SetStateAction<{
-            id: string
-            fileName: string
-            position: number[]
-            image: string
-            cloneImage?: string
-            aspect: number
-            scale: number
-            flipHorizontal: boolean
-            flipVertical: boolean
-        }[]>
-    >
+    logos: Logo[]
+    setLogos: React.Dispatch<React.SetStateAction<Logo[]>>
     selectedLogoId: string | null
     setSelectedLogoId: React.Dispatch<React.SetStateAction<string | null>>
-    addLogo: (logo: Omit<{
-        id: string
-        fileName: string
-        position: number[]
-        image: string
-        cloneImage?: string
-        aspect: number
-        scale: number
-        flipHorizontal: boolean
-        flipVertical: boolean
-    }, 'id'>) => void
-    updateLogo: (id: string, updates: Partial<{
-        fileName: string
-        position: number[]
-        image: string
-        cloneImage?: string
-        aspect: number
-        scale: number
-        flipHorizontal: boolean
-        flipVertical: boolean
-    }>) => void
+    addLogo: (logo: Omit<Logo, "id">) => void
+    updateLogo: (id: string, updates: Partial<Logo>) => void
     deleteLogo: (id: string) => void
     bgOffsetY: number
     setBgOffsetY: React.Dispatch<React.SetStateAction<number>>

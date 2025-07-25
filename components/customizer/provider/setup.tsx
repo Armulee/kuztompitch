@@ -141,6 +141,7 @@ const useProviderSetup = () => {
         position: number[]
         image: string
         aspect: number
+        scale: number
         flipHorizontal: boolean
         flipVertical: boolean
     }[]>([])
@@ -153,6 +154,7 @@ const useProviderSetup = () => {
         position: number[]
         image: string
         aspect: number
+        scale: number
         flipHorizontal: boolean
         flipVertical: boolean
     }, 'id'>) => {
@@ -167,6 +169,7 @@ const useProviderSetup = () => {
         position: number[]
         image: string
         aspect: number
+        scale: number
         flipHorizontal: boolean
         flipVertical: boolean
     }>) => {
