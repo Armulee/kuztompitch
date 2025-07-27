@@ -224,7 +224,7 @@ const EditLogo = () => {
 
                 const newScale = Math.max(
                     0.2,
-                    Math.min(3.0, resizeStart.scale + scaleFactor)
+                    Math.min(2.0, resizeStart.scale + scaleFactor)
                 )
 
                 console.log(
@@ -329,7 +329,7 @@ const EditLogo = () => {
 
                 const newScale = Math.max(
                     0.2,
-                    Math.min(3.0, resizeStart.scale + scaleFactor * 0.01)
+                    Math.min(2.0, resizeStart.scale + scaleFactor * 0.01)
                 )
 
                 updateLogo(selectedLogo.id, { scale: newScale })
