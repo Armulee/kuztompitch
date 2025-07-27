@@ -229,11 +229,14 @@ export function Microphone(props: GroupProps) {
         logo.aspect > 1
             ? [
                   (logo.flipHorizontal ? -1.2 : 1.2) * logo.scale,
-                  (logo.flipVertical ? -(1.2 / logo.aspect) : 1.2 / logo.aspect) * logo.scale,
+                  (logo.flipVertical
+                      ? -(1.2 / logo.aspect)
+                      : 1.2 / logo.aspect) * logo.scale,
                   1.2 * logo.scale,
               ]
             : [
-                  (logo.flipHorizontal ? -logo.aspect : logo.aspect) * logo.scale,
+                  (logo.flipHorizontal ? -logo.aspect : logo.aspect) *
+                      logo.scale,
                   (logo.flipVertical ? -1.2 : 1.2) * logo.scale,
                   1.2 * logo.scale,
               ]
@@ -259,7 +262,6 @@ export function Microphone(props: GroupProps) {
                 >
                     {logos.map((logo, index) => (
                         <Decal
-                            debug
                             key={logo.id}
                             position={position(logo)}
                             rotation={rotation(logo)}
@@ -287,7 +289,6 @@ export function Microphone(props: GroupProps) {
                 >
                     {logos.map((logo, index) => (
                         <Decal
-                            debug
                             key={logo.id}
                             position={position(logo)}
                             rotation={rotation(logo)}
