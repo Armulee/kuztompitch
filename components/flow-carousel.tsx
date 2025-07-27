@@ -39,7 +39,10 @@ const FlowCarousel = ({
             spaceBetween={spaceBetween}
             freeMode={true}
             scrollbar={scrollbar}
-            autoplay={{ disableOnInteraction: disableOnInteraction, delay: 0 }}
+            autoplay={{
+                disableOnInteraction: disableOnInteraction,
+                delay: 8000,
+            }}
             modules={[Autoplay, FreeMode, Scrollbar]}
             loop={loop}
             speed={speed}
