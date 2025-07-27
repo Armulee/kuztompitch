@@ -3,9 +3,10 @@ import { useEffect } from "react"
 import Hero from "./hero"
 import AboutUs from "./about-us"
 import Services from "./services"
-import OurProject from "./our-projects"
-import OurCustomers from "./our-customers"
+// import OurProject from "./our-projects"
+// import OurCustomers from "./our-customers"
 import ContactUs from "./contact-us"
+import News from "./news"
 
 const HomePage = () => {
     useEffect(() => {
@@ -29,10 +30,10 @@ const HomePage = () => {
             <Hero />
             <AboutUs />
             <Services />
-            <section id='our-projects'>
-                <OurProject />
-                <OurCustomers />
-            </section>
+            {/* <section id='our-projects'> */}
+            <News />
+
+            {/* </section> */}
             <ContactUs />
         </main>
     )
