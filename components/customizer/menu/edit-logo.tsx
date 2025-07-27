@@ -75,7 +75,6 @@ const EditLogo = () => {
         setIsClick(true)
     }
 
-
     const handleTouchStart = (e: React.TouchEvent) => {
         e.preventDefault()
         setDragging(true)
@@ -563,7 +562,7 @@ const EditLogo = () => {
                                         !selectedLogo.flipHorizontal,
                                 })
                             }
-                            className='w-8 h-8 bg-white/10 hover:bg-white/20 rounded-t border border-white/20 transition-colors group flex items-center justify-center'
+                            className='w-8 h-8 bg-white/10 hover:bg-white/20 rounded-t border border-white/20 text-white transition-colors group flex items-center justify-center'
                             title='Flip Horizontal'
                         >
                             <LuFlipHorizontal />
@@ -574,7 +573,7 @@ const EditLogo = () => {
                                     flipVertical: !selectedLogo.flipVertical,
                                 })
                             }
-                            className='w-8 h-8 bg-white/10 hover:bg-white/20 rounded-t border border-white/20 transition-colors group flex items-center justify-center'
+                            className='w-8 h-8 bg-white/10 hover:bg-white/20 rounded-t border border-white/20 text-white transition-colors group flex items-center justify-center'
                             title='Flip Vertical'
                         >
                             <LuFlipVertical />
