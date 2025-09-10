@@ -135,51 +135,63 @@ const useProviderSetup = () => {
         }
     }, [tour])
 
-    const [logos, setLogos] = useState<{
-        id: string
-        fileName: string
-        position: number[]
-        image: string
-        aspect: number
-        scale: number
-        flipHorizontal: boolean
-        flipVertical: boolean
-    }[]>([])
+    const [logos, setLogos] = useState<
+        {
+            id: string
+            fileName: string
+            position: number[]
+            image: string
+            aspect: number
+            scale: number
+            flipHorizontal: boolean
+            flipVertical: boolean
+        }[]
+    >([])
     const [selectedLogoId, setSelectedLogoId] = useState<string | null>(null)
 
     // Helper functions for logo management
-    const addLogo = (logoData: Omit<{
-        id: string
-        fileName: string
-        position: number[]
-        image: string
-        aspect: number
-        scale: number
-        flipHorizontal: boolean
-        flipVertical: boolean
-    }, 'id'>) => {
+    const addLogo = (
+        logoData: Omit<
+            {
+                id: string
+                fileName: string
+                position: number[]
+                image: string
+                aspect: number
+                scale: number
+                flipHorizontal: boolean
+                flipVertical: boolean
+            },
+            "id"
+        >
+    ) => {
         const newId = Date.now().toString()
         const newLogo = { ...logoData, id: newId }
-        setLogos(prev => [...prev, newLogo])
+        setLogos((prev) => [...prev, newLogo])
         setSelectedLogoId(newId)
     }
 
-    const updateLogo = (id: string, updates: Partial<{
-        fileName: string
-        position: number[]
-        image: string
-        aspect: number
-        scale: number
-        flipHorizontal: boolean
-        flipVertical: boolean
-    }>) => {
-        setLogos(prev => prev.map(logo => 
-            logo.id === id ? { ...logo, ...updates } : logo
-        ))
+    const updateLogo = (
+        id: string,
+        updates: Partial<{
+            fileName: string
+            position: number[]
+            image: string
+            aspect: number
+            scale: number
+            flipHorizontal: boolean
+            flipVertical: boolean
+        }>
+    ) => {
+        setLogos((prev) =>
+            prev.map((logo) =>
+                logo.id === id ? { ...logo, ...updates } : logo
+            )
+        )
     }
 
     const deleteLogo = (id: string) => {
-        setLogos(prev => prev.filter(logo => logo.id !== id))
+        setLogos((prev) => prev.filter((logo) => logo.id !== id))
         if (selectedLogoId === id) {
             setSelectedLogoId(null)
         }

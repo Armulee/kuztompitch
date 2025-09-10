@@ -13,17 +13,13 @@ export async function POST(req: Request) {
             body: JSON.stringify({ purpose: "create-order", ...data }),
         })
 
-        const result = await response.json()
-
-        if (result.success) {
-            return NextResponse.json(result, { status: 200 })
-        } else {
-            return NextResponse.json({ message: "Error" }, { status: 400 })
+        if (response.ok) {
+            return NextResponse.json({ success: true }, { status: 200 })
         }
     } catch (err) {
-        console.error(err)
+        console.error("[submit-order] Handler exception", err)
         return NextResponse.json(
-            { message: "Internal Server Error" },
+            { success: false, message: "Internal Server Error" },
             { status: 500 }
         )
     }

@@ -17,7 +17,9 @@ const OurCustomers = () => {
     const handleRight = () => swiper?.slideNext()
     return (
         <div className='mb-6 container'>
-            <h6 className='text-3xl font-bold mb-6'>Our Customers</h6>
+            <h6 className='text-3xl font-bold mb-6 text-white'>
+                Our Customers
+            </h6>
             <div className='w-full flex justify-between items-center w-[350px] m-auto'>
                 <FaChevronLeft
                     className={`${

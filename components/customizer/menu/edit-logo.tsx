@@ -32,6 +32,13 @@ const EditLogo = () => {
     const clamp = (val: number, min: number, max: number) =>
         Math.min(Math.max(val, min), max)
 
+    // Calculate distance between two touches for pinch gesture
+    const getTouchDistance = (touch1: React.Touch, touch2: React.Touch) => {
+        const dx = touch1.clientX - touch2.clientX
+        const dy = touch1.clientY - touch2.clientY
+        return Math.sqrt(dx * dx + dy * dy)
+    }
+
     // Calculate responsive viewport width based on screen size
     const calculateViewportWidth = () => {
         const screenWidth = window.innerWidth
@@ -77,13 +84,32 @@ const EditLogo = () => {
 
     const handleTouchStart = (e: React.TouchEvent) => {
         e.preventDefault()
-        setDragging(true)
+
+        if (e.touches.length === 2) {
+            // Two-finger pinch gesture
+            const distance = getTouchDistance(e.touches[0], e.touches[1])
+            setPinchStart({
+                distance,
+                scale: selectedLogo?.scale || 1,
+            })
+            setDragging(false)
+        } else if (e.touches.length === 1) {
+            // Single finger drag
+            setDragging(true)
+            setPinchStart(null)
+            const touch = e.touches[0]
+            setLastPosition({
+                x: touch.clientX,
+                y: touch.clientY,
+            })
+        }
     }
 
     const handleTouchEnd = () => {
         setDragging(false)
         setIsResizing(false)
         setResizeStart(null)
+        setPinchStart(null)
     }
 
     const handleResizeStart = (
@@ -120,7 +146,7 @@ const EditLogo = () => {
 
         if (direction === "up" || direction === "down") {
             const newOffsetY = clamp(
-                bgOffsetY + (direction === "up" ? -amount : amount),
+                bgOffsetY + (direction === "up" ? amount : -amount),
                 VIEWPORT_HEIGHT - IMAGE_HEIGHT,
                 0
             )
@@ -129,7 +155,7 @@ const EditLogo = () => {
             //     newOffsetY > -160 ? -160 : newOffsetY < -395 ? -395 : newOffsetY
             setBgOffsetY(newOffsetY)
 
-            const realPositionY = SLOPE * newOffsetY + Y_INTERCEPT
+            const realPositionY = SLOPE * newOffsetY + Y_INTERCEPT + 0.12
             const realPositionX = bgOffsetX * 0.01
             updateLogo(currentLogo.id, {
                 position: [
@@ -144,7 +170,7 @@ const EditLogo = () => {
                 bgOffsetX + (direction === "right" ? amount : -amount)
             setBgOffsetX(newOffsetX)
 
-            const realPositionY = SLOPE * bgOffsetY + Y_INTERCEPT
+            const realPositionY = SLOPE * bgOffsetY + Y_INTERCEPT + 0.12
             const realPositionX = newOffsetX * 0.01
             updateLogo(currentLogo.id, {
                 position: [
@@ -164,7 +190,7 @@ const EditLogo = () => {
         const centerY = -280
         setBgOffsetY(centerY)
         setBgOffsetX(0)
-        const realPosition = SLOPE * centerY + Y_INTERCEPT
+        const realPosition = SLOPE * centerY + Y_INTERCEPT + 0.12
         updateLogo(currentLogo.id, {
             position: [0, realPosition, currentLogo.position[2]],
         })
@@ -182,6 +208,10 @@ const EditLogo = () => {
         corner: "nw" | "ne" | "sw" | "se"
     } | null>(null)
     const [showResizers, setShowResizers] = useState<boolean>(false)
+    const [pinchStart, setPinchStart] = useState<{
+        distance: number
+        scale: number
+    } | null>(null)
 
     const handleMouseUp = useCallback(() => {
         if (isClick && mouseDownPos) {
@@ -301,9 +331,22 @@ const EditLogo = () => {
 
     const handleTouchMove = useCallback(
         (e: TouchEvent) => {
+            e.preventDefault()
+
+            // Handle pinch-to-zoom scaling
+            if (e.touches.length === 2 && pinchStart && selectedLogo) {
+                const distance = getTouchDistance(e.touches[0], e.touches[1])
+                const scaleChange = distance / pinchStart.distance
+                const newScale = Math.max(
+                    0.2,
+                    Math.min(2.0, pinchStart.scale * scaleChange)
+                )
+                updateLogo(selectedLogo.id, { scale: newScale })
+                return
+            }
+
             // Handle resizing
             if (isResizing && resizeStart && selectedLogo) {
-                e.preventDefault()
                 const touch = e.touches[0]
                 const deltaX = touch.clientX - resizeStart.x
                 const deltaY = touch.clientY - resizeStart.y
@@ -335,51 +378,54 @@ const EditLogo = () => {
                 return
             }
 
-            if (!dragging || showResizers) return // Don't move if resizers are shown
-            e.preventDefault()
-
-            const currentLogo = logos.find((logo) => logo.id === selectedLogoId)
-            if (!currentLogo) return
-
-            const touch = e.touches[0]
-            if (!touch || !lastPosition) return
-
-            const movementX = touch.clientX - lastPosition.x
-            const movementY = touch.clientY - lastPosition.y
-
-            // Handle Y-axis movement (inverted for natural dragging)
-            setBgOffsetY((prevY) => {
-                const offsetY = clamp(
-                    prevY - movementY,
-                    VIEWPORT_HEIGHT - IMAGE_HEIGHT,
-                    0
+            // Handle single finger dragging
+            if (dragging && e.touches.length === 1 && !showResizers) {
+                const currentLogo = logos.find(
+                    (logo) => logo.id === selectedLogoId
                 )
-                return offsetY
-            })
+                if (!currentLogo) return
 
-            // Handle X-axis movement
-            setBgOffsetX((prevX) => {
-                return prevX + movementX
-            })
+                const touch = e.touches[0]
+                if (!touch || !lastPosition) return
 
-            // Calculate positions
-            const realPositionY = SLOPE * bgOffsetY + Y_INTERCEPT + 0.12
-            const realPositionX = bgOffsetX * 0.01
+                const movementX = touch.clientX - lastPosition.x
+                const movementY = touch.clientY - lastPosition.y
 
-            updateLogo(currentLogo.id, {
-                position: [
-                    realPositionX,
-                    realPositionY,
-                    currentLogo.position[2],
-                ],
-            })
+                // Handle Y-axis movement (inverted for natural dragging)
+                setBgOffsetY((prevY) => {
+                    const offsetY = clamp(
+                        prevY - movementY,
+                        VIEWPORT_HEIGHT - IMAGE_HEIGHT,
+                        0
+                    )
+                    return offsetY
+                })
 
-            setLastPosition({ x: touch.clientX, y: touch.clientY })
+                // Handle X-axis movement
+                setBgOffsetX((prevX) => {
+                    return prevX + movementX
+                })
+
+                // Calculate positions
+                const realPositionY = SLOPE * bgOffsetY + Y_INTERCEPT + 0.12
+                const realPositionX = bgOffsetX * 0.01
+
+                updateLogo(currentLogo.id, {
+                    position: [
+                        realPositionX,
+                        realPositionY,
+                        currentLogo.position[2],
+                    ],
+                })
+
+                setLastPosition({ x: touch.clientX, y: touch.clientY })
+            }
         },
         [
+            pinchStart,
+            selectedLogo,
             isResizing,
             resizeStart,
-            selectedLogo,
             dragging,
             showResizers,
             bgOffsetY,
@@ -462,14 +508,7 @@ const EditLogo = () => {
                             : "border-gray-500"
                     }`}
                     onMouseDown={handleMouseDown}
-                    onTouchStart={(e) => {
-                        handleTouchStart(e)
-                        const touch = e.touches[0]
-                        setLastPosition({
-                            x: touch.clientX,
-                            y: touch.clientY,
-                        })
-                    }}
+                    onTouchStart={handleTouchStart}
                     style={{
                         width: viewportWidth,
                         minHeight: VIEWPORT_HEIGHT,

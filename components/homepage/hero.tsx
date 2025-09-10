@@ -9,7 +9,7 @@ const Hero = () => {
         >
             <div className='z-30 absolute top-[18%] md:top-1/2 md:left-1/2 md:-translate-y-1/2'>
                 <div className='w-full flex-col justify-center items-center mb-4'>
-                    <h1 className='text-[40px] md:text-5xl lg:text-7xl text-center md:text-start'>
+                    <h1 className='text-[40px] md:text-5xl lg:text-7xl text-center md:text-start text-white'>
                         Kuztom Pitch
                     </h1>
                     <h5 className='text-slate-400 text-[20px] md:text-2xl lg:text-4xl text-center md:text-start'>
@@ -18,7 +18,7 @@ const Hero = () => {
                 </div>
                 <div className='flex justify-center items-center gap-8'>
                     <Link href={"/customize"}>
-                        <button className='rounded-full bg-slate-500 px-8 py-2'>
+                        <button className='rounded-full bg-slate-500 px-8 py-2 text-white'>
                             Try Customize
                         </button>
                     </Link>
