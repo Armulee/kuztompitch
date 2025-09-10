@@ -15,7 +15,7 @@ const Payment = () => {
                         type='radio'
                         name='payment'
                         value='bank-transfer'
-                        checked={true}
+                        defaultChecked={true}
                         // onChange={(e) => setSelectedPayment(e.target.value)}
                         className='w-4 h-4 text-orange-600 border-gray-300 focus:ring-orange-500'
                     />

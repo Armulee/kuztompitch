@@ -7,7 +7,7 @@ export async function GET(
     const { code } = await params
 
     const url =
-        "https://script.google.com/macros/s/AKfycbzu5f7XDqAfWz-OCVaEKpsD1SepgajGuE9dX4yXI_5LDZtIpF-H113n3LAHindxp-l8Ag/exec"
+        "https://script.google.com/macros/s/AKfycbwvuJorNSlwssoaT5qGkz1LDS_wvZl60pCsQorVpzE3kHuU37Wg-VtFKhfytyiVokJj2w/exec"
     const newUrl = `${url}?discountCode=${encodeURIComponent(code)}`
     try {
         const response = await fetch(newUrl, { cache: "no-store" })

@@ -1,7 +1,15 @@
 // import { FaMapMarkerAlt } from "react-icons/fa"
 import { FaTruck } from "react-icons/fa6"
+import { useState } from "react"
 
-const Delivery = () => {
+const Delivery = ({
+    deliveryDate,
+    setDeliveryDate,
+}: {
+    deliveryDate: string
+    setDeliveryDate: React.Dispatch<React.SetStateAction<string>>
+}) => {
+    const [showDatePicker, setShowDatePicker] = useState(false)
     return (
         <div className='bg-white rounded-xl shadow-sm border border-slate-200'>
             <div className='p-6 border-b border-slate-200'>
@@ -17,16 +25,53 @@ const Delivery = () => {
                             type='radio'
                             name='delivery'
                             value='ems'
-                            checked={true}
+                            defaultChecked={true}
                             className='w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500'
                         />
                         <div className='flex-1'>
                             <div className='font-semibold text-slate-900'>
                                 EMS Delivery - 100฿
                             </div>
-                            <p className='text-sm text-slate-600'>
-                                Get it delivered in 7 business days
-                            </p>
+                            <div className='text-sm text-black/70'>
+                                <p>
+                                    Our custom microphone take 15-30 days to
+                                    produce and deliver, depending on the
+                                    current queue.
+                                </p>
+                                <p className='mt-1 text-red-500'>
+                                    If you need your microphone by a specific
+                                    date, please let us know.
+                                </p>
+                                <button
+                                    type='button'
+                                    className='underline text-black mt-2'
+                                    onClick={() =>
+                                        setShowDatePicker((prev) => !prev)
+                                    }
+                                >
+                                    {showDatePicker ? "Back" : "Specify a date"}
+                                </button>
+                                {deliveryDate && (
+                                    <div className='mt-1 text-slate-700'>
+                                        Selected:{" "}
+                                        {new Date(
+                                            deliveryDate
+                                        ).toLocaleDateString()}
+                                    </div>
+                                )}
+                                {showDatePicker && (
+                                    <div className='mt-2'>
+                                        <input
+                                            type='date'
+                                            value={deliveryDate}
+                                            onChange={(e) =>
+                                                setDeliveryDate(e.target.value)
+                                            }
+                                            className='border border-slate-200 rounded-lg px-3 py-2 text-slate-700 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none'
+                                        />
+                                    </div>
+                                )}
+                            </div>
                         </div>
                         <FaTruck className='h-5 w-5 text-green-600' />
                     </label>

@@ -3,7 +3,7 @@ import SocialMedias from "./social-medias"
 const ContactUs = () => {
     return (
         <section id='contact-us' className='container'>
-            <h6 className='font-bold text-3xl mt-4 mb-5 text-center'>
+            <h6 className='font-bold text-3xl mt-4 mb-5 text-center text-white'>
                 Contact Us
             </h6>
             <div className='w-full flex justify-center mb-10'>
@@ -17,24 +17,27 @@ const ContactUs = () => {
                 />
                 <div className='flex flex-col justify-center items-center max-w-[786px] md:text-start text-center'>
                     <div className='w-full'>
-                        <span className='font-bold text-3xl mb-3'>
+                        <span className='font-bold text-3xl mb-3 text-white'>
                             Company Address
                         </span>
-                        <div className='mb-4'>
+                        <div className='mb-4 text-slate-400'>
                             12 Soi Ngamwongwan 23 Yeak 5, Ngamwongwan Rd. Bang
                             Khen, Nonthaburi, 11000, Thailand
                         </div>
                     </div>
                     <div className='w-full'>
-                        <span className='font-bold text-3xl mb-3'>Email</span>
-                        <div className='mb-4'>
-                            <div>contact@kuztompitch.com</div>
+                        <span className='font-bold text-3xl mb-3 text-white'>
+                            Email
+                        </span>
+                        <div className='mb-4 text-slate-400'>
                             <div>kuztompitch@gmail.com</div>
                         </div>
                     </div>
                     <div className='w-full'>
-                        <span className='font-bold text-3xl mb-3'>Phone</span>
-                        <div className='mb-4'>
+                        <span className='font-bold text-3xl mb-3 text-white'>
+                            Phone
+                        </span>
+                        <div className='mb-4 text-slate-400'>
                             <div>+66 6737 7160</div>
                             <div>+66 2591 7175</div>
                         </div>

@@ -36,6 +36,7 @@ export default function MainCheckout({
     const [email, setEmail] = useState<string>("")
     const [telephone, setTelephone] = useState<string>("")
     const [address, setAddress] = useState<string>("")
+    const [deliveryDate, setDeliveryDate] = useState<string>("")
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -48,19 +49,20 @@ export default function MainCheckout({
             email: email.trim().toLowerCase(),
             telephone,
             snapshot,
-            decals: logos.map(logo => ({
+            decals: logos.map((logo) => ({
                 fileName: logo.fileName,
                 image: logo.image, // Only original image, not cloneImage
                 position: logo.position,
                 aspect: logo.aspect,
                 flipHorizontal: logo.flipHorizontal,
-                flipVertical: logo.flipVertical
+                flipVertical: logo.flipVertical,
             })),
             model,
             capsule: `${capsule.style}, ${capsule.color} (${capsule.colorName})`,
             topHandle: `${topHandle.style}, ${topHandle.color} (${topHandle.colorName})`,
             bottomHandle: `${bottomHandle.style}, ${bottomHandle.color} (${bottomHandle.colorName})`,
             address,
+            deliveryDate,
             pricing: total,
             status: "On Hold",
         }
@@ -110,7 +112,10 @@ export default function MainCheckout({
                 {/* Main Content */}
                 <div className='md:col-span-2 space-y-8'>
                     <Details />
-                    <Delivery />
+                    <Delivery
+                        deliveryDate={deliveryDate}
+                        setDeliveryDate={setDeliveryDate}
+                    />
                     <Address
                         setFullName={setFullName}
                         setEmail={setEmail}

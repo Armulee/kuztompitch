@@ -1,7 +1,7 @@
 import { FaFileSignature, FaLightbulb, FaHeadphonesAlt } from "react-icons/fa"
 
 const Services = () => {
-    const className = "w-10 h-auto mb-5 text-slate-400"
+    const className = "w-10 h-auto mb-5 text-white"
     const services = [
         [
             {
@@ -38,7 +38,7 @@ const Services = () => {
     ]
     return (
         <section id='services' className='container mt-6'>
-            <h6 className='text-3xl font-bold mb-6'>Services</h6>
+            <h6 className='text-3xl font-bold mb-6 text-white'>Services</h6>
             <div className='flex flex-col md:flex-row gap-4 justify-center items-center text-sm'>
                 {services.map((services, index) => {
                     return (
@@ -51,10 +51,12 @@ const Services = () => {
                                     key={service.key}
                                     className='flex flex-col justify-center gap-6 items-start bg-gradient-to-tr from-[#5C6A7260] to-[#4E4E4E20] rounded-lg w-full md:h-[400px] lg:h-full p-8'
                                 >
-                                    <div className='font-bold text-2xl mb-2 text-slate-400'>
+                                    <div className='font-bold text-2xl mb-2 text-white'>
                                         {service.topic}
                                     </div>
-                                    <p>{service.content}</p>
+                                    <p className='text-slate-400'>
+                                        {service.content}
+                                    </p>
                                 </div>
                             ))}
                         </div>

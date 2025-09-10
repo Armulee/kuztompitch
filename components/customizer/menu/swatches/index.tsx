@@ -75,31 +75,27 @@ const ColorSwatch = ({
                 modules={[FreeMode, Mousewheel]}
                 freeMode
             >
-                {colors?.[style?.toLowerCase()]?.[shade]?.map((c) => {
-                    return (
-                        <>
-                            {style === "Metalic" ? (
-                                <SwiperSlide
-                                    key={`metalic-${c.name}`}
-                                    style={{
-                                        background: `linear-gradient(135deg, ${c.color[0]} 0%, ${c.color[1]} 100%)`,
-                                    }}
-                                    onClick={() => handleClick({ ...c, style })}
-                                    className={`rounded-md !min-w-[20px] !min-h-[30px] border`}
-                                />
-                            ) : (
-                                <SwiperSlide
-                                    key={`solid-${c.name}`}
-                                    style={{
-                                        background: `${c.color}`,
-                                    }}
-                                    onClick={() => handleClick({ ...c, style })}
-                                    className={`rounded-md !min-w-[20px] !min-h-[30px] border relative`}
-                                ></SwiperSlide>
-                            )}
-                        </>
+                {colors?.[style?.toLowerCase()]?.[shade]?.map((c) =>
+                    style === "Metalic" ? (
+                        <SwiperSlide
+                            key={`metalic-${c.name}`}
+                            style={{
+                                background: `linear-gradient(135deg, ${c.color[0]} 0%, ${c.color[1]} 100%)`,
+                            }}
+                            onClick={() => handleClick({ ...c, style })}
+                            className={`rounded-md !min-w-[20px] !min-h-[30px] border`}
+                        />
+                    ) : (
+                        <SwiperSlide
+                            key={`solid-${c.name}`}
+                            style={{
+                                background: `${c.color}`,
+                            }}
+                            onClick={() => handleClick({ ...c, style })}
+                            className={`rounded-md !min-w-[20px] !min-h-[30px] border relative`}
+                        ></SwiperSlide>
                     )
-                })}
+                )}
             </Swiper>
         </div>
     )
