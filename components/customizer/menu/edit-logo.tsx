@@ -94,7 +94,7 @@ const EditLogo = () => {
             })
             setDragging(false)
         } else if (e.touches.length === 1) {
-            // Single finger drag
+            // Single finger drag - always allow dragging on mobile
             setDragging(true)
             setPinchStart(null)
             const touch = e.touches[0]
@@ -129,6 +129,9 @@ const EditLogo = () => {
             scale: selectedLogo?.scale || 1,
             corner,
         })
+        
+        // Prevent dragging when resizing
+        setDragging(false)
     }
 
     const handleResizeEnd = () => {
@@ -371,7 +374,7 @@ const EditLogo = () => {
 
                 const newScale = Math.max(
                     0.2,
-                    Math.min(2.0, resizeStart.scale + scaleFactor * 0.01)
+                    Math.min(2.0, resizeStart.scale + scaleFactor * 0.1)
                 )
 
                 updateLogo(selectedLogo.id, { scale: newScale })
@@ -379,7 +382,7 @@ const EditLogo = () => {
             }
 
             // Handle single finger dragging
-            if (dragging && e.touches.length === 1 && !showResizers) {
+            if (dragging && e.touches.length === 1) {
                 const currentLogo = logos.find(
                     (logo) => logo.id === selectedLogoId
                 )
@@ -515,6 +518,9 @@ const EditLogo = () => {
                         ...backgroundPosition,
                         cursor: dragging ? "grabbing" : "grab",
                         touchAction: "none",
+                        WebkitTouchCallout: "none",
+                        WebkitUserSelect: "none",
+                        userSelect: "none",
                     }}
                 >
                     {/* Logo preview - fixed size, only shows resizers */}
@@ -543,8 +549,8 @@ const EditLogo = () => {
                             {showResizers && (
                                 <>
                                     <div
-                                        className='absolute w-3 h-3 bg-blue-500 border border-white rounded-full cursor-nw-resize hover:bg-blue-600 transition-colors'
-                                        style={{ top: "-6px", left: "-6px" }}
+                                        className='absolute w-6 h-6 bg-blue-500 border-2 border-white rounded-full cursor-nw-resize hover:bg-blue-600 transition-colors touch-manipulation'
+                                        style={{ top: "-12px", left: "-12px" }}
                                         onMouseDown={(e) =>
                                             handleResizeStart(e, "nw")
                                         }
@@ -553,8 +559,8 @@ const EditLogo = () => {
                                         }
                                     />
                                     <div
-                                        className='absolute w-3 h-3 bg-blue-500 border border-white rounded-full cursor-ne-resize hover:bg-blue-600 transition-colors'
-                                        style={{ top: "-6px", right: "-6px" }}
+                                        className='absolute w-6 h-6 bg-blue-500 border-2 border-white rounded-full cursor-ne-resize hover:bg-blue-600 transition-colors touch-manipulation'
+                                        style={{ top: "-12px", right: "-12px" }}
                                         onMouseDown={(e) =>
                                             handleResizeStart(e, "ne")
                                         }
@@ -563,8 +569,8 @@ const EditLogo = () => {
                                         }
                                     />
                                     <div
-                                        className='absolute w-3 h-3 bg-blue-500 border border-white rounded-full cursor-sw-resize hover:bg-blue-600 transition-colors'
-                                        style={{ bottom: "-6px", left: "-6px" }}
+                                        className='absolute w-6 h-6 bg-blue-500 border-2 border-white rounded-full cursor-sw-resize hover:bg-blue-600 transition-colors touch-manipulation'
+                                        style={{ bottom: "-12px", left: "-12px" }}
                                         onMouseDown={(e) =>
                                             handleResizeStart(e, "sw")
                                         }
@@ -573,10 +579,10 @@ const EditLogo = () => {
                                         }
                                     />
                                     <div
-                                        className='absolute w-3 h-3 bg-blue-500 border border-white rounded-full cursor-se-resize hover:bg-blue-600 transition-colors'
+                                        className='absolute w-6 h-6 bg-blue-500 border-2 border-white rounded-full cursor-se-resize hover:bg-blue-600 transition-colors touch-manipulation'
                                         style={{
-                                            bottom: "-6px",
-                                            right: "-6px",
+                                            bottom: "-12px",
+                                            right: "-12px",
                                         }}
                                         onMouseDown={(e) =>
                                             handleResizeStart(e, "se")
