@@ -1,5 +1,5 @@
 // import { FaMapMarkerAlt } from "react-icons/fa"
-import { FaTruck } from "react-icons/fa6"
+import { FaTruck, FaTimes } from "react-icons/fa6"
 import { useState } from "react"
 
 const Delivery = ({
@@ -10,6 +10,11 @@ const Delivery = ({
     setDeliveryDate: React.Dispatch<React.SetStateAction<string>>
 }) => {
     const [showDatePicker, setShowDatePicker] = useState(false)
+    
+    const clearDeliveryDate = () => {
+        setDeliveryDate("")
+        setShowDatePicker(false)
+    }
     return (
         <div className='bg-white rounded-xl shadow-sm border border-slate-200'>
             <div className='p-6 border-b border-slate-200'>
@@ -52,11 +57,21 @@ const Delivery = ({
                                     {showDatePicker ? "Back" : "Specify a date"}
                                 </button>
                                 {deliveryDate && (
-                                    <div className='mt-1 text-slate-700'>
-                                        Selected:{" "}
-                                        {new Date(
-                                            deliveryDate
-                                        ).toLocaleDateString()}
+                                    <div className='mt-1 flex items-center gap-2'>
+                                        <span className='text-slate-700'>
+                                            Selected:{" "}
+                                            {new Date(
+                                                deliveryDate
+                                            ).toLocaleDateString()}
+                                        </span>
+                                        <button
+                                            type='button'
+                                            onClick={clearDeliveryDate}
+                                            className='text-red-500 hover:text-red-700 transition-colors p-1 rounded-full hover:bg-red-50'
+                                            title='Remove selected date'
+                                        >
+                                            <FaTimes className='h-3 w-3' />
+                                        </button>
                                     </div>
                                 )}
                                 {showDatePicker && (
