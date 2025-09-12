@@ -96,15 +96,6 @@ const Delivery = ({
                             </button>
                         )}
                         {deliveryDate && (
-                            <button
-                                type='button'
-                                className='underline text-black mt-2'
-                                onClick={clearDeliveryDate}
-                            >
-                                Delete
-                            </button>
-                        )}
-                        {deliveryDate && (
                             <div className='mt-1 flex items-center gap-2'>
                                 <span className='text-slate-700'>
                                     Selected:{" "}
