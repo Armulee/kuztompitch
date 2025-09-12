@@ -17,21 +17,7 @@ const Delivery = ({
     // Calculate minimum date (30 days from today)
     const getMinDate = () => {
         const today = new Date()
-        const minDate = new Date(today.getTime() + (30 * 24 * 60 * 60 * 1000))
-        return minDate.toISOString().split('T')[0]
-    }
-    
-    // Validate selected date
-    const validateDate = (selectedDate: string) => {
-        const today = new Date()
-        const minDate = new Date(today.getTime() + (30 * 24 * 60 * 60 * 1000))
-        const selected = new Date(selectedDate)
-        
-        if (selected < minDate) {
-            alert(`Please select a date at least 30 days from today. Minimum date: ${minDate.toLocaleDateString()}`)
-            return false
-        }
-        return true
+        return new Date(today.getTime() + (30 * 24 * 60 * 60 * 1000))
     }
     
     const clearDeliveryDate = () => {
@@ -42,12 +28,6 @@ const Delivery = ({
     const clearDateAndKeepPicker = () => {
         setDeliveryDate("")
         setShowDatePicker(true)
-    }
-    
-    // Calculate minimum date (30 days from today)
-    const getMinDate = () => {
-        const today = new Date()
-        return new Date(today.getTime() + (30 * 24 * 60 * 60 * 1000))
     }
     
     // Handle date selection
