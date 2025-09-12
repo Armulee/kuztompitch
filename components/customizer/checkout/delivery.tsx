@@ -33,13 +33,20 @@ const Delivery = ({
     // Handle date selection
     const handleDateChange = (date: Date | null) => {
         if (date) {
-            // Use local date to avoid timezone issues
-            const year = date.getFullYear()
-            const month = String(date.getMonth() + 1).padStart(2, '0')
-            const day = String(date.getDate()).padStart(2, '0')
-            const dateString = `${year}-${month}-${day}`
-            setDeliveryDate(dateString)
-            setShowDatePicker(false)
+            // Check if the selected date meets the minimum requirement
+            const minDate = getMinDate()
+            if (date >= minDate) {
+                // Use local date to avoid timezone issues
+                const year = date.getFullYear()
+                const month = String(date.getMonth() + 1).padStart(2, '0')
+                const day = String(date.getDate()).padStart(2, '0')
+                const dateString = `${year}-${month}-${day}`
+                setDeliveryDate(dateString)
+                setShowDatePicker(false)
+            } else {
+                // Show alert for invalid date
+                alert(`Please select a date at least 30 days from today. Minimum date: ${minDate.toLocaleDateString()}`)
+            }
         }
     }
     return (
@@ -115,7 +122,7 @@ const Delivery = ({
                                     selected={deliveryDate ? new Date(deliveryDate + 'T00:00:00') : null}
                                     onChange={handleDateChange}
                                     minDate={getMinDate()}
-                                    placeholderText="Select delivery date (minimum 30 days from today)"
+                                    placeholderText="dd/mm/yyyy"
                                     dateFormat="dd/MM/yyyy"
                                     className="border border-slate-200 rounded-lg px-3 py-2 text-black bg-white w-full focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none"
                                     showPopperArrow={false}
@@ -128,6 +135,8 @@ const Delivery = ({
                                         }
                                         return ''
                                     }}
+                                    isClearable={false}
+                                    readOnly={false}
                                 />
                             </div>
                         )}
