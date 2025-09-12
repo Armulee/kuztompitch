@@ -82,7 +82,7 @@ const Delivery = ({
                             <div className='mt-2'>
                                 <input
                                     type='date'
-                                    value={deliveryDate}
+                                    value=""
                                     onChange={(e) =>
                                         setDeliveryDate(e.target.value)
                                     }
