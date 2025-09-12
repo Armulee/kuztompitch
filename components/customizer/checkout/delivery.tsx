@@ -49,6 +49,53 @@ const Delivery = ({
             }
         }
     }
+
+    // Handle manual input with auto-formatting
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        let value = e.target.value.replace(/\D/g, '') // Remove non-digits
+        
+        // Auto-format with slashes
+        if (value.length >= 2) {
+            value = value.substring(0, 2) + '/' + value.substring(2)
+        }
+        if (value.length >= 5) {
+            value = value.substring(0, 5) + '/' + value.substring(5, 9)
+        }
+        
+        // Limit to dd/mm/yyyy format
+        if (value.length > 10) {
+            value = value.substring(0, 10)
+        }
+        
+        // Update the input value
+        e.target.value = value
+        
+        // Try to parse and validate the date
+        if (value.length === 10) {
+            const parts = value.split('/')
+            if (parts.length === 3) {
+                const day = parseInt(parts[0])
+                const month = parseInt(parts[1])
+                const year = parseInt(parts[2])
+                
+                // Validate date components
+                if (day >= 1 && day <= 31 && month >= 1 && month <= 12 && year >= 2024) {
+                    const inputDate = new Date(year, month - 1, day)
+                    const minDate = getMinDate()
+                    
+                    if (inputDate >= minDate) {
+                        // Valid date, convert to ISO format
+                        const dateString = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+                        setDeliveryDate(dateString)
+                        setShowDatePicker(false)
+                    } else {
+                        alert(`Please select a date at least 30 days from today. Minimum date: ${minDate.toLocaleDateString()}`)
+                        e.target.value = ''
+                    }
+                }
+            }
+        }
+    }
     return (
         <div className='bg-white rounded-xl shadow-sm border border-slate-200'>
             <div className='p-6 border-b border-slate-200'>
@@ -118,26 +165,34 @@ const Delivery = ({
                         )}
                         {showDatePicker && (
                             <div className='mt-2'>
-                                <DatePicker
-                                    selected={deliveryDate ? new Date(deliveryDate + 'T00:00:00') : null}
-                                    onChange={handleDateChange}
-                                    minDate={getMinDate()}
-                                    placeholderText="dd/mm/yyyy"
-                                    dateFormat="dd/MM/yyyy"
-                                    className="border border-slate-200 rounded-lg px-3 py-2 text-black bg-white w-full focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none"
-                                    showPopperArrow={false}
-                                    popperClassName="react-datepicker-popper"
-                                    calendarClassName="react-datepicker-calendar"
-                                    dayClassName={(date) => {
-                                        const minDate = getMinDate()
-                                        if (date < minDate) {
-                                            return 'react-datepicker__day--disabled'
-                                        }
-                                        return ''
-                                    }}
-                                    isClearable={false}
-                                    readOnly={false}
-                                />
+                                <div className="relative">
+                                    <input
+                                        type="text"
+                                        placeholder="dd/mm/yyyy"
+                                        maxLength={10}
+                                        onChange={handleInputChange}
+                                        className="border border-slate-200 rounded-lg px-3 py-2 text-black bg-white w-full focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none placeholder:text-black/50"
+                                    />
+                                    <DatePicker
+                                        selected={deliveryDate ? new Date(deliveryDate + 'T00:00:00') : null}
+                                        onChange={handleDateChange}
+                                        minDate={getMinDate()}
+                                        dateFormat="dd/MM/yyyy"
+                                        className="absolute inset-0 opacity-0 cursor-pointer"
+                                        showPopperArrow={false}
+                                        popperClassName="react-datepicker-popper"
+                                        calendarClassName="react-datepicker-calendar"
+                                        dayClassName={(date) => {
+                                            const minDate = getMinDate()
+                                            if (date < minDate) {
+                                                return 'react-datepicker__day--disabled'
+                                            }
+                                            return ''
+                                        }}
+                                        isClearable={false}
+                                        readOnly={true}
+                                    />
+                                </div>
                             </div>
                         )}
                     </div>
