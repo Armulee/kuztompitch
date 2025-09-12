@@ -175,7 +175,7 @@ export default function TermsOfServicePage() {
                         <div className="bg-gray-900 p-8 rounded-lg mb-8">
                             <h2 className="text-2xl font-bold mb-4 text-blue-400">12. Changes to Terms</h2>
                             <p className="text-gray-300">
-                                We reserve the right to modify these terms at any time. We will notify users of any material changes by posting the new terms on this page and updating the "Last updated" date. Your continued use of our services after any changes constitutes acceptance of the updated terms.
+                                We reserve the right to modify these terms at any time. We will notify users of any material changes by posting the new terms on this page and updating the &quot;Last updated&quot; date. Your continued use of our services after any changes constitutes acceptance of the updated terms.
                             </p>
                         </div>
 

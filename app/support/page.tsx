@@ -61,7 +61,7 @@ export default function SupportPage() {
                             <div className="bg-gray-900 p-6 rounded-lg">
                                 <h3 className="text-xl font-semibold mb-3 text-blue-400">How long does it take to complete a custom microphone?</h3>
                                 <p className="text-gray-300">
-                                    Custom microphones typically take 2-4 weeks to complete, depending on the complexity of the design and current order volume. We'll provide you with a detailed timeline when you place your order.
+                                    Custom microphones typically take 2-4 weeks to complete, depending on the complexity of the design and current order volume. We&apos;ll provide you with a detailed timeline when you place your order.
                                 </p>
                             </div>
 
@@ -89,7 +89,7 @@ export default function SupportPage() {
                             <div className="bg-gray-900 p-6 rounded-lg">
                                 <h3 className="text-xl font-semibold mb-3 text-blue-400">How do I track my order?</h3>
                                 <p className="text-gray-300">
-                                    Once your order is processed, you'll receive a tracking number via email. You can also check your order status by logging into your account on our website.
+                                    Once your order is processed, you&apos;ll receive a tracking number via email. You can also check your order status by logging into your account on our website.
                                 </p>
                             </div>
 
