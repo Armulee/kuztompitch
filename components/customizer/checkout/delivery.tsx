@@ -33,7 +33,12 @@ const Delivery = ({
     // Handle date selection
     const handleDateChange = (date: Date | null) => {
         if (date) {
-            setDeliveryDate(date.toISOString().split('T')[0])
+            // Use local date to avoid timezone issues
+            const year = date.getFullYear()
+            const month = String(date.getMonth() + 1).padStart(2, '0')
+            const day = String(date.getDate()).padStart(2, '0')
+            const dateString = `${year}-${month}-${day}`
+            setDeliveryDate(dateString)
             setShowDatePicker(false)
         }
     }
@@ -107,7 +112,7 @@ const Delivery = ({
                         {showDatePicker && (
                             <div className='mt-2'>
                                 <DatePicker
-                                    selected={deliveryDate ? new Date(deliveryDate) : null}
+                                    selected={deliveryDate ? new Date(deliveryDate + 'T00:00:00') : null}
                                     onChange={handleDateChange}
                                     minDate={getMinDate()}
                                     placeholderText="Select delivery date (minimum 30 days from today)"
