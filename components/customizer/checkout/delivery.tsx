@@ -15,22 +15,6 @@ const Delivery = ({
         setDeliveryDate("")
         setShowDatePicker(false)
     }
-    
-    const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const selectedDate = e.target.value
-        if (selectedDate) {
-            const confirmDate = window.confirm(
-                `Confirm delivery date: ${new Date(selectedDate).toLocaleDateString()}?`
-            )
-            if (confirmDate) {
-                setDeliveryDate(selectedDate)
-                setShowDatePicker(false)
-            } else {
-                // Reset the input value if user cancels
-                e.target.value = ""
-            }
-        }
-    }
     return (
         <div className='bg-white rounded-xl shadow-sm border border-slate-200'>
             <div className='p-6 border-b border-slate-200'>
@@ -70,11 +54,15 @@ const Delivery = ({
                         <button
                             type='button'
                             className='underline text-black mt-2'
-                            onClick={() =>
-                                setShowDatePicker((prev) => !prev)
-                            }
+                            onClick={() => {
+                                if (deliveryDate) {
+                                    clearDeliveryDate()
+                                } else {
+                                    setShowDatePicker((prev) => !prev)
+                                }
+                            }}
                         >
-                            {showDatePicker ? "Back" : "Specify a date"}
+                            {deliveryDate ? "Delete" : showDatePicker ? "Back" : "Specify a date"}
                         </button>
                         {deliveryDate && (
                             <div className='mt-1 flex items-center gap-2'>
@@ -94,12 +82,14 @@ const Delivery = ({
                                 </button>
                             </div>
                         )}
-                        {showDatePicker && !deliveryDate && (
+                        {showDatePicker && (
                             <div className='mt-2'>
                                 <input
                                     type='date'
-                                    value=""
-                                    onChange={handleDateChange}
+                                    value={deliveryDate}
+                                    onChange={(e) =>
+                                        setDeliveryDate(e.target.value)
+                                    }
                                     placeholder='dd/mm/yyyy'
                                     min={new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]}
                                     className='border border-slate-200 rounded-lg px-3 py-2 text-black bg-white placeholder:text-black focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none'
