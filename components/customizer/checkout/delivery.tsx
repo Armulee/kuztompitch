@@ -86,19 +86,24 @@ const Delivery = ({
                             If you need your microphone by a specific
                             date, please let us know.
                         </p>
-                        <button
-                            type='button'
-                            className='underline text-black mt-2'
-                            onClick={() => {
-                                if (deliveryDate) {
-                                    clearDeliveryDate()
-                                } else {
-                                    setShowDatePicker((prev) => !prev)
-                                }
-                            }}
-                        >
-                            {deliveryDate ? "Delete" : showDatePicker ? "Back" : "Specify a date"}
-                        </button>
+                        {!deliveryDate && (
+                            <button
+                                type='button'
+                                className='underline text-black mt-2'
+                                onClick={() => setShowDatePicker((prev) => !prev)}
+                            >
+                                {showDatePicker ? "Back" : "Specify a date"}
+                            </button>
+                        )}
+                        {deliveryDate && (
+                            <button
+                                type='button'
+                                className='underline text-black mt-2'
+                                onClick={clearDeliveryDate}
+                            >
+                                Delete
+                            </button>
+                        )}
                         {deliveryDate && (
                             <div className='mt-1 flex items-center gap-2'>
                                 <span className='text-slate-700'>
