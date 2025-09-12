@@ -87,7 +87,9 @@ const Delivery = ({
                                         setDeliveryDate(e.target.value)
                                     }
                                     placeholder='dd/mm/yyyy'
-                                    className='border border-slate-200 rounded-lg px-3 py-2 text-black bg-white focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none'
+                                    min={new Date().toISOString().split('T')[0]}
+                                    max={new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]}
+                                    className='border border-slate-200 rounded-lg px-3 py-2 text-black bg-white placeholder:text-black focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none'
                                 />
                             </div>
                         )}
