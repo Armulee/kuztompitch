@@ -20,11 +20,6 @@ const Delivery = ({
         return new Date(today.getTime() + (30 * 24 * 60 * 60 * 1000))
     }
     
-    const clearDeliveryDate = () => {
-        setDeliveryDate("")
-        setShowDatePicker(false)
-    }
-    
     const clearDateAndKeepPicker = () => {
         setDeliveryDate("")
         setShowDatePicker(true)
