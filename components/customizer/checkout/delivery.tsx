@@ -52,25 +52,39 @@ const Delivery = ({
 
     // Handle manual input with auto-formatting
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        let value = e.target.value.replace(/\D/g, '') // Remove non-digits
+        const input = e.target
+        const cursorPosition = input.selectionStart || 0
+        let value = input.value
         
-        // Auto-format with slashes
-        if (value.length >= 2) {
-            value = value.substring(0, 2) + '/' + value.substring(2)
+        // Only format if user is typing (not deleting)
+        if (value.length > (deliveryDate ? deliveryDate.length : 0)) {
+            // User is typing, apply auto-formatting
+            let digitsOnly = value.replace(/\D/g, '')
+            
+            // Auto-format with slashes
+            if (digitsOnly.length >= 2) {
+                digitsOnly = digitsOnly.substring(0, 2) + '/' + digitsOnly.substring(2)
+            }
+            if (digitsOnly.length >= 5) {
+                digitsOnly = digitsOnly.substring(0, 5) + '/' + digitsOnly.substring(5, 9)
+            }
+            
+            // Limit to dd/mm/yyyy format
+            if (digitsOnly.length > 10) {
+                digitsOnly = digitsOnly.substring(0, 10)
+            }
+            
+            input.value = digitsOnly
+            
+            // Set cursor position after the slash if one was added
+            if (digitsOnly.length === 3 && value.length === 2) {
+                setTimeout(() => input.setSelectionRange(3, 3), 0)
+            } else if (digitsOnly.length === 6 && value.length === 5) {
+                setTimeout(() => input.setSelectionRange(6, 6), 0)
+            }
         }
-        if (value.length >= 5) {
-            value = value.substring(0, 5) + '/' + value.substring(5, 9)
-        }
         
-        // Limit to dd/mm/yyyy format
-        if (value.length > 10) {
-            value = value.substring(0, 10)
-        }
-        
-        // Update the input value
-        e.target.value = value
-        
-        // Try to parse and validate the date
+        // Try to parse and validate the date when complete
         if (value.length === 10) {
             const parts = value.split('/')
             if (parts.length === 3) {
@@ -90,7 +104,7 @@ const Delivery = ({
                         setShowDatePicker(false)
                     } else {
                         alert(`Please select a date at least 30 days from today. Minimum date: ${minDate.toLocaleDateString()}`)
-                        e.target.value = ''
+                        input.value = ''
                     }
                 }
             }
@@ -164,35 +178,34 @@ const Delivery = ({
                             </div>
                         )}
                         {showDatePicker && (
-                            <div className='mt-2'>
-                                <div className="relative">
-                                    <input
-                                        type="text"
-                                        placeholder="dd/mm/yyyy"
-                                        maxLength={10}
-                                        onChange={handleInputChange}
-                                        className="border border-slate-200 rounded-lg px-3 py-2 text-black bg-white w-full focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none placeholder:text-black/50"
-                                    />
-                                    <DatePicker
-                                        selected={deliveryDate ? new Date(deliveryDate + 'T00:00:00') : null}
-                                        onChange={handleDateChange}
-                                        minDate={getMinDate()}
-                                        dateFormat="dd/MM/yyyy"
-                                        className="absolute inset-0 opacity-0 cursor-pointer"
-                                        showPopperArrow={false}
-                                        popperClassName="react-datepicker-popper"
-                                        calendarClassName="react-datepicker-calendar"
-                                        dayClassName={(date) => {
-                                            const minDate = getMinDate()
-                                            if (date < minDate) {
-                                                return 'react-datepicker__day--disabled'
-                                            }
-                                            return ''
-                                        }}
-                                        isClearable={false}
-                                        readOnly={true}
-                                    />
-                                </div>
+                            <div className='mt-2 space-y-2'>
+                                <input
+                                    type="text"
+                                    placeholder="dd/mm/yyyy"
+                                    maxLength={10}
+                                    onChange={handleInputChange}
+                                    className="border border-slate-200 rounded-lg px-3 py-2 text-black bg-white w-full focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none placeholder:text-black/50"
+                                />
+                                <DatePicker
+                                    selected={deliveryDate ? new Date(deliveryDate + 'T00:00:00') : null}
+                                    onChange={handleDateChange}
+                                    minDate={getMinDate()}
+                                    placeholderText="Or select from calendar"
+                                    dateFormat="dd/MM/yyyy"
+                                    className="border border-slate-200 rounded-lg px-3 py-2 text-black bg-white w-full focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none"
+                                    showPopperArrow={false}
+                                    popperClassName="react-datepicker-popper"
+                                    calendarClassName="react-datepicker-calendar"
+                                    dayClassName={(date) => {
+                                        const minDate = getMinDate()
+                                        if (date < minDate) {
+                                            return 'react-datepicker__day--disabled'
+                                        }
+                                        return ''
+                                    }}
+                                    isClearable={false}
+                                    readOnly={false}
+                                />
                             </div>
                         )}
                     </div>
