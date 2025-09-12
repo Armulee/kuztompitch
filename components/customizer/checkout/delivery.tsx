@@ -15,9 +15,20 @@ const Delivery = ({
     const getMinDate = () => {
         const today = new Date()
         const minDate = new Date(today.getTime() + (30 * 24 * 60 * 60 * 1000))
-        const dateString = minDate.toISOString().split('T')[0]
-        alert(`Today: ${today.toISOString().split('T')[0]}\nMin date (30 days from today): ${dateString}`)
-        return dateString
+        return minDate.toISOString().split('T')[0]
+    }
+    
+    // Validate selected date
+    const validateDate = (selectedDate: string) => {
+        const today = new Date()
+        const minDate = new Date(today.getTime() + (30 * 24 * 60 * 60 * 1000))
+        const selected = new Date(selectedDate)
+        
+        if (selected < minDate) {
+            alert(`Please select a date at least 30 days from today. Minimum date: ${minDate.toLocaleDateString()}`)
+            return false
+        }
+        return true
     }
     
     const clearDeliveryDate = () => {
@@ -101,11 +112,16 @@ const Delivery = ({
                                 <input
                                     type='date'
                                     value={deliveryDate}
-                                    onChange={(e) =>
-                                        setDeliveryDate(e.target.value)
-                                    }
+                                    onChange={(e) => {
+                                        const selectedDate = e.target.value
+                                        if (selectedDate && validateDate(selectedDate)) {
+                                            setDeliveryDate(selectedDate)
+                                        } else if (selectedDate) {
+                                            // Reset the input if validation fails
+                                            e.target.value = ""
+                                        }
+                                    }}
                                     placeholder='dd/mm/yyyy'
-                                    min={getMinDate()}
                                     className='border border-slate-200 rounded-lg px-3 py-2 text-black bg-white placeholder:text-black/50 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none'
                                 />
                             </div>
