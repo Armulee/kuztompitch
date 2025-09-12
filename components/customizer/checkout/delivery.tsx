@@ -16,8 +16,7 @@ const Delivery = ({
         const today = new Date()
         const minDate = new Date(today.getTime() + (30 * 24 * 60 * 60 * 1000))
         const dateString = minDate.toISOString().split('T')[0]
-        console.log('Today:', today.toISOString().split('T')[0])
-        console.log('Min date (30 days from today):', dateString)
+        alert(`Today: ${today.toISOString().split('T')[0]}\nMin date (30 days from today): ${dateString}`)
         return dateString
     }
     
