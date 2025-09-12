@@ -96,7 +96,11 @@ const Delivery = ({
                                         setDeliveryDate(e.target.value)
                                     }
                                     placeholder='dd/mm/yyyy'
-                                    min={new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]}
+                                    min={(() => {
+                                        const today = new Date()
+                                        today.setDate(today.getDate() + 30)
+                                        return today.toISOString().split('T')[0]
+                                    })()}
                                     className='border border-slate-200 rounded-lg px-3 py-2 text-black bg-white placeholder:text-black/50 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none'
                                 />
                             </div>
