@@ -117,7 +117,6 @@ const Delivery = ({
                                     popperClassName="react-datepicker-popper"
                                     calendarClassName="react-datepicker-calendar"
                                     dayClassName={(date) => {
-                                        const today = new Date()
                                         const minDate = getMinDate()
                                         if (date < minDate) {
                                             return 'react-datepicker__day--disabled'
