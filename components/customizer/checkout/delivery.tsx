@@ -53,8 +53,7 @@ const Delivery = ({
     // Handle manual input with auto-formatting
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const input = e.target
-        const cursorPosition = input.selectionStart || 0
-        let value = input.value
+        const value = input.value
         
         // Only format if user is typing (not deleting)
         if (value.length > (deliveryDate ? deliveryDate.length : 0)) {
