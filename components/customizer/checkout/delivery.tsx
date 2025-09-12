@@ -1,5 +1,5 @@
 // import { FaMapMarkerAlt } from "react-icons/fa"
-import { FaTruck, FaTimes } from "react-icons/fa6"
+import { FaTruck } from "react-icons/fa6"
 import { useState } from "react"
 
 const Delivery = ({
@@ -70,7 +70,7 @@ const Delivery = ({
                                             className='text-red-500 hover:text-red-700 transition-colors p-1 rounded-full hover:bg-red-50'
                                             title='Remove selected date'
                                         >
-                                            <FaTimes className='h-3 w-3' />
+                                            ×
                                         </button>
                                     </div>
                                 )}
