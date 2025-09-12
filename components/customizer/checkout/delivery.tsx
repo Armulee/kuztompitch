@@ -33,63 +33,64 @@ const Delivery = ({
                             defaultChecked={true}
                             className='w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500'
                         />
+                        <FaTruck className='h-5 w-5 text-green-600' />
                         <div className='flex-1'>
                             <div className='font-semibold text-slate-900'>
                                 EMS Delivery - 100฿
                             </div>
-                            <div className='text-sm text-black/70'>
-                                <p>
-                                    Our custom microphone take 15-30 days to
-                                    produce and deliver, depending on the
-                                    current queue.
-                                </p>
-                                <p className='mt-1 text-red-500'>
-                                    If you need your microphone by a specific
-                                    date, please let us know.
-                                </p>
+                        </div>
+                    </label>
+                    
+                    <div className='ml-7 text-sm text-black/70'>
+                        <p>
+                            Our custom microphone take 15-30 days to
+                            produce and deliver, depending on the
+                            current queue.
+                        </p>
+                        <p className='mt-1 text-red-500'>
+                            If you need your microphone by a specific
+                            date, please let us know.
+                        </p>
+                        <button
+                            type='button'
+                            className='underline text-black mt-2'
+                            onClick={() =>
+                                setShowDatePicker((prev) => !prev)
+                            }
+                        >
+                            {showDatePicker ? "Back" : "Specify a date"}
+                        </button>
+                        {deliveryDate && (
+                            <div className='mt-1 flex items-center gap-2'>
+                                <span className='text-slate-700'>
+                                    Selected:{" "}
+                                    {new Date(
+                                        deliveryDate
+                                    ).toLocaleDateString()}
+                                </span>
                                 <button
                                     type='button'
-                                    className='underline text-black mt-2'
-                                    onClick={() =>
-                                        setShowDatePicker((prev) => !prev)
-                                    }
+                                    onClick={clearDeliveryDate}
+                                    className='text-red-500 hover:text-red-700 transition-colors p-1 rounded-full hover:bg-red-50'
+                                    title='Remove selected date'
                                 >
-                                    {showDatePicker ? "Back" : "Specify a date"}
+                                    <FaTrash className='h-3 w-3' />
                                 </button>
-                                {deliveryDate && (
-                                    <div className='mt-1 flex items-center gap-2'>
-                                        <span className='text-slate-700'>
-                                            Selected:{" "}
-                                            {new Date(
-                                                deliveryDate
-                                            ).toLocaleDateString()}
-                                        </span>
-                                        <button
-                                            type='button'
-                                            onClick={clearDeliveryDate}
-                                            className='text-red-500 hover:text-red-700 transition-colors p-1 rounded-full hover:bg-red-50'
-                                            title='Remove selected date'
-                                        >
-                                            <FaTrash className='h-3 w-3' />
-                                        </button>
-                                    </div>
-                                )}
-                                {showDatePicker && (
-                                    <div className='mt-2'>
-                                        <input
-                                            type='date'
-                                            value={deliveryDate}
-                                            onChange={(e) =>
-                                                setDeliveryDate(e.target.value)
-                                            }
-                                            className='border border-slate-200 rounded-lg px-3 py-2 text-slate-700 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none'
-                                        />
-                                    </div>
-                                )}
                             </div>
-                        </div>
-                        <FaTruck className='h-5 w-5 text-green-600' />
-                    </label>
+                        )}
+                        {showDatePicker && (
+                            <div className='mt-2'>
+                                <input
+                                    type='date'
+                                    value={deliveryDate}
+                                    onChange={(e) =>
+                                        setDeliveryDate(e.target.value)
+                                    }
+                                    className='border border-slate-200 rounded-lg px-3 py-2 text-slate-700 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none'
+                                />
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>
