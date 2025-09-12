@@ -95,15 +95,13 @@ export default function MainCheckout({
             {/* Header */}
             <div className='mb-4 bg-white rounded-xl shadow-sm border border-slate-200'>
                 <div className='w-full flex items-center justify-center p-6 relative'>
-                    {!deliveryDate && (
-                        <button
-                            onClick={() => setCheckout(false)}
-                            className='absolute left-0 flex items-center gap-2 text-slate-600 hover:translate-x-1 transition duration-300 px-3 py-2'
-                        >
-                            <FaChevronLeft className='h-4 w-4' />
-                            Back
-                        </button>
-                    )}
+                    <button
+                        onClick={() => setCheckout(false)}
+                        className='absolute left-0 flex items-center gap-2 text-slate-600 hover:translate-x-1 transition duration-300 px-3 py-2'
+                    >
+                        <FaChevronLeft className='h-4 w-4' />
+                        Back
+                    </button>
                     <h4 className='text-2xl font-bold text-slate-900'>
                         Order Summary
                     </h4>
