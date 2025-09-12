@@ -15,6 +15,22 @@ const Delivery = ({
         setDeliveryDate("")
         setShowDatePicker(false)
     }
+    
+    const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const selectedDate = e.target.value
+        if (selectedDate) {
+            const confirmDate = window.confirm(
+                `Confirm delivery date: ${new Date(selectedDate).toLocaleDateString()}?`
+            )
+            if (confirmDate) {
+                setDeliveryDate(selectedDate)
+                setShowDatePicker(false)
+            } else {
+                // Reset the input value if user cancels
+                e.target.value = ""
+            }
+        }
+    }
     return (
         <div className='bg-white rounded-xl shadow-sm border border-slate-200'>
             <div className='p-6 border-b border-slate-200'>
@@ -83,9 +99,7 @@ const Delivery = ({
                                 <input
                                     type='date'
                                     value=""
-                                    onChange={(e) =>
-                                        setDeliveryDate(e.target.value)
-                                    }
+                                    onChange={handleDateChange}
                                     placeholder='dd/mm/yyyy'
                                     min={new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]}
                                     className='border border-slate-200 rounded-lg px-3 py-2 text-black bg-white placeholder:text-black focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none'
