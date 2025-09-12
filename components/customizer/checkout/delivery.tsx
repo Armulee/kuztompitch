@@ -11,6 +11,16 @@ const Delivery = ({
 }) => {
     const [showDatePicker, setShowDatePicker] = useState(false)
     
+    // Calculate minimum date (30 days from today)
+    const getMinDate = () => {
+        const today = new Date()
+        const minDate = new Date(today.getTime() + (30 * 24 * 60 * 60 * 1000))
+        const dateString = minDate.toISOString().split('T')[0]
+        console.log('Today:', today.toISOString().split('T')[0])
+        console.log('Min date (30 days from today):', dateString)
+        return dateString
+    }
+    
     const clearDeliveryDate = () => {
         setDeliveryDate("")
         setShowDatePicker(false)
@@ -96,11 +106,7 @@ const Delivery = ({
                                         setDeliveryDate(e.target.value)
                                     }
                                     placeholder='dd/mm/yyyy'
-                                    min={(() => {
-                                        const today = new Date()
-                                        today.setDate(today.getDate() + 30)
-                                        return today.toISOString().split('T')[0]
-                                    })()}
+                                    min={getMinDate()}
                                     className='border border-slate-200 rounded-lg px-3 py-2 text-black bg-white placeholder:text-black/50 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none'
                                 />
                             </div>
