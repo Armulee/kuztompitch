@@ -15,6 +15,11 @@ const Delivery = ({
         setDeliveryDate("")
         setShowDatePicker(false)
     }
+    
+    const clearDateAndKeepPicker = () => {
+        setDeliveryDate("")
+        setShowDatePicker(true)
+    }
     return (
         <div className='bg-white rounded-xl shadow-sm border border-slate-200'>
             <div className='p-6 border-b border-slate-200'>
@@ -74,7 +79,7 @@ const Delivery = ({
                                 </span>
                                 <button
                                     type='button'
-                                    onClick={clearDeliveryDate}
+                                    onClick={clearDateAndKeepPicker}
                                     className='text-red-500 hover:text-red-700 transition-colors p-1 rounded-full hover:bg-red-50'
                                     title='Remove selected date'
                                 >
