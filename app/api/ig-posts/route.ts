@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 
 export async function POST() {
     const url =
-        "https://script.google.com/macros/s/AKfycbxt9Mb5AxkUg_vHjpz7U5DV4pJwi7kbzHuosQ4WUSdnWWrZxPm7Bg11-p6hJxmD7KWgbA/exec"
+        "https://script.google.com/macros/s/AKfycbykHjFG1SOlqBuqa-28rZpiEi3PqQoVsaozB61RnqiguBtbRcG6EJ44PsPXut4Rq6k_/exec"
 
     try {
         const response = await fetch(url, {
