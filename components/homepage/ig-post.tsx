@@ -5,7 +5,7 @@ import { InstagramPostType } from "./news"
 
 const FALLBACK_IMAGE = "/assets/test.png"
 const FALLBACK_AVATAR = "/assets/dummy-profile-pic.jpg"
-const DEFAULT_USERNAME = "kuztompitch_official"
+const DEFAULT_USERNAME = "kuztompitch"
 
 const formatTimestamp = (timestamp?: string) => {
     if (!timestamp) {

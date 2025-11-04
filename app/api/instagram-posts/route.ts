@@ -18,6 +18,8 @@ type InstagramMediaItem = {
 
 type InstagramScriptResponse = {
     mediaData?: unknown
+    posts?: unknown
+    success?: boolean
     [key: string]: unknown
 }
 
@@ -60,19 +62,12 @@ export async function POST() {
             )
         }
 
-        const data: InstagramScriptResponse = await upstreamResponse.json()
+        const data: InstagramScriptResponse | InstagramMediaItem[] =
+            await upstreamResponse.json()
 
-        const { mediaData } = data
+        const extractedMediaData = extractMediaArray(data)
 
-        if (isInstagramMediaArray(mediaData)) {
-            return NextResponse.json({ mediaData })
-        }
-
-        if (isInstagramMediaArray(data)) {
-            return NextResponse.json({ mediaData: data })
-        }
-
-        return NextResponse.json({ mediaData: [] })
+        return NextResponse.json({ mediaData: extractedMediaData })
     } catch (error) {
         console.error("Instagram posts route error", error)
         return NextResponse.json(
@@ -82,5 +77,33 @@ export async function POST() {
             { status: 500 }
         )
     }
+}
+
+function extractMediaArray(payload: unknown): InstagramMediaItem[] {
+    if (isInstagramMediaArray(payload)) {
+        return payload
+    }
+
+    if (typeof payload !== "object" || payload === null) {
+        return []
+    }
+
+    const { mediaData, posts } = payload as InstagramScriptResponse
+
+    if (isInstagramMediaArray(mediaData)) {
+        return mediaData
+    }
+
+    if (isInstagramMediaArray(posts)) {
+        return posts
+    }
+
+    const { data } = payload as { data?: unknown }
+
+    if (isInstagramMediaArray(data)) {
+        return data
+    }
+
+    return []
 }
 

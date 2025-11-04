@@ -26,7 +26,7 @@ const fallbackPosts: InstagramPostType[] = [
         permalink: "https://instagram.com/kuztompitch_official",
         type: "IMAGE",
         timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-        username: "kuztompitch_official",
+        username: "kuztompitch",
         userAvatar: "https://picsum.photos/40/40?random=10",
     },
     {
@@ -37,7 +37,7 @@ const fallbackPosts: InstagramPostType[] = [
         permalink: "https://instagram.com/kuztompitch_official",
         type: "IMAGE",
         timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
-        username: "kuztompitch_official",
+        username: "kuztompitch",
         userAvatar: "https://picsum.photos/40/40?random=10",
     },
     {
@@ -48,7 +48,7 @@ const fallbackPosts: InstagramPostType[] = [
         permalink: "https://instagram.com/kuztompitch_official",
         type: "IMAGE",
         timestamp: new Date(Date.now() - 26 * 60 * 60 * 1000).toISOString(),
-        username: "kuztompitch_official",
+        username: "kuztompitch",
         userAvatar: "https://picsum.photos/40/40?random=10",
     },
     {
@@ -59,7 +59,7 @@ const fallbackPosts: InstagramPostType[] = [
         permalink: "https://instagram.com/kuztompitch_official",
         type: "IMAGE",
         timestamp: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-        username: "kuztompitch_official",
+        username: "kuztompitch",
         userAvatar: "https://picsum.photos/40/40?random=10",
     },
 ]
@@ -224,8 +224,11 @@ const News = () => {
 
                 const payload: unknown = await response.json()
                 const candidateMedia = (payload as { mediaData?: unknown }).mediaData
+                const candidatePosts = (payload as { posts?: unknown }).posts
                 const mediaData = Array.isArray(candidateMedia)
                     ? candidateMedia
+                    : Array.isArray(candidatePosts)
+                    ? candidatePosts
                     : Array.isArray(payload)
                     ? payload
                     : []
