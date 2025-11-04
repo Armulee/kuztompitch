@@ -40,6 +40,7 @@ const FlowCarousel = ({
             breakpoints={breakpoint}
             spaceBetween={spaceBetween}
             freeMode={freeMode}
+            loop={loop}
             scrollbar={scrollbar}
             autoplay={{
                 disableOnInteraction: disableOnInteraction,
