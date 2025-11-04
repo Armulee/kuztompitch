@@ -57,7 +57,7 @@ export async function POST() {
         let data
         try {
             data = JSON.parse(responseText)
-        } catch (parseError) {
+        } catch {
             console.error("[ig-posts] Failed to parse JSON response")
             console.error("[ig-posts] Response text:", responseText.substring(0, 500))
             return NextResponse.json(
