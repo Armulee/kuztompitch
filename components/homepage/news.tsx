@@ -256,7 +256,7 @@ const News = () => {
                             slidesPerView={1}
                             spaceBetween={20}
                             loop={posts.length > 1}
-                            speed={2000}
+                            speed={500}
                             disableOnInteraction={false}
                             onSlideChange={handleSlideChange}
                             onSwiper={handleSwiper}
