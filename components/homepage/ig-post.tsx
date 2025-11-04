@@ -31,13 +31,13 @@ const InstagramPost = ({
 
     return (
         <div
-            className={`bg-black rounded-lg shadow-lg overflow-hidden max-w-sm mx-auto ${
+            className={`bg-white rounded-lg shadow-lg overflow-hidden max-w-sm mx-auto border border-gray-200 ${
                 post.permalink ? "cursor-pointer hover:shadow-xl transition-shadow" : ""
             }`}
             onClick={handleClick}
         >
             {/* Header */}
-            <div className='flex items-center p-3'>
+            <div className='flex items-center p-3 border-b border-gray-200'>
                 {/* Avatar - black rounded div with logo centered */}
                 <div className='w-8 h-8 rounded-full bg-black flex items-center justify-center mr-3'>
                     <Image
@@ -49,11 +49,11 @@ const InstagramPost = ({
                     />
                 </div>
                 <div className='flex-1'>
-                    <p className='font-semibold text-sm text-white'>
+                    <p className='font-semibold text-sm text-black'>
                         kuztompitch
                     </p>
                 </div>
-                <span className='text-white text-xs'>{post.timestamp}</span>
+                <span className='text-gray-600 text-xs'>{post.timestamp}</span>
             </div>
 
             {/* Media - Image or Video */}
@@ -90,12 +90,12 @@ const InstagramPost = ({
             </div>
 
             {/* Caption */}
-            <div className='p-3'>
+            <div className='p-3 border-t border-gray-200'>
                 <div className='text-sm'>
-                    <span className='font-semibold mr-1 text-white'>
+                    <span className='font-semibold mr-1 text-black'>
                         kuztompitch
                     </span>
-                    <span className='text-slate-300'>{post.caption}</span>
+                    <span className='text-gray-700'>{post.caption}</span>
                 </div>
             </div>
         </div>
