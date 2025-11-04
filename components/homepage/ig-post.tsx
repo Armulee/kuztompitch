@@ -1,13 +1,14 @@
 import Image from "next/image"
 import { InstagramPostType } from "./news"
 import { useEffect, useRef } from "react"
+import { FaPlay } from "react-icons/fa"
 
-const InstagramPost = ({ 
-    post, 
-    isActive = false 
-}: { 
+const InstagramPost = ({
+    post,
+    isActive = false,
+}: {
     post: InstagramPostType
-    isActive?: boolean 
+    isActive?: boolean
 }) => {
     const videoRef = useRef<HTMLVideoElement>(null)
 
@@ -32,7 +33,9 @@ const InstagramPost = ({
     return (
         <div
             className={`bg-white rounded-lg shadow-lg overflow-hidden max-w-sm mx-auto border border-gray-200 flex flex-col h-[500px] ${
-                post.permalink ? "cursor-pointer hover:shadow-xl transition-shadow" : ""
+                post.permalink
+                    ? "cursor-pointer hover:shadow-xl transition-shadow"
+                    : ""
             }`}
             onClick={handleClick}
         >
@@ -53,36 +56,43 @@ const InstagramPost = ({
                         kuztompitch
                     </p>
                 </div>
-                <span className='text-gray-600 text-xs flex-shrink-0 ml-2'>{post.timestamp}</span>
+                <span className='text-gray-600 text-xs flex-shrink-0 ml-2'>
+                    {post.timestamp}
+                </span>
             </div>
 
             {/* Media - Image or Video */}
             <div className='relative flex-shrink-0 h-80'>
                 {post.type === "VIDEO" ? (
-                    <video
-                        ref={videoRef}
-                        src={post.imageUrl}
-                        className='w-full h-full object-cover'
-                        loop
-                        muted
-                        playsInline
-                        onMouseEnter={(e) => {
-                            if (isActive && e.currentTarget) {
-                                e.currentTarget.play().catch(() => {})
-                            }
-                        }}
-                        onMouseLeave={(e) => {
-                            if (!isActive && e.currentTarget) {
-                                e.currentTarget.pause()
-                            }
-                        }}
-                    />
+                    <div className='relative w-full h-full'>
+                        <video
+                            ref={videoRef}
+                            src={post.imageUrl}
+                            className='w-full h-full object-cover'
+                            loop
+                            muted
+                            playsInline
+                            onMouseEnter={(e) => {
+                                if (isActive && e.currentTarget) {
+                                    e.currentTarget.play().catch(() => {})
+                                }
+                            }}
+                            onMouseLeave={(e) => {
+                                if (!isActive && e.currentTarget) {
+                                    e.currentTarget.pause()
+                                }
+                            }}
+                        />
+                        <div className='absolute inset-0 flex items-center justify-center pointer-events-none'>
+                            <FaPlay className='text-black text-4xl opacity-80' />
+                        </div>
+                    </div>
                 ) : (
                     <Image
                         width={300}
                         height={400}
                         src={post.imageUrl}
-                        alt={post.caption || 'Instagram post'}
+                        alt={post.caption || "Instagram post"}
                         className='w-full h-full object-cover'
                         unoptimized
                     />
