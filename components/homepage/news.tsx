@@ -13,50 +13,22 @@ export interface InstagramPostType {
     userAvatar: string
     likes: number
     timestamp: string
+    permalink?: string
 }
 
-const dummyPosts: InstagramPostType[] = [
-    {
-        id: "1",
-        imageUrl: "https://picsum.photos/400/400?random=1",
-        caption:
-            "Amazing custom pitch design! 🎤✨ #kuztompitch #custom #microphone",
-        username: "kuztompitch_official",
-        userAvatar: "https://picsum.photos/40/40?random=10",
-        likes: 127,
-        timestamp: "2h",
-    },
-    {
-        id: "2",
-        imageUrl: "https://picsum.photos/400/400?random=2",
-        caption:
-            "Behind the scenes of our latest project 🎨 #bts #design #creation",
-        username: "kuztompitch_official",
-        userAvatar: "https://picsum.photos/40/40?random=10",
-        likes: 89,
-        timestamp: "4h",
-    },
-    {
-        id: "3",
-        imageUrl: "https://picsum.photos/400/400?random=3",
-        caption:
-            "Client spotlight: Premium metallic finish ⚡ #premium #metallic #quality",
-        username: "kuztompitch_official",
-        userAvatar: "https://picsum.photos/40/40?random=10",
-        likes: 203,
-        timestamp: "1d",
-    },
-    {
-        id: "4",
-        imageUrl: "https://picsum.photos/400/400?random=4",
-        caption:
-            "New color options available now! 🌈 #newcolors #options #customize",
-        username: "kuztompitch_official",
-        userAvatar: "https://picsum.photos/40/40?random=10",
-        likes: 156,
-        timestamp: "2d",
-    },
-]
+interface GASPost {
+    id: string
+    caption: string
+    media_url: string
+    permalink: string
+    type: string
+    timestamp: string
+}
+
+interface GASResponse {
+    success: boolean
+    posts: GASPost[]
+}
 
 const ProgressBar = ({
     currentSlide,
@@ -148,8 +120,65 @@ const ProgressBar = ({
 const News = () => {
     const [currentSlide, setCurrentSlide] = useState(0)
     const [isPaused, setIsPaused] = useState(false)
+    const [posts, setPosts] = useState<InstagramPostType[]>([])
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState<string | null>(null)
     const autoplayDelay = 8000 // Match FlowCarousel delay
     const transitionSpeed = 2000 // Match FlowCarousel speed
+
+    useEffect(() => {
+        const fetchInstagramPosts = async () => {
+            try {
+                setLoading(true)
+                setError(null)
+
+                const response = await fetch("/api/ig-posts", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                })
+
+                if (!response.ok) {
+                    throw new Error("Failed to fetch Instagram posts")
+                }
+
+                const data: GASResponse = await response.json()
+
+                if (data.success && data.posts) {
+                    // Map GAS response to InstagramPostType
+                    const mappedPosts: InstagramPostType[] = data.posts.map(
+                        (post) => ({
+                            id: post.id,
+                            imageUrl: post.media_url,
+                            caption: post.caption || "",
+                            username: "kuztompitch_official",
+                            userAvatar:
+                                "/assets/dummy-profile-pic.jpg",
+                            likes: 0, // Default value since GAS doesn't provide likes
+                            timestamp: post.timestamp || "",
+                            permalink: post.permalink,
+                        })
+                    )
+
+                    setPosts(mappedPosts)
+                } else {
+                    throw new Error("Invalid response format")
+                }
+            } catch (err) {
+                console.error("Error fetching Instagram posts:", err)
+                setError(
+                    err instanceof Error
+                        ? err.message
+                        : "Failed to load Instagram posts"
+                )
+            } finally {
+                setLoading(false)
+            }
+        }
+
+        fetchInstagramPosts()
+    }, [])
 
     const handleSlideChange = (swiper: SwiperType) => {
         setCurrentSlide(swiper.realIndex)
@@ -196,48 +225,68 @@ const News = () => {
                     </p>
                 </div>
 
-                <FlowCarousel
-                    slidesPerView='auto'
-                    spaceBetween={20}
-                    loop={true}
-                    speed={2000}
-                    disableOnInteraction={false}
-                    onSlideChange={handleSlideChange}
-                    onSwiper={handleSwiper}
-                    breakpoint={{
-                        640: {
-                            slidesPerView: 1,
-                            spaceBetween: 20,
-                        },
-                        768: {
-                            slidesPerView: 2,
-                            spaceBetween: 20,
-                        },
-                        1024: {
-                            slidesPerView: 3,
-                            spaceBetween: 30,
-                        },
-                        1280: {
-                            slidesPerView: 4,
-                            spaceBetween: 30,
-                        },
-                    }}
-                    className='!overflow-visible'
-                >
-                    {dummyPosts.map((post) => (
-                        <SwiperSlide key={post.id} className='!w-auto'>
-                            <InstagramPost post={post} />
-                        </SwiperSlide>
-                    ))}
-                </FlowCarousel>
+                {loading ? (
+                    <div className='flex justify-center items-center py-20'>
+                        <div className='text-white text-lg'>Loading posts...</div>
+                    </div>
+                ) : error ? (
+                    <div className='flex justify-center items-center py-20'>
+                        <div className='text-red-400 text-lg'>{error}</div>
+                    </div>
+                ) : posts.length === 0 ? (
+                    <div className='flex justify-center items-center py-20'>
+                        <div className='text-white text-lg'>
+                            No posts available
+                        </div>
+                    </div>
+                ) : (
+                    <>
+                        <FlowCarousel
+                            slidesPerView='auto'
+                            spaceBetween={20}
+                            loop={posts.length > 1}
+                            speed={2000}
+                            disableOnInteraction={false}
+                            onSlideChange={handleSlideChange}
+                            onSwiper={handleSwiper}
+                            breakpoint={{
+                                640: {
+                                    slidesPerView: 1,
+                                    spaceBetween: 20,
+                                },
+                                768: {
+                                    slidesPerView: 2,
+                                    spaceBetween: 20,
+                                },
+                                1024: {
+                                    slidesPerView: 3,
+                                    spaceBetween: 30,
+                                },
+                                1280: {
+                                    slidesPerView: 4,
+                                    spaceBetween: 30,
+                                },
+                            }}
+                            className='!overflow-visible'
+                        >
+                            {posts.map((post) => (
+                                <SwiperSlide key={post.id} className='!w-auto'>
+                                    <InstagramPost post={post} />
+                                </SwiperSlide>
+                            ))}
+                        </FlowCarousel>
 
-                <ProgressBar
-                    currentSlide={currentSlide}
-                    totalSlides={dummyPosts.length}
-                    autoplayDelay={autoplayDelay}
-                    transitionSpeed={transitionSpeed}
-                    isPaused={isPaused}
-                />
+                        {posts.length > 0 && (
+                            <ProgressBar
+                                currentSlide={currentSlide}
+                                totalSlides={posts.length}
+                                autoplayDelay={autoplayDelay}
+                                transitionSpeed={transitionSpeed}
+                                isPaused={isPaused}
+                            />
+                        )}
+                    </>
+                )}
 
                 <div className='text-center mt-8'>
                     <a
