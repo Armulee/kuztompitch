@@ -1,9 +1,13 @@
 // import aboutUs from "../../public/assets/about-us.png"
-import aboutUs from "../../public/assets/about-us.jpg"
+// import aboutUs from "../../public/assets/about-us.jpg"
 import ParallaxContent from "./parallax-content"
 
 const AboutUs = () => {
-    // Use the scroll position
+    // Google Drive image URL
+    // Source: https://drive.google.com/file/d/120aEQj6nSbXHlevSzDY6OlLAr5QoZqwE/view?usp=sharing
+    // Try multiple URL formats for Google Drive compatibility
+    const fileId = "120aEQj6nSbXHlevSzDY6OlLAr5QoZqwE"
+    const aboutUsImageUrl = `https://drive.google.com/uc?export=view&id=${fileId}`
 
     return (
         <section id='about-us' className='flex flex-col md:flex-row shrink-0'>
@@ -11,7 +15,7 @@ const AboutUs = () => {
                 <div className='flex flex-col justify-center items-start'>
                     <div className='w-full h-[70vh] relative'>
                         <ParallaxContent
-                            imgUrl={aboutUs}
+                            imgUrl={aboutUsImageUrl}
                             heading='Through Luxury Customization.'
                             subheading='We redefine the essence of band equipment'
                         />
