@@ -186,7 +186,7 @@ const News = () => {
                 ) : (
                     <>
                         <FlowCarousel
-                            slidesPerView='auto'
+                            slidesPerView={1}
                             spaceBetween={20}
                             loop={posts.length > 1}
                             speed={2000}
@@ -214,7 +214,7 @@ const News = () => {
                             className='!overflow-visible'
                         >
                             {posts.map((post, index) => (
-                                <SwiperSlide key={post.id} className='!w-auto'>
+                                <SwiperSlide key={post.id}>
                                     <InstagramPost 
                                         post={post} 
                                         isActive={currentSlide === index}
