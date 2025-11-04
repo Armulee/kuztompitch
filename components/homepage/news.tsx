@@ -62,13 +62,10 @@ const PaginationDots = ({
 
 const News = () => {
     const [currentSlide, setCurrentSlide] = useState(0)
-    const [isPaused, setIsPaused] = useState(false)
     const [posts, setPosts] = useState<InstagramPostType[]>([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
     const swiperRef = useRef<SwiperType | null>(null)
-    const autoplayDelay = 8000 // Match FlowCarousel delay
-    const transitionSpeed = 2000 // Match FlowCarousel speed
 
     useEffect(() => {
         const fetchInstagramPosts = async () => {
@@ -142,31 +139,6 @@ const News = () => {
 
     const handleSwiper = (swiper: SwiperType) => {
         swiperRef.current = swiper
-        // Use Swiper's built-in events for better integration
-        swiper.on("touchStart", () => {
-            setIsPaused(true)
-        })
-
-        swiper.on("touchEnd", () => {
-            // Resume after a short delay
-            setTimeout(() => {
-                setIsPaused(false)
-            }, 500)
-        })
-
-        // Handle mouse events for desktop
-        swiper.on("sliderFirstMove", () => {
-            setIsPaused(true)
-        })
-
-        // Handle when autoplay is stopped/started
-        swiper.on("autoplayStop", () => {
-            setIsPaused(true)
-        })
-
-        swiper.on("autoplayStart", () => {
-            setIsPaused(false)
-        })
     }
 
     const handleDotClick = (index: number) => {
