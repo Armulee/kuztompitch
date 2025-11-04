@@ -1,5 +1,8 @@
 "use client"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
+import { SwiperSlide } from "swiper/react"
+import { Swiper as SwiperType } from "swiper/types"
+import FlowCarousel from "../flow-carousel"
 import InstagramPost from "./ig-post"
 
 export interface InstagramPostType {
@@ -27,101 +30,44 @@ interface GASResponse {
     posts: GASPost[]
 }
 
-const Pagination = ({
-    currentPage,
-    totalPages,
-    onPageChange,
+const PaginationDots = ({
+    currentSlide,
+    totalSlides,
+    onDotClick,
 }: {
-    currentPage: number
-    totalPages: number
-    onPageChange: (page: number) => void
+    currentSlide: number
+    totalSlides: number
+    onDotClick: (index: number) => void
 }) => {
-    const getPageNumbers = () => {
-        const delta = 2
-        const range = []
-        const rangeWithDots = []
-
-        for (
-            let i = Math.max(2, currentPage - delta);
-            i <= Math.min(totalPages - 1, currentPage + delta);
-            i++
-        ) {
-            range.push(i)
-        }
-
-        if (currentPage - delta > 2) {
-            rangeWithDots.push(1, "...")
-        } else {
-            rangeWithDots.push(1)
-        }
-
-        rangeWithDots.push(...range)
-
-        if (currentPage + delta < totalPages - 1) {
-            rangeWithDots.push("...", totalPages)
-        } else if (totalPages > 1) {
-            rangeWithDots.push(totalPages)
-        }
-
-        return rangeWithDots
-    }
-
-    if (totalPages <= 1) return null
+    if (totalSlides <= 1) return null
 
     return (
-        <div className='flex justify-center items-center mt-8 space-x-2'>
-            <button
-                onClick={() => onPageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-                className='px-4 py-2 rounded-lg bg-gray-800 text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-700 transition-colors'
-            >
-                Previous
-            </button>
-
-            {getPageNumbers().map((page, index) => {
-                if (page === "...") {
-                    return (
-                        <span
-                            key={`dots-${index}`}
-                            className='px-2 text-gray-400'
-                        >
-                            ...
-                        </span>
-                    )
-                }
-
-                return (
-                    <button
-                        key={page}
-                        onClick={() => onPageChange(page as number)}
-                        className={`px-4 py-2 rounded-lg transition-colors ${
-                            currentPage === page
-                                ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white"
-                                : "bg-gray-800 text-white hover:bg-gray-700"
-                        }`}
-                    >
-                        {page}
-                    </button>
-                )
-            })}
-
-            <button
-                onClick={() => onPageChange(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                className='px-4 py-2 rounded-lg bg-gray-800 text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-700 transition-colors'
-            >
-                Next
-            </button>
+        <div className='flex justify-center items-center mt-6 space-x-2'>
+            {Array.from({ length: totalSlides }).map((_, index) => (
+                <button
+                    key={index}
+                    onClick={() => onDotClick(index)}
+                    className={`transition-all duration-300 rounded-full ${
+                        index === currentSlide
+                            ? "w-8 h-2 bg-gradient-to-r from-purple-500 to-pink-500"
+                            : "w-2 h-2 bg-gray-600 hover:bg-gray-500"
+                    }`}
+                    aria-label={`Go to slide ${index + 1}`}
+                />
+            ))}
         </div>
     )
 }
 
 const News = () => {
+    const [currentSlide, setCurrentSlide] = useState(0)
+    const [isPaused, setIsPaused] = useState(false)
     const [posts, setPosts] = useState<InstagramPostType[]>([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
-    const [currentPage, setCurrentPage] = useState(1)
-    const postsPerPage = 12 // Number of posts per page
+    const swiperRef = useRef<SwiperType | null>(null)
+    const autoplayDelay = 8000 // Match FlowCarousel delay
+    const transitionSpeed = 2000 // Match FlowCarousel speed
 
     useEffect(() => {
         const fetchInstagramPosts = async () => {
@@ -170,7 +116,6 @@ const News = () => {
                     )
 
                     setPosts(mappedPosts)
-                    setCurrentPage(1) // Reset to first page when new posts are loaded
                 } else {
                     throw new Error("Invalid response format")
                 }
@@ -189,15 +134,43 @@ const News = () => {
         fetchInstagramPosts()
     }, [])
 
-    // Calculate pagination
-    const totalPages = Math.ceil(posts.length / postsPerPage)
-    const startIndex = (currentPage - 1) * postsPerPage
-    const endIndex = startIndex + postsPerPage
-    const currentPosts = posts.slice(startIndex, endIndex)
+    const handleSlideChange = (swiper: SwiperType) => {
+        setCurrentSlide(swiper.realIndex)
+    }
 
-    const handlePageChange = (page: number) => {
-        setCurrentPage(page)
-        window.scrollTo({ top: 0, behavior: "smooth" })
+    const handleSwiper = (swiper: SwiperType) => {
+        swiperRef.current = swiper
+        // Use Swiper's built-in events for better integration
+        swiper.on("touchStart", () => {
+            setIsPaused(true)
+        })
+
+        swiper.on("touchEnd", () => {
+            // Resume after a short delay
+            setTimeout(() => {
+                setIsPaused(false)
+            }, 500)
+        })
+
+        // Handle mouse events for desktop
+        swiper.on("sliderFirstMove", () => {
+            setIsPaused(true)
+        })
+
+        // Handle when autoplay is stopped/started
+        swiper.on("autoplayStop", () => {
+            setIsPaused(true)
+        })
+
+        swiper.on("autoplayStart", () => {
+            setIsPaused(false)
+        })
+    }
+
+    const handleDotClick = (index: number) => {
+        if (swiperRef.current) {
+            swiperRef.current.slideToLoop(index)
+        }
     }
 
     return (
@@ -238,16 +211,45 @@ const News = () => {
                     </div>
                 ) : (
                     <>
-                        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
-                            {currentPosts.map((post) => (
-                                <InstagramPost key={post.id} post={post} />
+                        <FlowCarousel
+                            slidesPerView='auto'
+                            spaceBetween={20}
+                            loop={posts.length > 1}
+                            speed={2000}
+                            disableOnInteraction={false}
+                            onSlideChange={handleSlideChange}
+                            onSwiper={handleSwiper}
+                            breakpoint={{
+                                640: {
+                                    slidesPerView: 1,
+                                    spaceBetween: 20,
+                                },
+                                768: {
+                                    slidesPerView: 2,
+                                    spaceBetween: 20,
+                                },
+                                1024: {
+                                    slidesPerView: 3,
+                                    spaceBetween: 30,
+                                },
+                                1280: {
+                                    slidesPerView: 4,
+                                    spaceBetween: 30,
+                                },
+                            }}
+                            className='!overflow-visible'
+                        >
+                            {posts.map((post) => (
+                                <SwiperSlide key={post.id} className='!w-auto'>
+                                    <InstagramPost post={post} />
+                                </SwiperSlide>
                             ))}
-                        </div>
+                        </FlowCarousel>
 
-                        <Pagination
-                            currentPage={currentPage}
-                            totalPages={totalPages}
-                            onPageChange={handlePageChange}
+                        <PaginationDots
+                            currentSlide={currentSlide}
+                            totalSlides={posts.length}
+                            onDotClick={handleDotClick}
                         />
                     </>
                 )}
