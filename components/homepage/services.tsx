@@ -99,7 +99,7 @@ const Services = () => {
                                 className='flex flex-col gap-6 lg:gap-8 flex-1'
                                 key={`services-group-${groupIndex + 1}`}
                             >
-                                {serviceGroup.map((service, index) => (
+                                {serviceGroup.map((service) => (
                                     <motion.div
                                         key={service.key}
                                         variants={itemVariants}
