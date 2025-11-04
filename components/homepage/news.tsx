@@ -14,6 +14,7 @@ export interface InstagramPostType {
     likes: number
     timestamp: string
     permalink?: string
+    type: string
 }
 
 interface GASPost {
@@ -112,6 +113,7 @@ const News = () => {
                             likes: 0, // Default value since GAS doesn't provide likes
                             timestamp: post.timestamp || "",
                             permalink: post.permalink,
+                            type: post.type || "IMAGE",
                         })
                     )
 
@@ -239,9 +241,12 @@ const News = () => {
                             }}
                             className='!overflow-visible'
                         >
-                            {posts.map((post) => (
+                            {posts.map((post, index) => (
                                 <SwiperSlide key={post.id} className='!w-auto'>
-                                    <InstagramPost post={post} />
+                                    <InstagramPost 
+                                        post={post} 
+                                        isActive={currentSlide === index}
+                                    />
                                 </SwiperSlide>
                             ))}
                         </FlowCarousel>

@@ -1,7 +1,28 @@
 import Image from "next/image"
 import { InstagramPostType } from "./news"
+import { useEffect, useRef } from "react"
 
-const InstagramPost = ({ post }: { post: InstagramPostType }) => {
+const InstagramPost = ({ 
+    post, 
+    isActive = false 
+}: { 
+    post: InstagramPostType
+    isActive?: boolean 
+}) => {
+    const videoRef = useRef<HTMLVideoElement>(null)
+
+    useEffect(() => {
+        if (videoRef.current && post.type === "VIDEO") {
+            if (isActive) {
+                videoRef.current.play().catch((err) => {
+                    console.error("Error playing video:", err)
+                })
+            } else {
+                videoRef.current.pause()
+            }
+        }
+    }, [isActive, post.type])
+
     const handleClick = () => {
         if (post.permalink) {
             window.open(post.permalink, "_blank", "noopener,noreferrer")
@@ -35,16 +56,37 @@ const InstagramPost = ({ post }: { post: InstagramPostType }) => {
                 <span className='text-white text-xs'>{post.timestamp}</span>
             </div>
 
-            {/* Image */}
+            {/* Media - Image or Video */}
             <div className='relative'>
-                <Image
-                    width={300}
-                    height={400}
-                    src={post.imageUrl}
-                    alt={post.caption || 'Instagram post'}
-                    className='w-full h-80 object-cover'
-                    unoptimized
-                />
+                {post.type === "VIDEO" ? (
+                    <video
+                        ref={videoRef}
+                        src={post.imageUrl}
+                        className='w-full h-80 object-cover'
+                        loop
+                        muted
+                        playsInline
+                        onMouseEnter={(e) => {
+                            if (isActive && e.currentTarget) {
+                                e.currentTarget.play().catch(() => {})
+                            }
+                        }}
+                        onMouseLeave={(e) => {
+                            if (!isActive && e.currentTarget) {
+                                e.currentTarget.pause()
+                            }
+                        }}
+                    />
+                ) : (
+                    <Image
+                        width={300}
+                        height={400}
+                        src={post.imageUrl}
+                        alt={post.caption || 'Instagram post'}
+                        className='w-full h-80 object-cover'
+                        unoptimized
+                    />
+                )}
             </div>
 
             {/* Caption */}
