@@ -90,7 +90,7 @@ const InstagramPost = ({
             </div>
 
             {/* Caption */}
-            <div className='p-3 border-t border-gray-200 flex-shrink-0 flex-1 min-h-0 overflow-hidden'>
+            <div className='px-3 pt-3 pb-2 border-t border-gray-200 flex-shrink-0 flex-1 min-h-0 overflow-hidden'>
                 <div className='text-sm h-full flex flex-col'>
                     <div className='line-clamp-3 overflow-hidden whitespace-pre-wrap break-words'>
                         <span className='font-semibold mr-1 text-black'>
