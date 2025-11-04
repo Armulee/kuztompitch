@@ -9,7 +9,7 @@ const ParallaxContent = ({
     subheading,
     heading,
 }: {
-    imgUrl: StaticImageData
+    imgUrl: StaticImageData | string
     subheading: string
     heading: string
 }) => {
@@ -21,7 +21,7 @@ const ParallaxContent = ({
     )
 }
 
-const StickyImage = ({ imgUrl }: { imgUrl: StaticImageData }) => {
+const StickyImage = ({ imgUrl }: { imgUrl: StaticImageData | string }) => {
     const targetRef = useRef(null)
     const { scrollYProgress } = useScroll({
         target: targetRef,
@@ -49,6 +49,9 @@ const StickyImage = ({ imgUrl }: { imgUrl: StaticImageData }) => {
                     objectPosition: "90%",
                 }}
                 src={imgUrl}
+                width={1920}
+                height={1080}
+                unoptimized={typeof imgUrl === "string"}
             />
             <motion.div
                 className='absolute inset-0 bg-neutral-950/70'
