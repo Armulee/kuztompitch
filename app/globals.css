@@ -4,11 +4,11 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #000000;
+  --foreground: #ededed;
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
   :root {
     --background: #000000;
     --foreground: #ededed;
@@ -28,8 +28,8 @@ html {
 body {
   color: var(--foreground);
   background: var(--background);
-  /* font-family: Arial, Helvetica, sans-serif; */
   font-family: "Cal Sans", sans-serif;
+  overflow-x: hidden;
 }
 
 .font {
@@ -52,5 +52,10 @@ body {
 }
 
 .container {
-  @apply w-[calc(100%-2rem)] mx-auto md:w-[80%] md:px-0
+  @apply w-[calc(100%-2rem)] mx-auto md:w-[80%] md:px-0 px-4
+}
+
+/* Smooth scrolling for anchor links */
+html {
+  scroll-padding-top: 80px;
 }

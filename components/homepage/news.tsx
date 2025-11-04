@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from "react"
 import { SwiperSlide } from "swiper/react"
 import { Swiper as SwiperType } from "swiper/types"
+import { motion } from "framer-motion"
 import FlowCarousel from "../flow-carousel"
 import InstagramPost from "./ig-post"
 
@@ -116,7 +117,7 @@ const PaginationDots = ({
                         onClick={() => onDotClick(dotIndex)}
                         className={`transition-all duration-300 rounded-full ${
                             isActive
-                                ? "w-8 h-2 bg-gradient-to-r from-purple-500 to-pink-500"
+                                ? "w-8 h-2 bg-white"
                                 : "w-2 h-2 bg-gray-600 hover:bg-gray-500"
                         }`}
                         aria-label={`Go to slide ${dotIndex + 1}`}
@@ -215,21 +216,33 @@ const News = () => {
     }
 
     return (
-        <section className='py-16 bg-black'>
+        <section className='relative py-20 md:py-32 bg-gradient-to-b from-black via-gray-900 to-black overflow-hidden'>
+            {/* Background Decoration */}
+            <div className='absolute inset-0 overflow-hidden pointer-events-none'>
+                <div className='absolute top-1/4 left-0 w-96 h-96 bg-white/5 rounded-full blur-3xl' />
+                <div className='absolute bottom-1/4 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl' />
+            </div>
+            <div className='relative z-10'>
             <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-                <div className='text-center mb-12'>
-                    <h2 className='text-3xl font-bold text-white mb-4'>
+                <motion.div
+                    initial={{ opacity: 0, y: -20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6 }}
+                    className='text-center mb-16'
+                >
+                    <h2 className='text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-white'>
                         Latest from Our Instagram
                     </h2>
-                    <p className='text-lg text-slate-400'>
+                    <p className='text-lg md:text-xl text-slate-400 max-w-2xl mx-auto'>
                         Follow our journey and see our latest Kuztom Pitch
                         creations
                     </p>
-                </div>
+                </motion.div>
 
                 {loading ? (
                     <div className='flex justify-center items-center py-20'>
-                        <div className='animate-spin rounded-full h-12 w-12 border-4 border-gray-300 border-t-purple-500 border-r-pink-500'></div>
+                        <div className='animate-spin rounded-full h-12 w-12 border-4 border-gray-300 border-t-white border-r-white'></div>
                     </div>
                 ) : error ? (
                     <div className='flex flex-col justify-center items-center py-20 px-4'>
@@ -303,10 +316,10 @@ const News = () => {
                         href='https://instagram.com/kuztompitch_official'
                         target='_blank'
                         rel='noopener noreferrer'
-                        className='inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-300'
+                        className='inline-flex items-center px-6 py-3 bg-white text-black font-semibold rounded-lg hover:bg-gray-100 transition-all duration-300'
                     >
                         <svg
-                            className='w-5 h-5 mr-2 text-white'
+                            className='w-5 h-5 mr-2 text-black'
                             fill='currentColor'
                             viewBox='0 0 24 24'
                         >
@@ -315,6 +328,7 @@ const News = () => {
                         Follow us on Instagram
                     </a>
                 </div>
+            </div>
             </div>
         </section>
     )

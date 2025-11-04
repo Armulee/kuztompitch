@@ -1,37 +1,17 @@
+"use client"
 import Link from "next/link"
 import SocialMedias from "./social-medias"
+import { motion } from "framer-motion"
 
 const Hero = () => {
     return (
         <section
             id='home'
-            className='w-full h-[100vh] overflow-hidden flex flex-col justify-center items-center relative'
+            className='w-full h-screen overflow-hidden flex flex-col justify-center items-center relative'
         >
-            <div className='z-30 absolute top-[18%] md:top-1/2 md:left-1/2 md:-translate-y-1/2'>
-                <div className='w-full flex-col justify-center items-center mb-4'>
-                    <h1 className='text-[40px] md:text-5xl lg:text-7xl text-center md:text-start text-white'>
-                        Kuztom Pitch
-                    </h1>
-                    <h5 className='text-slate-400 text-[20px] md:text-2xl lg:text-4xl text-center md:text-start'>
-                        Band Equipment Customize
-                    </h5>
-                </div>
-                <div className='flex justify-center items-center gap-8'>
-                    <Link href={"/customize"}>
-                        <button className='rounded-full bg-slate-500 px-8 py-2 text-white'>
-                            Try Customize
-                        </button>
-                    </Link>
-                    <SocialMedias className='hidden absolute right-4 top-1/2 md:flex relative translate-y-0 z-50' />
-                </div>
-            </div>
-            <SocialMedias className='md:hidden absolute right-4 top-1/2 -translate-y-1/2 flex-col z-30' />
-
-            {/* Video Overlay  */}
-            <div className='bg-black/20 md:bg-black/20 absolute w-full h-full z-20' />
-            {/* MP4 */}
+            {/* Video Background */}
             <video
-                className='absolute -bottom-1/2 right-10 translate-x-0 md:left-1/4 md:-bottom-[25%] md:-translate-x-1/2 w-full h-[120vh] object-cover -z-10'
+                className='absolute inset-0 w-full h-full object-cover scale-110'
                 autoPlay
                 muted
                 playsInline
@@ -39,7 +19,119 @@ const Hero = () => {
             >
                 <source src='/assets/hero.webm' type='video/webm' />
             </video>
-            {/* <div className='absolute bottom-0 w-full h-[70px] bg-gradient-to-t from-white to-black opacity-50 -z-20' /> */}
+
+            {/* Gradient Overlays */}
+            <div className='absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80 z-10' />
+            <div className='absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-black/50 z-10' />
+            
+            {/* Animated Background Elements */}
+            <div className='absolute inset-0 overflow-hidden z-10'>
+                <div className='absolute top-1/4 left-1/4 w-96 h-96 bg-white/5 rounded-full blur-3xl animate-pulse' />
+                <div className='absolute bottom-1/4 right-1/4 w-96 h-96 bg-white/5 rounded-full blur-3xl animate-pulse' style={{ animationDelay: '1s' }} />
+            </div>
+
+            {/* Content */}
+            <div className='relative z-30 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+                <div className='flex flex-col md:flex-row items-center justify-between min-h-[60vh]'>
+                    {/* Left Content */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, ease: "easeOut" }}
+                        className='flex flex-col items-center md:items-start text-center md:text-left mb-8 md:mb-0'
+                    >
+                        <motion.div
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.8, delay: 0.2 }}
+                            className='mb-6'
+                        >
+                            <h1 className='text-5xl md:text-6xl lg:text-8xl font-bold text-white mb-4 leading-tight'>
+                                <span className='block'>
+                                    Kuztom Pitch
+                                </span>
+                            </h1>
+                            <motion.h5
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.8, delay: 0.4 }}
+                                className='text-xl md:text-2xl lg:text-4xl text-slate-300 font-light tracking-wide'
+                            >
+                                Band Equipment Customize
+                            </motion.h5>
+                        </motion.div>
+
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.6 }}
+                            className='flex flex-col sm:flex-row gap-4 items-center md:items-start'
+                        >
+                            <Link href={"/customize"}>
+                                <motion.button
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className='group relative px-8 py-4 rounded-full bg-white text-black font-semibold text-lg shadow-lg shadow-black/50 overflow-hidden border border-white/20'
+                                >
+                                    <motion.span
+                                        className='relative z-10 flex items-center gap-2 group-hover:text-white transition-colors'
+                                    >
+                                        Try Customize
+                                        <svg className='w-5 h-5 transform group-hover:translate-x-1 transition-transform' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                                            <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M13 7l5 5m0 0l-5 5m5-5H6' />
+                                        </svg>
+                                    </motion.span>
+                                    <motion.div
+                                        className='absolute inset-0 bg-black'
+                                        initial={{ x: '-100%' }}
+                                        whileHover={{ x: 0 }}
+                                        transition={{ duration: 0.3 }}
+                                    />
+                                </motion.button>
+                            </Link>
+                        </motion.div>
+                    </motion.div>
+
+                    {/* Right Social Icons - Desktop */}
+                    <motion.div
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.8, delay: 0.3 }}
+                        className='hidden md:flex'
+                    >
+                        <SocialMedias className='flex-col gap-6' />
+                    </motion.div>
+                </div>
+            </div>
+
+            {/* Mobile Social Icons */}
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.8 }}
+                className='md:hidden absolute right-4 top-1/2 -translate-y-1/2 z-30'
+            >
+                <SocialMedias className='flex-col gap-5' />
+            </motion.div>
+
+            {/* Scroll Indicator */}
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 1, delay: 1 }}
+                className='absolute bottom-8 left-1/2 -translate-x-1/2 z-30 hidden md:block'
+            >
+                <motion.div
+                    animate={{ y: [0, 10, 0] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                    className='flex flex-col items-center gap-2 text-white/60'
+                >
+                    <span className='text-sm font-light'>Scroll</span>
+                    <svg className='w-6 h-6' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                        <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M19 14l-7 7m0 0l-7-7m7 7V3' />
+                    </svg>
+                </motion.div>
+            </motion.div>
         </section>
     )
 }
