@@ -13,174 +13,205 @@ export interface InstagramPostType {
     userAvatar: string
     likes: number
     timestamp: string
+    permalink?: string
+    type: string
 }
 
-const dummyPosts: InstagramPostType[] = [
-    {
-        id: "1",
-        imageUrl: "https://picsum.photos/400/400?random=1",
-        caption:
-            "Amazing custom pitch design! 🎤✨ #kuztompitch #custom #microphone",
-        username: "kuztompitch_official",
-        userAvatar: "https://picsum.photos/40/40?random=10",
-        likes: 127,
-        timestamp: "2h",
-    },
-    {
-        id: "2",
-        imageUrl: "https://picsum.photos/400/400?random=2",
-        caption:
-            "Behind the scenes of our latest project 🎨 #bts #design #creation",
-        username: "kuztompitch_official",
-        userAvatar: "https://picsum.photos/40/40?random=10",
-        likes: 89,
-        timestamp: "4h",
-    },
-    {
-        id: "3",
-        imageUrl: "https://picsum.photos/400/400?random=3",
-        caption:
-            "Client spotlight: Premium metallic finish ⚡ #premium #metallic #quality",
-        username: "kuztompitch_official",
-        userAvatar: "https://picsum.photos/40/40?random=10",
-        likes: 203,
-        timestamp: "1d",
-    },
-    {
-        id: "4",
-        imageUrl: "https://picsum.photos/400/400?random=4",
-        caption:
-            "New color options available now! 🌈 #newcolors #options #customize",
-        username: "kuztompitch_official",
-        userAvatar: "https://picsum.photos/40/40?random=10",
-        likes: 156,
-        timestamp: "2d",
-    },
-]
+interface GASPost {
+    id: string
+    caption: string
+    media_url: string
+    permalink: string
+    type: string
+    timestamp: string
+}
 
-const ProgressBar = ({
+interface GASResponse {
+    success: boolean
+    posts: GASPost[]
+}
+
+const PaginationDots = ({
     currentSlide,
     totalSlides,
-    autoplayDelay,
-    transitionSpeed,
-    isPaused,
+    onDotClick,
 }: {
     currentSlide: number
     totalSlides: number
-    autoplayDelay: number
-    transitionSpeed: number
-    isPaused: boolean
+    onDotClick: (index: number) => void
 }) => {
-    const [progress, setProgress] = useState(0)
-    const intervalRef = useRef<NodeJS.Timeout>()
-    const transitionTimeoutRef = useRef<NodeJS.Timeout>()
+    if (totalSlides <= 1) return null
 
-    useEffect(() => {
-        setProgress(0)
+    const getVisibleDots = () => {
+        const delta = 2 // Show 2 dots on each side of active = 4 total visible around active
+        const dots: (number | string)[] = []
 
-        if (intervalRef.current) {
-            clearInterval(intervalRef.current)
+        // Always show first dot
+        dots.push(0)
+
+        // Calculate range around current slide
+        const start = Math.max(1, currentSlide - delta)
+        const end = Math.min(totalSlides - 2, currentSlide + delta)
+
+        // Add ellipsis before if there's a gap
+        if (start > 2) {
+            dots.push("...")
+        } else if (start === 2) {
+            // Show dot 1 if we're close enough
+            dots.push(1)
         }
 
-        if (transitionTimeoutRef.current) {
-            clearTimeout(transitionTimeoutRef.current)
-        }
-
-        if (isPaused) {
-            return
-        }
-
-        // Pause progress during transition
-        transitionTimeoutRef.current = setTimeout(() => {
-            // Start progress after transition completes
-            intervalRef.current = setInterval(() => {
-                setProgress((prev) => {
-                    if (prev >= 100) {
-                        return 100
-                    }
-                    return prev + 100 / (autoplayDelay / 50)
-                })
-            }, 50)
-        }, transitionSpeed)
-
-        return () => {
-            if (intervalRef.current) {
-                clearInterval(intervalRef.current)
-            }
-            if (transitionTimeoutRef.current) {
-                clearTimeout(transitionTimeoutRef.current)
+        // Add dots in range around current slide
+        for (let i = start; i <= end; i++) {
+            if (i > 0 && i < totalSlides - 1) {
+                dots.push(i)
             }
         }
-    }, [currentSlide, autoplayDelay, transitionSpeed, isPaused])
 
-    // Pause progress when user is interacting
-    useEffect(() => {
-        if (isPaused && intervalRef.current) {
-            clearInterval(intervalRef.current)
+        // Add ellipsis after if there's a gap
+        if (end < totalSlides - 3) {
+            dots.push("...")
+        } else if (end === totalSlides - 3 && totalSlides > 3) {
+            // Show second-to-last if we're close enough
+            dots.push(totalSlides - 2)
         }
-    }, [isPaused])
+
+        // Always show last dot if there's more than one slide
+        if (totalSlides > 1) {
+            dots.push(totalSlides - 1)
+        }
+
+        // Remove duplicates while preserving order
+        const seen = new Set()
+        return dots.filter((dot) => {
+            if (dot === "...") return true
+            if (seen.has(dot)) return false
+            seen.add(dot)
+            return true
+        })
+    }
+
+    const visibleDots = getVisibleDots()
 
     return (
-        <div className='flex justify-center mt-6 space-x-2'>
-            {Array.from({ length: totalSlides }).map((_, index) => (
-                <div
-                    key={index}
-                    className='relative h-1 bg-gray-300 rounded-full overflow-hidden'
-                    style={{ width: `${100 / totalSlides}%`, maxWidth: "60px" }}
-                >
-                    <div
-                        className='absolute top-0 left-0 h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full transition-all duration-75 ease-linear'
-                        style={{
-                            width:
-                                index === currentSlide
-                                    ? `${progress}%`
-                                    : index < currentSlide
-                                    ? "100%"
-                                    : "0%",
-                        }}
+        <div className='flex justify-center items-center mt-6 space-x-2'>
+            {visibleDots.map((dot, index) => {
+                if (dot === "...") {
+                    return (
+                        <span
+                            key={`ellipsis-${index}`}
+                            className='px-2 text-gray-400 text-sm'
+                        >
+                            ...
+                        </span>
+                    )
+                }
+
+                const dotIndex = dot as number
+                const isActive = dotIndex === currentSlide
+
+                return (
+                    <button
+                        key={dotIndex}
+                        onClick={() => onDotClick(dotIndex)}
+                        className={`transition-all duration-300 rounded-full ${
+                            isActive
+                                ? "w-8 h-2 bg-gradient-to-r from-purple-500 to-pink-500"
+                                : "w-2 h-2 bg-gray-600 hover:bg-gray-500"
+                        }`}
+                        aria-label={`Go to slide ${dotIndex + 1}`}
                     />
-                </div>
-            ))}
+                )
+            })}
         </div>
     )
 }
 
 const News = () => {
     const [currentSlide, setCurrentSlide] = useState(0)
-    const [isPaused, setIsPaused] = useState(false)
-    const autoplayDelay = 8000 // Match FlowCarousel delay
-    const transitionSpeed = 2000 // Match FlowCarousel speed
+    const [posts, setPosts] = useState<InstagramPostType[]>([])
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState<string | null>(null)
+    const swiperRef = useRef<SwiperType | null>(null)
+
+    useEffect(() => {
+        const fetchInstagramPosts = async () => {
+            try {
+                setLoading(true)
+                setError(null)
+
+                const response = await fetch("/api/ig-posts", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                })
+
+                const data: GASResponse | { success: false; message: string; details?: string; statusCode?: number; rawHtml?: string } = await response.json()
+
+                if (!response.ok || !data.success) {
+                    const errorData = data as { success: false; message: string; details?: string; statusCode?: number; rawHtml?: string }
+                    let errorMessage = errorData.message || "Failed to fetch Instagram posts"
+                    
+                    if (errorData.details) {
+                        errorMessage = `${errorMessage}\n${errorData.details}`
+                    }
+                    
+                    if (errorData.rawHtml) {
+                        errorMessage = `${errorMessage}\n\nRaw HTML (first 1000 chars):\n${errorData.rawHtml}`
+                    }
+                    
+                    throw new Error(errorMessage)
+                }
+
+                if (data.success && data.posts) {
+                    // Map GAS response to InstagramPostType
+                    const mappedPosts: InstagramPostType[] = data.posts.map(
+                        (post) => ({
+                            id: post.id,
+                            imageUrl: post.media_url,
+                            caption: post.caption || "",
+                            username: "kuztompitch",
+                            userAvatar:
+                                "/assets/dummy-profile-pic.jpg",
+                            likes: 0, // Default value since GAS doesn't provide likes
+                            timestamp: post.timestamp || "",
+                            permalink: post.permalink,
+                            type: post.type || "IMAGE",
+                        })
+                    )
+
+                    setPosts(mappedPosts)
+                } else {
+                    throw new Error("Invalid response format")
+                }
+            } catch (err) {
+                console.error("Error fetching Instagram posts:", err)
+                setError(
+                    err instanceof Error
+                        ? err.message
+                        : "Failed to load Instagram posts"
+                )
+            } finally {
+                setLoading(false)
+            }
+        }
+
+        fetchInstagramPosts()
+    }, [])
 
     const handleSlideChange = (swiper: SwiperType) => {
         setCurrentSlide(swiper.realIndex)
     }
 
     const handleSwiper = (swiper: SwiperType) => {
-        // Use Swiper's built-in events for better integration
-        swiper.on("touchStart", () => {
-            setIsPaused(true)
-        })
+        swiperRef.current = swiper
+    }
 
-        swiper.on("touchEnd", () => {
-            // Resume after a short delay
-            setTimeout(() => {
-                setIsPaused(false)
-            }, 500)
-        })
-
-        // Handle mouse events for desktop
-        swiper.on("sliderFirstMove", () => {
-            setIsPaused(true)
-        })
-
-        // Handle when autoplay is stopped/started
-        swiper.on("autoplayStop", () => {
-            setIsPaused(true)
-        })
-
-        swiper.on("autoplayStart", () => {
-            setIsPaused(false)
-        })
+    const handleDotClick = (index: number) => {
+        if (swiperRef.current) {
+            swiperRef.current.slideToLoop(index)
+        }
     }
 
     return (
@@ -196,48 +227,76 @@ const News = () => {
                     </p>
                 </div>
 
-                <FlowCarousel
-                    slidesPerView='auto'
-                    spaceBetween={20}
-                    loop={true}
-                    speed={2000}
-                    disableOnInteraction={false}
-                    onSlideChange={handleSlideChange}
-                    onSwiper={handleSwiper}
-                    breakpoint={{
-                        640: {
-                            slidesPerView: 1,
-                            spaceBetween: 20,
-                        },
-                        768: {
-                            slidesPerView: 2,
-                            spaceBetween: 20,
-                        },
-                        1024: {
-                            slidesPerView: 3,
-                            spaceBetween: 30,
-                        },
-                        1280: {
-                            slidesPerView: 4,
-                            spaceBetween: 30,
-                        },
-                    }}
-                    className='!overflow-visible'
-                >
-                    {dummyPosts.map((post) => (
-                        <SwiperSlide key={post.id} className='!w-auto'>
-                            <InstagramPost post={post} />
-                        </SwiperSlide>
-                    ))}
-                </FlowCarousel>
+                {loading ? (
+                    <div className='flex justify-center items-center py-20'>
+                        <div className='animate-spin rounded-full h-12 w-12 border-4 border-gray-300 border-t-purple-500 border-r-pink-500'></div>
+                    </div>
+                ) : error ? (
+                    <div className='flex flex-col justify-center items-center py-20 px-4'>
+                        <div className='max-w-2xl w-full'>
+                            <div className='bg-red-900/20 border border-red-500/50 rounded-lg p-6'>
+                                <h3 className='text-red-400 text-xl font-semibold mb-2'>
+                                    Error Loading Instagram Posts
+                                </h3>
+                                <p className='text-red-300 text-sm whitespace-pre-wrap break-words'>
+                                    {error}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                ) : posts.length === 0 ? (
+                    <div className='flex justify-center items-center py-20'>
+                        <div className='text-white text-lg'>
+                            No posts available
+                        </div>
+                    </div>
+                ) : (
+                    <>
+                        <FlowCarousel
+                            slidesPerView={1}
+                            spaceBetween={20}
+                            loop={posts.length > 1}
+                            speed={500}
+                            disableOnInteraction={false}
+                            onSlideChange={handleSlideChange}
+                            onSwiper={handleSwiper}
+                            breakpoint={{
+                                640: {
+                                    slidesPerView: 1,
+                                    spaceBetween: 20,
+                                },
+                                768: {
+                                    slidesPerView: 2,
+                                    spaceBetween: 20,
+                                },
+                                1024: {
+                                    slidesPerView: 3,
+                                    spaceBetween: 30,
+                                },
+                                1280: {
+                                    slidesPerView: 4,
+                                    spaceBetween: 30,
+                                },
+                            }}
+                            className='!overflow-visible'
+                        >
+                            {posts.map((post, index) => (
+                                <SwiperSlide key={post.id}>
+                                    <InstagramPost 
+                                        post={post} 
+                                        isActive={currentSlide === index}
+                                    />
+                                </SwiperSlide>
+                            ))}
+                        </FlowCarousel>
 
-                <ProgressBar
-                    currentSlide={currentSlide}
-                    totalSlides={dummyPosts.length}
-                    autoplayDelay={autoplayDelay}
-                    transitionSpeed={transitionSpeed}
-                    isPaused={isPaused}
-                />
+                        <PaginationDots
+                            currentSlide={currentSlide}
+                            totalSlides={posts.length}
+                            onDotClick={handleDotClick}
+                        />
+                    </>
+                )}
 
                 <div className='text-center mt-8'>
                     <a

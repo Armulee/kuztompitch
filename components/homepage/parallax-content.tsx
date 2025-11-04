@@ -9,7 +9,7 @@ const ParallaxContent = ({
     subheading,
     heading,
 }: {
-    imgUrl: StaticImageData
+    imgUrl: StaticImageData | string
     subheading: string
     heading: string
 }) => {
@@ -21,7 +21,7 @@ const ParallaxContent = ({
     )
 }
 
-const StickyImage = ({ imgUrl }: { imgUrl: StaticImageData }) => {
+const StickyImage = ({ imgUrl }: { imgUrl: StaticImageData | string }) => {
     const targetRef = useRef(null)
     const { scrollYProgress } = useScroll({
         target: targetRef,
@@ -30,6 +30,9 @@ const StickyImage = ({ imgUrl }: { imgUrl: StaticImageData }) => {
 
     const scale = useTransform(scrollYProgress, [0, 1], [1, 0.85])
     const opacity = useTransform(scrollYProgress, [0, 1], [1, 0])
+
+    // For Google Drive images, use regular img tag instead of Next.js Image
+    const isGoogleDriveUrl = typeof imgUrl === "string" && imgUrl.includes("drive.google.com")
 
     return (
         <motion.div
@@ -41,15 +44,35 @@ const StickyImage = ({ imgUrl }: { imgUrl: StaticImageData }) => {
             ref={targetRef}
             className='sticky z-0 overflow-hidden rounded-b-3xl'
         >
-            <Image
-                alt=''
-                className='w-full h-full'
-                style={{
-                    objectFit: "cover",
-                    objectPosition: "90%",
-                }}
-                src={imgUrl}
-            />
+            {isGoogleDriveUrl ? (
+                <img
+                    alt=''
+                    className='w-full h-full object-cover'
+                    style={{
+                        objectFit: "cover",
+                        objectPosition: "90%",
+                    }}
+                    src={imgUrl}
+                    onError={(e) => {
+                        console.error("Failed to load Google Drive image:", imgUrl)
+                        // Fallback to original asset if available
+                        e.currentTarget.style.display = "none"
+                    }}
+                />
+            ) : (
+                <Image
+                    alt=''
+                    className='w-full h-full'
+                    style={{
+                        objectFit: "cover",
+                        objectPosition: "90%",
+                    }}
+                    src={imgUrl}
+                    width={1920}
+                    height={1080}
+                    unoptimized={typeof imgUrl === "string"}
+                />
+            )}
             <motion.div
                 className='absolute inset-0 bg-neutral-950/70'
                 style={{
