@@ -24,23 +24,56 @@ export async function POST() {
         if (!isJson || responseText.trim().startsWith("<!DOCTYPE") || responseText.trim().startsWith("<html")) {
             console.error("[ig-posts] Received HTML response instead of JSON")
             console.error("[ig-posts] Response status:", response.status)
-            console.error("[ig-posts] Response content:", responseText.substring(0, 500))
+            console.error("[ig-posts] Full response content:", responseText)
 
             // Try to extract error message from HTML
             let errorMessage = "Google Apps Script returned an error page"
             
-            // Try to find error message in common HTML error formats
+            // Google Apps Script error pages typically have:
+            // 1. Error message in a div with class "errorMessage"
+            const errorMessageDivMatch = responseText.match(/<div[^>]*class=["']errorMessage["'][^>]*>([^<]+)<\/div>/i)
+            // 2. Error message in body text content
+            const bodyTextMatch = responseText.match(/<body[^>]*>[\s\S]*?<div[^>]*>[\s\S]*?<div[^>]*>([^<]+)<\/div>/i)
+            // 3. Title tag
             const titleMatch = responseText.match(/<title[^>]*>([^<]+)<\/title>/i)
-            const h1Match = responseText.match(/<h1[^>]*>([^<]+)<\/h1>/i)
-            const errorMatch = responseText.match(/error[^<]*:?\s*([^<\n]+)/i)
+            // 4. Any text between divs in the body
+            const bodyDivMatch = responseText.match(/<body[^>]*>[\s\S]*?<div[^>]*>[\s\S]*?<div[^>]*>[\s\S]*?<div[^>]*>([^<]+)<\/div>/i)
+            // 5. Extract all text content from body (remove HTML tags)
+            const bodyTextContent = responseText
+                .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
+                .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+                .match(/<body[^>]*>([\s\S]*)<\/body>/i)?.[1]
+                ?.replace(/<[^>]+>/g, ' ')
+                .replace(/\s+/g, ' ')
+                .trim()
             
-            if (titleMatch) {
-                errorMessage = `Error: ${titleMatch[1]}`
-            } else if (h1Match) {
-                errorMessage = `Error: ${h1Match[1]}`
-            } else if (errorMatch) {
-                errorMessage = `Error: ${errorMatch[1]}`
+            // Try to find the actual error message
+            if (errorMessageDivMatch && errorMessageDivMatch[1]) {
+                errorMessage = errorMessageDivMatch[1].trim()
+            } else if (bodyTextMatch && bodyTextMatch[1]) {
+                errorMessage = bodyTextMatch[1].trim()
+            } else if (bodyDivMatch && bodyDivMatch[1]) {
+                errorMessage = bodyDivMatch[1].trim()
+            } else if (bodyTextContent) {
+                // Extract meaningful text (skip common UI text)
+                const meaningfulText = bodyTextContent
+                    .split(/\s+/)
+                    .filter(text => 
+                        text.length > 3 && 
+                        !text.match(/^(google|apps|script|error|the|and|for|are|with)$/i)
+                    )
+                    .slice(0, 20)
+                    .join(' ')
+                
+                if (meaningfulText) {
+                    errorMessage = meaningfulText
+                }
+            } else if (titleMatch && titleMatch[1] !== "Error") {
+                errorMessage = titleMatch[1]
             }
+
+            // Log the extracted error message
+            console.error("[ig-posts] Extracted error message:", errorMessage)
 
             return NextResponse.json(
                 {
@@ -48,6 +81,7 @@ export async function POST() {
                     message: errorMessage,
                     details: "The Google Apps Script returned an HTML error page instead of JSON. Please check the script configuration and ensure it's deployed correctly.",
                     statusCode: response.status,
+                    rawHtml: responseText.substring(0, 1000), // Include first 1000 chars for debugging
                 },
                 { status: response.status >= 400 ? response.status : 500 }
             )

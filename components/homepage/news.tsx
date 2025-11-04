@@ -139,13 +139,20 @@ const News = () => {
                     },
                 })
 
-                const data: GASResponse | { success: false; message: string; details?: string; statusCode?: number } = await response.json()
+                const data: GASResponse | { success: false; message: string; details?: string; statusCode?: number; rawHtml?: string } = await response.json()
 
                 if (!response.ok || !data.success) {
-                    const errorData = data as { success: false; message: string; details?: string; statusCode?: number }
-                    const errorMessage = errorData.details 
-                        ? `${errorData.message}: ${errorData.details}`
-                        : errorData.message || "Failed to fetch Instagram posts"
+                    const errorData = data as { success: false; message: string; details?: string; statusCode?: number; rawHtml?: string }
+                    let errorMessage = errorData.message || "Failed to fetch Instagram posts"
+                    
+                    if (errorData.details) {
+                        errorMessage = `${errorMessage}\n${errorData.details}`
+                    }
+                    
+                    if (errorData.rawHtml) {
+                        errorMessage = `${errorMessage}\n\nRaw HTML (first 1000 chars):\n${errorData.rawHtml}`
+                    }
+                    
                     throw new Error(errorMessage)
                 }
 
