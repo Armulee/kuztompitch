@@ -1,5 +1,5 @@
 import { Swiper } from "swiper/react"
-import { Autoplay, FreeMode, Scrollbar } from "swiper/modules"
+import { Autoplay, FreeMode, Scrollbar, Mousewheel } from "swiper/modules"
 import { Swiper as SwiperType } from "swiper/types"
 
 const FlowCarousel = ({
@@ -12,6 +12,7 @@ const FlowCarousel = ({
     spaceBetween = 10,
     loop = false,
     disableOnInteraction = true,
+    freeMode = false,
     onSwiper,
     onSlideChange,
 }: {
@@ -22,6 +23,7 @@ const FlowCarousel = ({
     speed?: number
     spaceBetween?: number
     loop?: boolean
+    freeMode?: boolean
     breakpoint?: {
         [x: number]: { slidesPerView: number; spaceBetween: number }
     }
@@ -37,14 +39,18 @@ const FlowCarousel = ({
             slidesPerView={slidesPerView}
             breakpoints={breakpoint}
             spaceBetween={spaceBetween}
-            freeMode={true}
+            freeMode={freeMode}
             scrollbar={scrollbar}
             autoplay={{
                 disableOnInteraction: disableOnInteraction,
                 delay: 8000,
             }}
-            modules={[Autoplay, FreeMode, Scrollbar]}
-            loop={loop}
+            modules={[Autoplay, FreeMode, Scrollbar, Mousewheel]}
+            mousewheel={{
+                forceToAxis: true,
+                sensitivity: 1,
+                releaseOnEdges: false,
+            }}
             speed={speed}
         >
             {children}
