@@ -223,12 +223,21 @@ const News = () => {
                 }
 
                 const payload: unknown = await response.json()
+                const successFlag = (payload as { success?: unknown }).success
+
+                if (successFlag === false) {
+                    throw new Error("Instagram feed responded with a failure status")
+                }
+
                 const candidateMedia = (payload as { mediaData?: unknown }).mediaData
                 const candidatePosts = (payload as { posts?: unknown }).posts
+                const candidateResult = (payload as { result?: unknown }).result
                 const mediaData = Array.isArray(candidateMedia)
                     ? candidateMedia
                     : Array.isArray(candidatePosts)
                     ? candidatePosts
+                    : Array.isArray(candidateResult)
+                    ? candidateResult
                     : Array.isArray(payload)
                     ? payload
                     : []
