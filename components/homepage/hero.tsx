@@ -36,6 +36,7 @@ const Hero = () => {
                 muted
                 playsInline
                 loop
+                preload='auto'
             >
                 <source src='/assets/hero.webm' type='video/webm' />
             </video>
