@@ -139,11 +139,15 @@ const News = () => {
                     },
                 })
 
-                if (!response.ok) {
-                    throw new Error("Failed to fetch Instagram posts")
-                }
+                const data: GASResponse | { success: false; message: string; details?: string; statusCode?: number } = await response.json()
 
-                const data: GASResponse = await response.json()
+                if (!response.ok || !data.success) {
+                    const errorData = data as { success: false; message: string; details?: string; statusCode?: number }
+                    const errorMessage = errorData.details 
+                        ? `${errorData.message}: ${errorData.details}`
+                        : errorData.message || "Failed to fetch Instagram posts"
+                    throw new Error(errorMessage)
+                }
 
                 if (data.success && data.posts) {
                     // Map GAS response to InstagramPostType
@@ -230,8 +234,17 @@ const News = () => {
                         <div className='text-white text-lg'>Loading posts...</div>
                     </div>
                 ) : error ? (
-                    <div className='flex justify-center items-center py-20'>
-                        <div className='text-red-400 text-lg'>{error}</div>
+                    <div className='flex flex-col justify-center items-center py-20 px-4'>
+                        <div className='max-w-2xl w-full'>
+                            <div className='bg-red-900/20 border border-red-500/50 rounded-lg p-6'>
+                                <h3 className='text-red-400 text-xl font-semibold mb-2'>
+                                    Error Loading Instagram Posts
+                                </h3>
+                                <p className='text-red-300 text-sm whitespace-pre-wrap break-words'>
+                                    {error}
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 ) : posts.length === 0 ? (
                     <div className='flex justify-center items-center py-20'>
