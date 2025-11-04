@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 
-export async function POST(req: Request) {
+export async function POST() {
     const url =
         "https://script.google.com/macros/s/AKfycbxt9Mb5AxkUg_vHjpz7U5DV4pJwi7kbzHuosQ4WUSdnWWrZxPm7Bg11-p6hJxmD7KWgbA/exec"
 
