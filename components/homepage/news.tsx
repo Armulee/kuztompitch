@@ -1,4 +1,5 @@
 "use client"
+
 import { useState, useEffect, useRef } from "react"
 import { SwiperSlide } from "swiper/react"
 import { Swiper as SwiperType } from "swiper/types"
@@ -7,56 +8,74 @@ import InstagramPost from "./ig-post"
 
 export interface InstagramPostType {
     id: string
-    imageUrl: string
-    caption: string
-    username: string
-    userAvatar: string
-    likes: number
-    timestamp: string
+    media_url: string
+    caption?: string | null
+    permalink?: string
+    type?: string
+    timestamp?: string
+    username?: string
+    userAvatar?: string
 }
 
-const dummyPosts: InstagramPostType[] = [
+const fallbackPosts: InstagramPostType[] = [
     {
-        id: "1",
-        imageUrl: "https://picsum.photos/400/400?random=1",
+        id: "fallback-1",
+        media_url: "https://picsum.photos/400/400?random=1",
         caption:
             "Amazing custom pitch design! 🎤✨ #kuztompitch #custom #microphone",
+        permalink: "https://instagram.com/kuztompitch_official",
+        type: "IMAGE",
+        timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
         username: "kuztompitch_official",
         userAvatar: "https://picsum.photos/40/40?random=10",
-        likes: 127,
-        timestamp: "2h",
     },
     {
-        id: "2",
-        imageUrl: "https://picsum.photos/400/400?random=2",
+        id: "fallback-2",
+        media_url: "https://picsum.photos/400/400?random=2",
         caption:
             "Behind the scenes of our latest project 🎨 #bts #design #creation",
+        permalink: "https://instagram.com/kuztompitch_official",
+        type: "IMAGE",
+        timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
         username: "kuztompitch_official",
         userAvatar: "https://picsum.photos/40/40?random=10",
-        likes: 89,
-        timestamp: "4h",
     },
     {
-        id: "3",
-        imageUrl: "https://picsum.photos/400/400?random=3",
+        id: "fallback-3",
+        media_url: "https://picsum.photos/400/400?random=3",
         caption:
             "Client spotlight: Premium metallic finish ⚡ #premium #metallic #quality",
+        permalink: "https://instagram.com/kuztompitch_official",
+        type: "IMAGE",
+        timestamp: new Date(Date.now() - 26 * 60 * 60 * 1000).toISOString(),
         username: "kuztompitch_official",
         userAvatar: "https://picsum.photos/40/40?random=10",
-        likes: 203,
-        timestamp: "1d",
     },
     {
-        id: "4",
-        imageUrl: "https://picsum.photos/400/400?random=4",
+        id: "fallback-4",
+        media_url: "https://picsum.photos/400/400?random=4",
         caption:
             "New color options available now! 🌈 #newcolors #options #customize",
+        permalink: "https://instagram.com/kuztompitch_official",
+        type: "IMAGE",
+        timestamp: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
         username: "kuztompitch_official",
         userAvatar: "https://picsum.photos/40/40?random=10",
-        likes: 156,
-        timestamp: "2d",
     },
 ]
+
+const isInstagramPost = (value: unknown): value is InstagramPostType => {
+    if (typeof value !== "object" || value === null) {
+        return false
+    }
+
+    const candidate = value as Partial<InstagramPostType>
+
+    return (
+        typeof candidate.id === "string" &&
+        typeof candidate.media_url === "string"
+    )
+}
 
 const ProgressBar = ({
     currentSlide,
@@ -146,6 +165,9 @@ const ProgressBar = ({
 }
 
 const News = () => {
+    const [posts, setPosts] = useState<InstagramPostType[]>([])
+    const [isLoading, setIsLoading] = useState(true)
+    const [error, setError] = useState<string | null>(null)
     const [currentSlide, setCurrentSlide] = useState(0)
     const [isPaused, setIsPaused] = useState(false)
     const autoplayDelay = 8000 // Match FlowCarousel delay
@@ -183,6 +205,80 @@ const News = () => {
         })
     }
 
+    useEffect(() => {
+        let isMounted = true
+
+        const loadInstagramPosts = async () => {
+            setIsLoading(true)
+            try {
+                const response = await fetch("/api/instagram-posts", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                })
+
+                if (!response.ok) {
+                    throw new Error(`Request failed with status ${response.status}`)
+                }
+
+                const payload: unknown = await response.json()
+                const candidateMedia = (payload as { mediaData?: unknown }).mediaData
+                const mediaData = Array.isArray(candidateMedia)
+                    ? candidateMedia
+                    : Array.isArray(payload)
+                    ? payload
+                    : []
+
+                const sanitized = mediaData.filter(isInstagramPost)
+
+                if (!isMounted) {
+                    return
+                }
+
+                if (sanitized.length === 0) {
+                    setPosts(fallbackPosts)
+                    setError("No Instagram posts available right now. Showing sample posts.")
+                } else {
+                    setPosts(
+                        sanitized.map((item) => ({
+                            ...item,
+                            caption: item.caption ?? "",
+                        }))
+                    )
+                    setError(null)
+                }
+            } catch (err) {
+                console.error("Failed to load Instagram posts", err)
+
+                if (!isMounted) {
+                    return
+                }
+
+                setPosts(fallbackPosts)
+                setError("We had trouble loading the Instagram feed. Showing sample posts.")
+            } finally {
+                if (isMounted) {
+                    setIsLoading(false)
+                }
+            }
+        }
+
+        loadInstagramPosts()
+
+        return () => {
+            isMounted = false
+        }
+    }, [])
+
+    useEffect(() => {
+        if (posts.length > 0) {
+            setCurrentSlide(0)
+        }
+    }, [posts.length])
+
+    const hasPosts = posts.length > 0
+
     return (
         <section className='py-16 bg-black'>
             <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
@@ -196,48 +292,69 @@ const News = () => {
                     </p>
                 </div>
 
-                <FlowCarousel
-                    slidesPerView='auto'
-                    spaceBetween={20}
-                    loop={true}
-                    speed={2000}
-                    disableOnInteraction={false}
-                    onSlideChange={handleSlideChange}
-                    onSwiper={handleSwiper}
-                    breakpoint={{
-                        640: {
-                            slidesPerView: 1,
-                            spaceBetween: 20,
-                        },
-                        768: {
-                            slidesPerView: 2,
-                            spaceBetween: 20,
-                        },
-                        1024: {
-                            slidesPerView: 3,
-                            spaceBetween: 30,
-                        },
-                        1280: {
-                            slidesPerView: 4,
-                            spaceBetween: 30,
-                        },
-                    }}
-                    className='!overflow-visible'
-                >
-                    {dummyPosts.map((post) => (
-                        <SwiperSlide key={post.id} className='!w-auto'>
-                            <InstagramPost post={post} />
-                        </SwiperSlide>
-                    ))}
-                </FlowCarousel>
+                <div className='relative min-h-[22rem]'>
+                    {isLoading && (
+                        <div className='flex items-center justify-center h-full text-slate-400'>
+                            Loading latest posts...
+                        </div>
+                    )}
 
-                <ProgressBar
-                    currentSlide={currentSlide}
-                    totalSlides={dummyPosts.length}
-                    autoplayDelay={autoplayDelay}
-                    transitionSpeed={transitionSpeed}
-                    isPaused={isPaused}
-                />
+                    {!isLoading && !hasPosts && (
+                        <div className='flex items-center justify-center h-full text-slate-400'>
+                            No Instagram posts to display right now.
+                        </div>
+                    )}
+
+                    {hasPosts && (
+                        <>
+                            <FlowCarousel
+                                key={posts.length}
+                                slidesPerView='auto'
+                                spaceBetween={20}
+                                loop={posts.length > 1}
+                                speed={2000}
+                                disableOnInteraction={false}
+                                onSlideChange={handleSlideChange}
+                                onSwiper={handleSwiper}
+                                breakpoint={{
+                                    640: {
+                                        slidesPerView: 1,
+                                        spaceBetween: 20,
+                                    },
+                                    768: {
+                                        slidesPerView: 2,
+                                        spaceBetween: 20,
+                                    },
+                                    1024: {
+                                        slidesPerView: 3,
+                                        spaceBetween: 30,
+                                    },
+                                    1280: {
+                                        slidesPerView: 4,
+                                        spaceBetween: 30,
+                                    },
+                                }}
+                                className='!overflow-visible'
+                            >
+                                {posts.map((post) => (
+                                    <SwiperSlide key={post.id} className='!w-auto'>
+                                        <InstagramPost post={post} />
+                                    </SwiperSlide>
+                                ))}
+                            </FlowCarousel>
+
+                            {posts.length > 1 && (
+                                <ProgressBar
+                                    currentSlide={currentSlide}
+                                    totalSlides={posts.length}
+                                    autoplayDelay={autoplayDelay}
+                                    transitionSpeed={transitionSpeed}
+                                    isPaused={isPaused}
+                                />
+                            )}
+                        </>
+                    )}
+                </div>
 
                 <div className='text-center mt-8'>
                     <a
@@ -256,6 +373,12 @@ const News = () => {
                         Follow us on Instagram
                     </a>
                 </div>
+
+                {error && (
+                    <p className='text-center text-xs text-slate-500 mt-4'>
+                        {error}
+                    </p>
+                )}
             </div>
         </section>
     )
