@@ -1,4 +1,4 @@
-import aboutUs from "../../public/assets/about-us.png"
+import aboutUs from "../../public/assets/about-us.jpg"
 import ParallaxContent from "./parallax-content"
 
 const AboutUs = () => {
