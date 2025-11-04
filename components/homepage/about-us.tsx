@@ -5,7 +5,9 @@ import ParallaxContent from "./parallax-content"
 const AboutUs = () => {
     // Google Drive image URL
     // Source: https://drive.google.com/file/d/120aEQj6nSbXHlevSzDY6OlLAr5QoZqwE/view?usp=sharing
-    const aboutUsImageUrl = "https://drive.google.com/uc?export=view&id=120aEQj6nSbXHlevSzDY6OlLAr5QoZqwE"
+    // Try multiple URL formats for Google Drive compatibility
+    const fileId = "120aEQj6nSbXHlevSzDY6OlLAr5QoZqwE"
+    const aboutUsImageUrl = `https://drive.google.com/uc?export=view&id=${fileId}`
 
     return (
         <section id='about-us' className='flex flex-col md:flex-row shrink-0'>
