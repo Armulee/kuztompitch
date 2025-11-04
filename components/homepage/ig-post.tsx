@@ -2,8 +2,19 @@ import Image from "next/image"
 import { InstagramPostType } from "./news"
 
 const InstagramPost = ({ post }: { post: InstagramPostType }) => {
+    const handleClick = () => {
+        if (post.permalink) {
+            window.open(post.permalink, "_blank", "noopener,noreferrer")
+        }
+    }
+
     return (
-        <div className='bg-black rounded-lg shadow-lg overflow-hidden max-w-sm mx-auto'>
+        <div
+            className={`bg-black rounded-lg shadow-lg overflow-hidden max-w-sm mx-auto ${
+                post.permalink ? "cursor-pointer hover:shadow-xl transition-shadow" : ""
+            }`}
+            onClick={handleClick}
+        >
             {/* Header */}
             <div className='flex items-center p-3'>
                 <Image
