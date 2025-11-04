@@ -229,7 +229,7 @@ const News = () => {
 
                 {loading ? (
                     <div className='flex justify-center items-center py-20'>
-                        <div className='text-white text-lg'>Loading posts...</div>
+                        <div className='animate-spin rounded-full h-12 w-12 border-4 border-gray-300 border-t-purple-500 border-r-pink-500'></div>
                     </div>
                 ) : error ? (
                     <div className='flex flex-col justify-center items-center py-20 px-4'>
