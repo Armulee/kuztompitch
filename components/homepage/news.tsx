@@ -42,20 +42,87 @@ const PaginationDots = ({
 }) => {
     if (totalSlides <= 1) return null
 
+    const getVisibleDots = () => {
+        const delta = 2 // Show 2 dots on each side of active = 4 total visible around active
+        const dots: (number | string)[] = []
+
+        // Always show first dot
+        dots.push(0)
+
+        // Calculate range around current slide
+        const start = Math.max(1, currentSlide - delta)
+        const end = Math.min(totalSlides - 2, currentSlide + delta)
+
+        // Add ellipsis before if there's a gap
+        if (start > 2) {
+            dots.push("...")
+        } else if (start === 2) {
+            // Show dot 1 if we're close enough
+            dots.push(1)
+        }
+
+        // Add dots in range around current slide
+        for (let i = start; i <= end; i++) {
+            if (i > 0 && i < totalSlides - 1) {
+                dots.push(i)
+            }
+        }
+
+        // Add ellipsis after if there's a gap
+        if (end < totalSlides - 3) {
+            dots.push("...")
+        } else if (end === totalSlides - 3 && totalSlides > 3) {
+            // Show second-to-last if we're close enough
+            dots.push(totalSlides - 2)
+        }
+
+        // Always show last dot if there's more than one slide
+        if (totalSlides > 1) {
+            dots.push(totalSlides - 1)
+        }
+
+        // Remove duplicates while preserving order
+        const seen = new Set()
+        return dots.filter((dot) => {
+            if (dot === "...") return true
+            if (seen.has(dot)) return false
+            seen.add(dot)
+            return true
+        })
+    }
+
+    const visibleDots = getVisibleDots()
+
     return (
         <div className='flex justify-center items-center mt-6 space-x-2'>
-            {Array.from({ length: totalSlides }).map((_, index) => (
-                <button
-                    key={index}
-                    onClick={() => onDotClick(index)}
-                    className={`transition-all duration-300 rounded-full ${
-                        index === currentSlide
-                            ? "w-8 h-2 bg-gradient-to-r from-purple-500 to-pink-500"
-                            : "w-2 h-2 bg-gray-600 hover:bg-gray-500"
-                    }`}
-                    aria-label={`Go to slide ${index + 1}`}
-                />
-            ))}
+            {visibleDots.map((dot, index) => {
+                if (dot === "...") {
+                    return (
+                        <span
+                            key={`ellipsis-${index}`}
+                            className='px-2 text-gray-400 text-sm'
+                        >
+                            ...
+                        </span>
+                    )
+                }
+
+                const dotIndex = dot as number
+                const isActive = dotIndex === currentSlide
+
+                return (
+                    <button
+                        key={dotIndex}
+                        onClick={() => onDotClick(dotIndex)}
+                        className={`transition-all duration-300 rounded-full ${
+                            isActive
+                                ? "w-8 h-2 bg-gradient-to-r from-purple-500 to-pink-500"
+                                : "w-2 h-2 bg-gray-600 hover:bg-gray-500"
+                        }`}
+                        aria-label={`Go to slide ${dotIndex + 1}`}
+                    />
+                )
+            })}
         </div>
     )
 }
