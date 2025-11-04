@@ -26,8 +26,8 @@ const ContactUs = () => {
         <section id='contact-us' className='relative py-20 md:py-32 bg-gradient-to-b from-black via-gray-900 to-black overflow-hidden'>
             {/* Background Decoration */}
             <div className='absolute inset-0 overflow-hidden pointer-events-none'>
-                <div className='absolute top-0 right-0 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl' />
-                <div className='absolute bottom-0 left-0 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl' />
+                <div className='absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl' />
+                <div className='absolute bottom-0 left-0 w-96 h-96 bg-white/5 rounded-full blur-3xl' />
             </div>
 
             <div className='container relative z-10'>
@@ -38,10 +38,8 @@ const ContactUs = () => {
                     transition={{ duration: 0.6 }}
                     className='text-center mb-16'
                 >
-                    <h2 className='text-4xl md:text-5xl lg:text-6xl font-bold mb-4'>
-                        <span className='bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent'>
-                            Contact Us
-                        </span>
+                    <h2 className='text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-white'>
+                        Contact Us
                     </h2>
                     <p className='text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-8'>
                         Get in touch with us for your customization needs
@@ -90,11 +88,11 @@ const ContactUs = () => {
                                     className='mb-8 last:mb-0 group'
                                 >
                                     <div className='flex items-start gap-4'>
-                                        <div className='flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-purple-600/20 to-pink-600/20 border border-purple-500/30 flex items-center justify-center text-purple-300 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300'>
+                                        <div className='flex-shrink-0 w-12 h-12 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-white group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300'>
                                             {info.icon}
                                         </div>
                                         <div className='flex-1'>
-                                            <h3 className='font-bold text-xl md:text-2xl mb-2 text-white group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-purple-300 group-hover:to-pink-300 group-hover:bg-clip-text transition-all duration-300'>
+                                            <h3 className='font-bold text-xl md:text-2xl mb-2 text-white group-hover:text-white transition-all duration-300'>
                                                 {info.title}
                                             </h3>
                                             {Array.isArray(info.content) ? (

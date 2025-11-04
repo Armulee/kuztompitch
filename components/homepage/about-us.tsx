@@ -8,8 +8,8 @@ const AboutUs = () => {
         <section id='about-us' className='relative bg-gradient-to-b from-black via-gray-900 to-black py-20 md:py-32'>
             {/* Background Decoration */}
             <div className='absolute inset-0 overflow-hidden pointer-events-none'>
-                <div className='absolute top-0 left-0 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl' />
-                <div className='absolute bottom-0 right-0 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl' />
+                <div className='absolute top-0 left-0 w-96 h-96 bg-white/5 rounded-full blur-3xl' />
+                <div className='absolute bottom-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl' />
             </div>
 
             <div className='relative z-10'>
@@ -38,11 +38,11 @@ const AboutUs = () => {
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.6, delay: 0.2 }}
                             >
-                                <h2 className='text-3xl md:text-4xl font-bold mb-6 bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent'>
+                                <h2 className='text-3xl md:text-4xl font-bold mb-6 text-white'>
                                     About Kuztom Pitch
                                 </h2>
                                 <p className='text-lg md:text-xl text-white/90 mb-6 leading-relaxed'>
-                                    For us <span className='font-semibold text-purple-300'>KUZTOM PITCH</span>, our passion lies in
+                                    For us <span className='font-semibold text-white'>KUZTOM PITCH</span>, our passion lies in
                                     transforming standard gear into powerful statements
                                     that resonate with your unique style.
                                 </p>

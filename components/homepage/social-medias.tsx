@@ -41,7 +41,7 @@ const SocialMedias = ({ className }: { className?: string }) => {
                     whileTap={{ scale: 0.95 }}
                     className='relative group'
                 >
-                    <div className='w-12 h-12 rounded-xl bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white transition-all duration-300 group-hover:border-purple-500/50 group-hover:bg-gradient-to-br group-hover:from-purple-600/20 group-hover:to-pink-600/20 group-hover:shadow-lg group-hover:shadow-purple-500/30'>
+                    <div className='w-12 h-12 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-white transition-all duration-300 group-hover:border-white/50 group-hover:bg-white/20 group-hover:shadow-lg group-hover:shadow-white/20'>
                         {social.icon}
                     </div>
                     <span className='absolute -bottom-8 left-1/2 -translate-x-1/2 text-xs text-white/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap'>

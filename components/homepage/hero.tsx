@@ -26,8 +26,8 @@ const Hero = () => {
             
             {/* Animated Background Elements */}
             <div className='absolute inset-0 overflow-hidden z-10'>
-                <div className='absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse' />
-                <div className='absolute bottom-1/4 right-1/4 w-96 h-96 bg-pink-500/20 rounded-full blur-3xl animate-pulse' style={{ animationDelay: '1s' }} />
+                <div className='absolute top-1/4 left-1/4 w-96 h-96 bg-white/5 rounded-full blur-3xl animate-pulse' />
+                <div className='absolute bottom-1/4 right-1/4 w-96 h-96 bg-white/5 rounded-full blur-3xl animate-pulse' style={{ animationDelay: '1s' }} />
             </div>
 
             {/* Content */}
@@ -47,7 +47,7 @@ const Hero = () => {
                             className='mb-6'
                         >
                             <h1 className='text-5xl md:text-6xl lg:text-8xl font-bold text-white mb-4 leading-tight'>
-                                <span className='block bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent'>
+                                <span className='block'>
                                     Kuztom Pitch
                                 </span>
                             </h1>
@@ -71,16 +71,18 @@ const Hero = () => {
                                 <motion.button
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
-                                    className='group relative px-8 py-4 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold text-lg shadow-lg shadow-purple-500/50 overflow-hidden'
+                                    className='group relative px-8 py-4 rounded-full bg-white text-black font-semibold text-lg shadow-lg shadow-black/50 overflow-hidden border border-white/20'
                                 >
-                                    <span className='relative z-10 flex items-center gap-2'>
+                                    <motion.span
+                                        className='relative z-10 flex items-center gap-2 group-hover:text-white transition-colors'
+                                    >
                                         Try Customize
                                         <svg className='w-5 h-5 transform group-hover:translate-x-1 transition-transform' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                                             <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M13 7l5 5m0 0l-5 5m5-5H6' />
                                         </svg>
-                                    </span>
+                                    </motion.span>
                                     <motion.div
-                                        className='absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500'
+                                        className='absolute inset-0 bg-black'
                                         initial={{ x: '-100%' }}
                                         whileHover={{ x: 0 }}
                                         transition={{ duration: 0.3 }}
