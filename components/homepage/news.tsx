@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from "react"
 import { SwiperSlide } from "swiper/react"
 import { Swiper as SwiperType } from "swiper/types"
+import { motion } from "framer-motion"
 import FlowCarousel from "../flow-carousel"
 import InstagramPost from "./ig-post"
 
@@ -215,17 +216,31 @@ const News = () => {
     }
 
     return (
-        <section className='py-16 bg-black'>
+        <section className='relative py-20 md:py-32 bg-gradient-to-b from-black via-gray-900 to-black overflow-hidden'>
+            {/* Background Decoration */}
+            <div className='absolute inset-0 overflow-hidden pointer-events-none'>
+                <div className='absolute top-1/4 left-0 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl' />
+                <div className='absolute bottom-1/4 right-0 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl' />
+            </div>
+            <div className='relative z-10'>
             <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-                <div className='text-center mb-12'>
-                    <h2 className='text-3xl font-bold text-white mb-4'>
-                        Latest from Our Instagram
+                <motion.div
+                    initial={{ opacity: 0, y: -20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6 }}
+                    className='text-center mb-16'
+                >
+                    <h2 className='text-4xl md:text-5xl lg:text-6xl font-bold mb-4'>
+                        <span className='bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent'>
+                            Latest from Our Instagram
+                        </span>
                     </h2>
-                    <p className='text-lg text-slate-400'>
+                    <p className='text-lg md:text-xl text-slate-400 max-w-2xl mx-auto'>
                         Follow our journey and see our latest Kuztom Pitch
                         creations
                     </p>
-                </div>
+                </motion.div>
 
                 {loading ? (
                     <div className='flex justify-center items-center py-20'>
@@ -315,6 +330,7 @@ const News = () => {
                         Follow us on Instagram
                     </a>
                 </div>
+            </div>
             </div>
         </section>
     )
