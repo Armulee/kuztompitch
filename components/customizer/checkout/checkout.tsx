@@ -7,6 +7,7 @@ import Total from "./total"
 import { useState } from "react"
 import { FaChevronLeft } from "react-icons/fa6"
 import Discount from "./discount"
+import { useRouter } from "next/navigation"
 
 export default function MainCheckout({
     setSubmitted,
@@ -23,8 +24,8 @@ export default function MainCheckout({
     setDiscount: React.Dispatch<React.SetStateAction<number>>
     totalDiscount: number
 }) {
+    const router = useRouter()
     const {
-        setCheckout,
         capsule,
         topHandle,
         bottomHandle,
@@ -51,7 +52,7 @@ export default function MainCheckout({
             snapshot,
             decals: logos.map((logo) => ({
                 fileName: logo.fileName,
-                image: logo.image, // Only original image, not cloneImage
+                image: logo.image,
                 position: logo.position,
                 aspect: logo.aspect,
                 flipHorizontal: logo.flipHorizontal,
@@ -92,24 +93,22 @@ export default function MainCheckout({
     }
     return (
         <>
-            {/* Header */}
-            <div className='mb-4 bg-white rounded-xl shadow-sm border border-slate-200'>
-                <div className='w-full flex items-center justify-center p-6 relative'>
+            <div className='mb-4 bg-surface-light rounded-2xl border border-white/[0.06]'>
+                <div className='w-full flex items-center justify-center p-4 sm:p-6 relative'>
                     <button
-                        onClick={() => setCheckout(false)}
-                        className='absolute left-0 flex items-center gap-2 text-slate-600 hover:translate-x-1 transition duration-300 px-3 py-2'
+                        onClick={() => router.push("/customize")}
+                        className='absolute left-0 flex items-center gap-1.5 sm:gap-2 text-zinc-400 hover:text-white hover:translate-x-1 transition-all duration-300 px-2 sm:px-3 py-2 text-sm'
                     >
-                        <FaChevronLeft className='h-4 w-4' />
-                        Back
+                        <FaChevronLeft className='h-3 w-3 sm:h-4 sm:w-4' />
+                        <span className='hidden sm:inline'>Back</span>
                     </button>
-                    <h4 className='text-2xl font-bold text-slate-900'>
+                    <h4 className='text-lg sm:text-2xl font-bold gradient-text font-display'>
                         Order Summary
                     </h4>
                 </div>
             </div>
 
-            <form onSubmit={handleSubmit} className='grid md:grid-cols-3 gap-8'>
-                {/* Main Content */}
+            <form onSubmit={handleSubmit} className='grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-8'>
                 <div className='md:col-span-2 space-y-8'>
                     <Details />
                     <Delivery
@@ -126,7 +125,6 @@ export default function MainCheckout({
                     <Discount setDiscount={setDiscount} />
                 </div>
 
-                {/* Order Summary Sidebar */}
                 <Total total={total} totalDiscount={totalDiscount} />
             </form>
         </>

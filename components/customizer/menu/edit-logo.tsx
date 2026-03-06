@@ -42,10 +42,12 @@ const EditLogo = () => {
     // Calculate responsive viewport width based on screen size
     const calculateViewportWidth = () => {
         const screenWidth = window.innerWidth
-        // Responsive sizing: minimum 200px, maximum 500px, scales with screen width
-        const minWidth = 200
+        const minWidth = 150
         const maxWidth = 400
-        const scaleFactor = 0.5 // 25% of screen width
+
+        let scaleFactor = 0.45
+        if (screenWidth < 400) scaleFactor = 0.4
+        else if (screenWidth >= 1024) scaleFactor = 0.3
 
         const calculatedWidth = Math.min(
             maxWidth,
@@ -430,7 +432,6 @@ const EditLogo = () => {
             isResizing,
             resizeStart,
             dragging,
-            showResizers,
             bgOffsetY,
             bgOffsetX,
             updateLogo,
@@ -492,23 +493,21 @@ const EditLogo = () => {
                 WebkitTouchCallout: "none",
             }}
         >
-            {/* Header with current part indicator */}
             <div className='w-full text-center'>
-                <h3 className='text-lg font-semibold text-white mb-1'>
+                <h3 className='text-xs font-medium text-zinc-500 uppercase tracking-wider mb-1'>
                     Image Adjustment
                 </h3>
             </div>
 
-            {/* Main positioning area */}
-            <div className='flex items-center justify-center space-x-6'>
+            <div className='flex items-center justify-center gap-3 sm:gap-6'>
                 <div
                     ref={containerRef}
-                    className={`relative border-2 rounded-lg overflow-hidden ${
+                    className={`relative border-2 rounded-xl overflow-hidden ${
                         dragging
-                            ? "border-blue-400 shadow-lg shadow-blue-400/20"
+                            ? "border-accent-purple/60 shadow-lg shadow-accent-purple/15"
                             : hovering
-                            ? "border-gray-300 shadow-md"
-                            : "border-gray-500"
+                            ? "border-white/20 shadow-md"
+                            : "border-white/10"
                     }`}
                     onMouseDown={handleMouseDown}
                     onTouchStart={handleTouchStart}
@@ -526,7 +525,7 @@ const EditLogo = () => {
                     {/* Logo preview - fixed size, only shows resizers */}
                     {selectedLogo.image && (
                         <div
-                            className='absolute rounded border-2 border-white shadow-lg opacity-80'
+                            className='absolute rounded-lg border border-white/40 shadow-lg opacity-85'
                             style={{
                                 width:
                                     selectedLogo.aspect > 1
@@ -549,8 +548,8 @@ const EditLogo = () => {
                             {showResizers && (
                                 <>
                                     <div
-                                        className='absolute w-6 h-6 bg-blue-500 border-2 border-white rounded-full cursor-nw-resize hover:bg-blue-600 transition-colors touch-manipulation'
-                                        style={{ top: "-12px", left: "-12px" }}
+                                        className='absolute w-5 h-5 bg-accent-purple border-2 border-white rounded-full cursor-nw-resize hover:bg-accent-purple/80 transition-colors touch-manipulation shadow-md'
+                                        style={{ top: "-10px", left: "-10px" }}
                                         onMouseDown={(e) =>
                                             handleResizeStart(e, "nw")
                                         }
@@ -559,8 +558,8 @@ const EditLogo = () => {
                                         }
                                     />
                                     <div
-                                        className='absolute w-6 h-6 bg-blue-500 border-2 border-white rounded-full cursor-ne-resize hover:bg-blue-600 transition-colors touch-manipulation'
-                                        style={{ top: "-12px", right: "-12px" }}
+                                        className='absolute w-5 h-5 bg-accent-purple border-2 border-white rounded-full cursor-ne-resize hover:bg-accent-purple/80 transition-colors touch-manipulation shadow-md'
+                                        style={{ top: "-10px", right: "-10px" }}
                                         onMouseDown={(e) =>
                                             handleResizeStart(e, "ne")
                                         }
@@ -569,8 +568,8 @@ const EditLogo = () => {
                                         }
                                     />
                                     <div
-                                        className='absolute w-6 h-6 bg-blue-500 border-2 border-white rounded-full cursor-sw-resize hover:bg-blue-600 transition-colors touch-manipulation'
-                                        style={{ bottom: "-12px", left: "-12px" }}
+                                        className='absolute w-5 h-5 bg-accent-purple border-2 border-white rounded-full cursor-sw-resize hover:bg-accent-purple/80 transition-colors touch-manipulation shadow-md'
+                                        style={{ bottom: "-10px", left: "-10px" }}
                                         onMouseDown={(e) =>
                                             handleResizeStart(e, "sw")
                                         }
@@ -579,10 +578,10 @@ const EditLogo = () => {
                                         }
                                     />
                                     <div
-                                        className='absolute w-6 h-6 bg-blue-500 border-2 border-white rounded-full cursor-se-resize hover:bg-blue-600 transition-colors touch-manipulation'
+                                        className='absolute w-5 h-5 bg-accent-purple border-2 border-white rounded-full cursor-se-resize hover:bg-accent-purple/80 transition-colors touch-manipulation shadow-md'
                                         style={{
-                                            bottom: "-12px",
-                                            right: "-12px",
+                                            bottom: "-10px",
+                                            right: "-10px",
                                         }}
                                         onMouseDown={(e) =>
                                             handleResizeStart(e, "se")
@@ -599,7 +598,7 @@ const EditLogo = () => {
 
                 {/* Joystick-style position controls */}
                 <div className='flex-shrink-0'>
-                    <div className='flex justify-center mb-4 space-x-2'>
+                    <div className='flex justify-center mb-2 sm:mb-3 gap-1 sm:gap-1.5'>
                         <button
                             onClick={() =>
                                 updateLogo(selectedLogo.id, {
@@ -607,10 +606,10 @@ const EditLogo = () => {
                                         !selectedLogo.flipHorizontal,
                                 })
                             }
-                            className='w-8 h-8 bg-white/10 hover:bg-white/20 rounded-t border border-white/20 text-white transition-colors group flex items-center justify-center'
+                            className='w-7 h-7 sm:w-8 sm:h-8 bg-white/[0.04] hover:bg-white/10 rounded-md sm:rounded-lg border border-white/[0.08] text-white/60 hover:text-white transition-all flex items-center justify-center'
                             title='Flip Horizontal'
                         >
-                            <LuFlipHorizontal />
+                            <LuFlipHorizontal className='w-3 h-3 sm:w-3.5 sm:h-3.5' />
                         </button>
                         <button
                             onClick={() =>
@@ -618,60 +617,56 @@ const EditLogo = () => {
                                     flipVertical: !selectedLogo.flipVertical,
                                 })
                             }
-                            className='w-8 h-8 bg-white/10 hover:bg-white/20 rounded-t border border-white/20 text-white transition-colors group flex items-center justify-center'
+                            className='w-7 h-7 sm:w-8 sm:h-8 bg-white/[0.04] hover:bg-white/10 rounded-md sm:rounded-lg border border-white/[0.08] text-white/60 hover:text-white transition-all flex items-center justify-center'
                             title='Flip Vertical'
                         >
-                            <LuFlipVertical />
+                            <LuFlipVertical className='w-3 h-3 sm:w-3.5 sm:h-3.5' />
                         </button>
                     </div>
 
-                    {/* Up button */}
                     <div className='flex justify-center'>
                         <button
                             onClick={() => adjustPosition("up")}
-                            className='w-8 h-8 bg-white/10 hover:bg-white/20 rounded-t border border-white/20 transition-colors group flex items-center justify-center'
+                            className='w-7 h-7 sm:w-8 sm:h-8 bg-white/[0.04] hover:bg-white/10 rounded-t-md sm:rounded-t-lg border border-white/[0.08] transition-all group flex items-center justify-center'
                             title='Move up'
                         >
-                            <FaChevronUp className='w-3 h-3 text-white group-hover:text-blue-300' />
+                            <FaChevronUp className='w-2 h-2 sm:w-2.5 sm:h-2.5 text-white/50 group-hover:text-accent-purple' />
                         </button>
                     </div>
 
-                    {/* Middle row: Left, Center, Right */}
                     <div className='flex items-center'>
                         <button
                             onClick={() => adjustPosition("left")}
-                            className='w-8 h-8 bg-white/10 hover:bg-white/20 rounded-l border border-white/20 border-r-0 transition-colors group flex items-center justify-center'
+                            className='w-7 h-7 sm:w-8 sm:h-8 bg-white/[0.04] hover:bg-white/10 rounded-l-md sm:rounded-l-lg border border-white/[0.08] border-r-0 transition-all group flex items-center justify-center'
                             title='Move left'
                         >
-                            <FaChevronLeft className='w-3 h-3 text-white group-hover:text-blue-300' />
+                            <FaChevronLeft className='w-2 h-2 sm:w-2.5 sm:h-2.5 text-white/50 group-hover:text-accent-purple' />
                         </button>
 
-                        {/* Center reset button */}
                         <button
                             onClick={resetToCenter}
-                            className='w-8 h-8 bg-white/5 hover:bg-white/15 border-t border-b border-white/20 flex items-center justify-center transition-colors group'
+                            className='w-7 h-7 sm:w-8 sm:h-8 bg-white/[0.02] hover:bg-white/10 border-y border-white/[0.08] flex items-center justify-center transition-all group'
                             title='Reset to center'
                         >
-                            <div className='w-2 h-2 bg-white/30 group-hover:bg-white/50 rounded-full transition-colors'></div>
+                            <div className='w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white/20 group-hover:bg-accent-purple/60 rounded-full transition-colors'></div>
                         </button>
 
                         <button
                             onClick={() => adjustPosition("right")}
-                            className='w-8 h-8 bg-white/10 hover:bg-white/20 rounded-r border border-white/20 border-l-0 transition-colors group flex items-center justify-center'
+                            className='w-7 h-7 sm:w-8 sm:h-8 bg-white/[0.04] hover:bg-white/10 rounded-r-md sm:rounded-r-lg border border-white/[0.08] border-l-0 transition-all group flex items-center justify-center'
                             title='Move right'
                         >
-                            <FaChevronRight className='w-3 h-3 text-white group-hover:text-blue-300' />
+                            <FaChevronRight className='w-2 h-2 sm:w-2.5 sm:h-2.5 text-white/50 group-hover:text-accent-purple' />
                         </button>
                     </div>
 
-                    {/* Down button */}
                     <div className='flex justify-center'>
                         <button
                             onClick={() => adjustPosition("down")}
-                            className='w-8 h-8 bg-white/10 hover:bg-white/20 rounded-b border border-white/20 border-t-0 transition-colors group flex items-center justify-center'
+                            className='w-7 h-7 sm:w-8 sm:h-8 bg-white/[0.04] hover:bg-white/10 rounded-b-md sm:rounded-b-lg border border-white/[0.08] border-t-0 transition-all group flex items-center justify-center'
                             title='Move down'
                         >
-                            <FaChevronDown className='w-3 h-3 text-white group-hover:text-blue-300' />
+                            <FaChevronDown className='w-2 h-2 sm:w-2.5 sm:h-2.5 text-white/50 group-hover:text-accent-cyan' />
                         </button>
                     </div>
                 </div>

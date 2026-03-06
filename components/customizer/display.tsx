@@ -31,45 +31,54 @@ const Display = () => {
             return "#ffffff"
         }
     }, [displayColor])
+
     return (
         <div className='w-full relative'>
-            <div className='bg-black'>
-                <div
-                    style={{
-                        borderColor: color(),
-                        backgroundColor: `${
-                            Array.isArray(displayColor)
-                                ? displayColor[0]
-                                : displayColor
-                        }30`,
-                    }}
-                    className={`flex gap-3 justify-center items-center gap-4 px-4 py-2 border border-0 border-b rounded-b-full text-white`}
-                >
-                    <span className='flex flex-col justify-center items-center'>
-                        <span className='text-[8px]'>Style</span>{" "}
-                        <b style={{ color: color() }} className='text-sm'>
-                            {displayStyle}
-                        </b>
-                    </span>
-                    <span className='flex flex-col justify-center items-center'>
-                        <span className='text-[8px]'>Color</span>{" "}
-                        <b style={{ color: color() }} className='text-sm'>
-                            {colorName}
-                        </b>
-                    </span>
-                    {Array.isArray(displayColor) ? (
-                        <span
-                            className='w-[50px] h-[25px] border rounded-md'
-                            style={{
-                                background: `linear-gradient(135deg, ${displayColor[0]} 0%, ${displayColor[1]} 100%)`,
-                            }}
-                        />
-                    ) : (
-                        <span
-                            className='w-[50px] h-[25px] border rounded-md'
-                            style={{ background: displayColor }}
-                        />
-                    )}
+            <div className='bg-[#0a0a0a]'>
+                <div className='flex justify-center'>
+                    <div
+                        style={{
+                            borderColor: `${color()}25`,
+                            backgroundColor: `${
+                                Array.isArray(displayColor)
+                                    ? displayColor[0]
+                                    : displayColor
+                            }08`,
+                        }}
+                        className='inline-flex gap-3 sm:gap-5 items-center px-4 sm:px-6 py-1.5 sm:py-2 border border-white/[0.06] rounded-b-2xl backdrop-blur-md'
+                    >
+                        <div className='flex flex-col items-center'>
+                            <span className='text-[6px] sm:text-[7px] text-zinc-600 uppercase tracking-[0.15em] font-medium'>Style</span>
+                            <span style={{ color: color() }} className='text-[10px] sm:text-xs font-semibold mt-0.5'>
+                                {displayStyle}
+                            </span>
+                        </div>
+
+                        <div className='w-px h-5 sm:h-6 bg-white/[0.06]' />
+
+                        <div className='flex flex-col items-center'>
+                            <span className='text-[6px] sm:text-[7px] text-zinc-600 uppercase tracking-[0.15em] font-medium'>Color</span>
+                            <span style={{ color: color() }} className='text-[10px] sm:text-xs font-semibold mt-0.5'>
+                                {colorName}
+                            </span>
+                        </div>
+
+                        <div className='w-px h-5 sm:h-6 bg-white/[0.06]' />
+
+                        {Array.isArray(displayColor) ? (
+                            <span
+                                className='w-6 h-6 sm:w-8 sm:h-8 rounded-md sm:rounded-lg border border-white/10 shadow-inner flex-shrink-0'
+                                style={{
+                                    background: `linear-gradient(135deg, ${displayColor[0]} 0%, ${displayColor[1]} 100%)`,
+                                }}
+                            />
+                        ) : (
+                            <span
+                                className='w-6 h-6 sm:w-8 sm:h-8 rounded-md sm:rounded-lg border border-white/10 shadow-inner flex-shrink-0'
+                                style={{ background: displayColor }}
+                            />
+                        )}
+                    </div>
                 </div>
             </div>
         </div>

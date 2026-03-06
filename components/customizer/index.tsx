@@ -17,12 +17,10 @@ const Customizer = () => {
     const pathname = usePathname()
     useEffect(() => {
         if (pathname === "/customize") {
-            document.body.style.background = "#efefef"
+            document.body.style.background = "#0a0a0a"
         }
         return () => document.body.removeAttribute("style")
     }, [pathname])
-
-    const { checkout } = useCustomizeContext()
 
     // handle decal file drop
     const { addLogo } = useCustomizeContext()
@@ -40,7 +38,7 @@ const Customizer = () => {
                             // Create clone with transparent padding
                             const cloneImage = await createImageWithPadding(
                                 imageUrl,
-                                25
+                                25,
                             )
 
                             addLogo({
@@ -56,7 +54,7 @@ const Customizer = () => {
                         } catch (error) {
                             console.error(
                                 "Error creating image with padding:",
-                                error
+                                error,
                             )
                             // Fallback to original if padding fails
                             addLogo({
@@ -78,7 +76,7 @@ const Customizer = () => {
 
             setIsRejected(false)
         },
-        [addLogo]
+        [addLogo],
     )
 
     const onDragEnter = () => {
@@ -87,10 +85,7 @@ const Customizer = () => {
     const [isRejected, setIsRejected] = useState(true)
 
     return (
-        <section
-            style={{ overflow: checkout ? "visible" : "hidden" }}
-            className='w-full h-[100dvh] z-0 relative'
-        >
+        <section className='w-full h-[100dvh] z-0 relative overflow-hidden'>
             <Dropzone
                 onDrop={onDrop}
                 accept={{
@@ -112,38 +107,72 @@ const Customizer = () => {
                         className='w-full h-full'
                     >
                         <input {...getInputProps()} />
-                        <div className={`w-[100vw] h-[53dvh] relative`}>
-                            <ThreeDimensionViewer />
-                        </div>
+                        <div className='flex flex-col w-full h-full lg:relative'>
+                            <div className='w-full flex-1 min-h-0 relative'>
+                                <ThreeDimensionViewer />
+                            </div>
 
-                        <div
-                            className={`w-full h-[47dvh] overflow-hidden relative`}
-                        >
-                            <Display />
-                            <Menu />
+                            <div
+                                className='w-full flex-shrink-0 overflow-hidden relative bg-[#0a0a0a]
+                                lg:absolute lg:bottom-20 lg:right-16 lg:w-fit lg:min-w-[420px] lg:max-w-[520px] lg:max-h-[calc(100dvh-32px)] lg:overflow-y-auto lg:rounded-2xl lg:border lg:border-white/[0.08] lg:shadow-2xl lg:bg-[#0c0c10]/95 lg:backdrop-blur-xl'
+                            >
+                                <Display />
+                                <Menu />
+                                <Pricing />
+                            </div>
                         </div>
 
                         {isDragActive && (
-                            <div className='absolute inset-0 bg-white/50 flex items-center justify-center z-50'>
-                                <div className='bg-black p-8 rounded-lg text-center'>
-                                    <p className='text-lg font-semibold text-white'>
-                                        Drop your image here.
+                            <div className='absolute inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-50'>
+                                <div className='p-10 rounded-3xl text-center border-2 border-dashed border-accent-purple/40 bg-accent-purple/[0.06]'>
+                                    <div className='w-14 h-14 rounded-2xl bg-accent-purple/10 flex items-center justify-center mx-auto mb-4'>
+                                        <svg
+                                            className='w-7 h-7 text-accent-purple'
+                                            fill='none'
+                                            viewBox='0 0 24 24'
+                                            stroke='currentColor'
+                                        >
+                                            <path
+                                                strokeLinecap='round'
+                                                strokeLinejoin='round'
+                                                strokeWidth={1.5}
+                                                d='M12 16V4m0 0l-4 4m4-4l4 4M2 17l.621 2.485A2 2 0 004.561 21h14.878a2 2 0 001.94-1.515L22 17'
+                                            />
+                                        </svg>
+                                    </div>
+                                    <p className='text-base font-semibold text-white'>
+                                        Drop your image here
                                     </p>
-                                    <p className='text-sm text-gray-300 mt-2'>
-                                        Supports JPG and PNG files
+                                    <p className='text-xs text-zinc-500 mt-1.5'>
+                                        JPG and PNG supported
                                     </p>
                                 </div>
                             </div>
                         )}
 
                         {isDragReject && isRejected && (
-                            <div className='absolute inset-0 bg-red-500/20 flex items-center justify-center z-50'>
-                                <div className='bg-red-500 p-8 rounded-lg text-center'>
-                                    <p className='text-lg font-semibold text-white'>
-                                        Sorry, we cannot read this file.
+                            <div className='absolute inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-50'>
+                                <div className='p-10 rounded-3xl text-center border-2 border-dashed border-red-500/40 bg-red-500/[0.06]'>
+                                    <div className='w-14 h-14 rounded-2xl bg-red-500/10 flex items-center justify-center mx-auto mb-4'>
+                                        <svg
+                                            className='w-7 h-7 text-red-400'
+                                            fill='none'
+                                            viewBox='0 0 24 24'
+                                            stroke='currentColor'
+                                        >
+                                            <path
+                                                strokeLinecap='round'
+                                                strokeLinejoin='round'
+                                                strokeWidth={1.5}
+                                                d='M6 18L18 6M6 6l12 12'
+                                            />
+                                        </svg>
+                                    </div>
+                                    <p className='text-base font-semibold text-white'>
+                                        Unsupported file type
                                     </p>
-                                    <p className='text-sm text-white/70 mt-2'>
-                                        File must be in format JPG or PNG
+                                    <p className='text-xs text-zinc-500 mt-1.5'>
+                                        Only JPG and PNG files are supported
                                     </p>
                                 </div>
                             </div>
@@ -151,8 +180,6 @@ const Customizer = () => {
                     </div>
                 )}
             </Dropzone>
-
-            <Pricing />
 
             <Tutorial />
         </section>

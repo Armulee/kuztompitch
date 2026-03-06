@@ -7,12 +7,13 @@ import * as THREE from "three"
 import { Decal, useGLTF, useTexture } from "@react-three/drei"
 import { GLTF } from "three-stdlib"
 import { useCustomizeContext } from "../provider"
-import { useEffect, useRef } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import {
     Euler,
     GroupProps,
     ThreeEvent,
     useFrame,
+    useThree,
     Vector3,
 } from "@react-three/fiber"
 import { usePathname } from "next/navigation"
@@ -51,9 +52,54 @@ export function Microphone(props: GroupProps) {
         setFocusedPart,
         focusStartTime,
         setFocusStartTime,
+        selectedLogoId,
+        setSelectedLogoId,
+        setEditLogo,
+        updateLogo,
+        editLogo,
+        setIsDraggingDecal,
     } = useCustomizeContext()
 
-    // Handle the material changing for each style
+    const { gl } = useThree()
+    const [hoveredLogoId, setHoveredLogoId] = useState<string | null>(null)
+
+    // Refs for stable access inside native event listeners
+    const selectedLogoIdRef = useRef<string | null>(selectedLogoId)
+    selectedLogoIdRef.current = selectedLogoId
+    const updateLogoRef = useRef(updateLogo)
+    updateLogoRef.current = updateLogo
+    const setIsDraggingDecalRef = useRef(setIsDraggingDecal)
+    setIsDraggingDecalRef.current = setIsDraggingDecal
+
+    // Drag state refs
+    const isDraggingRef = useRef(false)
+    const dragStartScreen = useRef<{ x: number; y: number }>({ x: 0, y: 0 })
+    const dragStartLogoPos = useRef<number[]>([0, 0, 0])
+
+    const getLogoLocalPos = (logo: Logo): THREE.Vector3 =>
+        new THREE.Vector3(
+            Math.sin(logo.position[0]) * 0.5,
+            logo.position[1],
+            Math.cos(logo.position[0]) * 0.5 + 0.05
+        )
+
+    const findNearestLogo = (
+        localPoint: THREE.Vector3,
+        threshold: number = 0.5
+    ): Logo | null => {
+        let nearest: Logo | null = null
+        let minDist = threshold
+        for (const logo of logos) {
+            const logoPos = getLogoLocalPos(logo)
+            const dist = localPoint.distanceTo(logoPos)
+            if (dist < minDist) {
+                minDist = dist
+                nearest = logo
+            }
+        }
+        return nearest
+    }
+
     useEffect(() => {
         if (capsule) {
             materials["Capsule"].color = new THREE.Color(capsule.color)
@@ -74,28 +120,93 @@ export function Microphone(props: GroupProps) {
         }
     }, [capsule, topHandle, bottomHandle, materials])
 
-    // Rotate the model on the y-axis while `isRotating` is true
     const modelRef = useRef<THREE.Group>(null)
     const pathname = usePathname()
 
-    // Handle focused part when click the mesh
     const handleClick = (e: ThreeEvent<MouseEvent>, part: string) => {
         e.stopPropagation()
-        if (isOrbiting.current) return // Prevent click if dragging
+        if (isOrbiting.current) return
+        if (isDraggingRef.current) return
+
+        // Proximity-based decal detection: check if click is near any logo
+        if (logos.length > 0) {
+            const localPoint = e.object.worldToLocal(e.point.clone())
+            const nearestLogo = findNearestLogo(localPoint)
+            if (nearestLogo) {
+                setSelectedLogoId(nearestLogo.id)
+                setEditLogo(true)
+                return
+            }
+        }
 
         setPart(part)
         setFocusedPart(part)
         setFocusStartTime(performance.now())
     }
+
+    const handleDecalClick = (e: ThreeEvent<MouseEvent>, logoId: string) => {
+        e.stopPropagation()
+        if (isOrbiting.current) return
+
+        setSelectedLogoId(logoId)
+        setEditLogo(true)
+    }
+
+    const handleDecalPointerOver = (e: ThreeEvent<PointerEvent>, logoId: string) => {
+        e.stopPropagation()
+        setHoveredLogoId(logoId)
+        gl.domElement.style.cursor = "pointer"
+    }
+
+    const handleDecalPointerOut = (e: ThreeEvent<PointerEvent>) => {
+        e.stopPropagation()
+        setHoveredLogoId(null)
+        gl.domElement.style.cursor = "auto"
+    }
+
+    // Scroll-to-scale: when mouse wheel fires over a hovered & selected decal
+    const handleWheel = useCallback(
+        (e: WheelEvent) => {
+            if (!hoveredLogoId || !selectedLogoId) return
+            if (hoveredLogoId !== selectedLogoId) return
+            if (!editLogo) return
+
+            e.preventDefault()
+            e.stopPropagation()
+
+            const logo = logos.find((l) => l.id === selectedLogoId)
+            if (!logo) return
+
+            const delta = e.deltaY > 0 ? -0.05 : 0.05
+            const newScale = Math.max(0.2, Math.min(2.5, logo.scale + delta))
+            updateLogo(selectedLogoId, { scale: newScale })
+        },
+        [hoveredLogoId, selectedLogoId, editLogo, logos, updateLogo]
+    )
+
+    useEffect(() => {
+        const canvas = gl.domElement
+        canvas.addEventListener("wheel", handleWheel, { passive: false })
+        return () => canvas.removeEventListener("wheel", handleWheel)
+    }, [gl.domElement, handleWheel])
+
     const duration = 1000
     useFrame(() => {
         if (modelRef.current && isRotating && pathname === "/customize") {
             modelRef.current.rotation.y += 0.003
         }
 
+        // Always clear glow first so rapid part switching never leaves a stale flash.
+        const capsuleMat = materials["Capsule"]
+        const topHandleMat = materials["Top handle"]
+        const bottomHandleMat = materials["Bottom handle"]
+        capsuleMat.emissiveIntensity = 0
+        topHandleMat.emissiveIntensity = 0
+        bottomHandleMat.emissiveIntensity = 0
+
         if (focusedPart && focusStartTime !== null) {
             const elapsed = performance.now() - focusStartTime
-            const loopDuration = 1000 // 1s loop
+            const loopDuration = 1000
 
             const glowStrength = Math.abs(
                 Math.sin((elapsed / loopDuration) * Math.PI)
@@ -111,29 +222,45 @@ export function Microphone(props: GroupProps) {
                     : null
 
             if (partMat) {
-                partMat.emissive = new THREE.Color(0xffffff)
-                partMat.emissiveIntensity = glowStrength
+                // Use accent glow instead of white to avoid bright flash artifacts.
+                partMat.emissive = new THREE.Color(0x8b5cf6)
+                partMat.emissiveIntensity = 0.06 + glowStrength * 0.16
             }
 
             if (elapsed > duration) {
-                if (partMat) {
-                    partMat.emissiveIntensity = 0
-                }
                 setFocusedPart(null)
                 setFocusStartTime(null)
             }
         }
     })
 
-    // Handlers to toggle rotation on mouse events and detect is orbiting
     const pointerDownPos = useRef<{ x: number; y: number } | null>(null)
     const isOrbiting = useRef(false)
+
     const handlePointerDown = (e: ThreeEvent<PointerEvent>) => {
         setIsRotating(false)
         pointerDownPos.current = { x: e.clientX, y: e.clientY }
         isOrbiting.current = false
+
+        // Check if near active decal to initiate drag
+        if (editLogo && selectedLogoId && logos.length > 0) {
+            const localPoint = e.object.worldToLocal(e.point.clone())
+            const activeLogo = logos.find((l) => l.id === selectedLogoId)
+            if (activeLogo) {
+                const logoPos = getLogoLocalPos(activeLogo)
+                if (localPoint.distanceTo(logoPos) < 0.5) {
+                    isDraggingRef.current = true
+                    dragStartScreen.current = { x: e.clientX, y: e.clientY }
+                    dragStartLogoPos.current = [...activeLogo.position]
+                    setIsDraggingDecal(true)
+                }
+            }
+        }
     }
+
     const handlePointerMove = (e: ThreeEvent<PointerEvent>) => {
+        if (isDraggingRef.current) return
+
         if (!pointerDownPos.current) return
         const dx = e.clientX - pointerDownPos.current.x
         const dy = e.clientY - pointerDownPos.current.y
@@ -142,7 +269,50 @@ export function Microphone(props: GroupProps) {
         }
     }
 
-    // Transform user uploaded images to textures for multiple decals
+    const handlePointerUp = () => {
+        if (isDraggingRef.current) {
+            isDraggingRef.current = false
+            setIsDraggingDecal(false)
+        }
+        pointerDownPos.current = null
+    }
+
+    // Native event listeners for reliable drag tracking across the canvas
+    useEffect(() => {
+        const canvas = gl.domElement
+
+        const onPointerMove = (e: PointerEvent) => {
+            if (!isDraggingRef.current) return
+
+            const dx = e.clientX - dragStartScreen.current.x
+            const dy = e.clientY - dragStartScreen.current.y
+
+            const newAngle = dragStartLogoPos.current[0] + dx * 0.005
+            const newHeight = dragStartLogoPos.current[1] - dy * 0.005
+
+            const id = selectedLogoIdRef.current
+            if (id) {
+                updateLogoRef.current(id, {
+                    position: [newAngle, newHeight, dragStartLogoPos.current[2]],
+                })
+            }
+        }
+
+        const onPointerUp = () => {
+            if (!isDraggingRef.current) return
+            isDraggingRef.current = false
+            setIsDraggingDecalRef.current(false)
+        }
+
+        canvas.addEventListener("pointermove", onPointerMove)
+        window.addEventListener("pointerup", onPointerUp)
+
+        return () => {
+            canvas.removeEventListener("pointermove", onPointerMove)
+            window.removeEventListener("pointerup", onPointerUp)
+        }
+    }, [gl.domElement])
+
     const logoImages =
         logos.length > 0
             ? logos.map((logo) => logo.image)
@@ -152,7 +322,6 @@ export function Microphone(props: GroupProps) {
         ? logoTextures
         : [logoTextures]
 
-    // Fix texture wrapping to prevent looping for all textures
     texturesArray.forEach((texture, index) => {
         if (texture && logos[index]?.image) {
             texture.wrapS = THREE.ClampToEdgeWrapping
@@ -161,57 +330,6 @@ export function Microphone(props: GroupProps) {
             texture.offset.set(0, 0)
         }
     })
-
-    // const transformControls = useControls("Decal Adjustment", {
-    //     position: {
-    //         value: { x: 0, y: 2.2, z: 0.5 },
-    //         step: 0.01,
-    //     },
-    //     rotation: {
-    //         value: { x: 0, y: 0, z: 0 },
-    //         step: 0.01,
-    //     },
-    //     scale: {
-    //         value: { x: 1, y: 1, z: 1 },
-    //         step: 0.01,
-    //     },
-    // })
-
-    // handle decal adjusting by dragging the Decal component
-    // const [isDragging, setIsDragging] = useState(false)
-    // const [startY, setStartY] = useState<number | null>(null)
-    // const handlePointerDownDecal = (e: ThreeEvent<PointerEvent>) => {
-    //     e.stopPropagation()
-    //     setEditLogo(true)
-    //     setIsDragging(true)
-    //     setStartY(e.clientY)
-    // }
-    // const handlePointerUpDecal = (e: ThreeEvent<PointerEvent>) => {
-    //     e.stopPropagation()
-    //     setIsDragging(false)
-    //     setStartY(null)
-    // }
-    // const handlePointerMoveDecal = (e: ThreeEvent<PointerEvent>) => {
-    //     if (isDragging && startY !== null) {
-    //         e.stopPropagation()
-    //         const deltaY = (e.clientY - startY) * -0.01 // Adjust sensitivity
-    //         setStartY(e.clientY)
-
-    //         setLogo((prev) => {
-    //             const newY = parseFloat((prev.position[1] + deltaY).toFixed(2))
-    //             return {
-    //                 ...prev,
-    //                 position: [prev.position[0], newY, prev.position[2]],
-    //             }
-    //         })
-    //     }
-    // }
-    // useEffect(() => {
-    //     if (props.orbitControlsRef?.current && isDragging) {
-    //         props.orbitControlsRef.current.enabled = !isDragging
-    //     }
-    // }, [isDragging])
-    // console.log("Logos:", logos.length)
 
     const position: (logo: Logo) => Vector3 = (logo: Logo) => [
         Math.sin(logo.position[0]) * 0.5,
@@ -241,11 +359,42 @@ export function Microphone(props: GroupProps) {
                   1.2 * logo.scale,
               ]
 
+    const renderDecals = (meshType: "top" | "bottom") =>
+        logos.map((logo, index) => {
+            const isSelected = selectedLogoId === logo.id && editLogo
+            return (
+                <Decal
+                    key={`${meshType}-${logo.id}`}
+                    position={position(logo)}
+                    rotation={rotation(logo)}
+                    scale={scale(logo)}
+                    onClick={(e) => handleDecalClick(e, logo.id)}
+                    onPointerOver={(e) => handleDecalPointerOver(e, logo.id)}
+                    onPointerOut={handleDecalPointerOut}
+                >
+                    <meshStandardMaterial
+                        roughness={1}
+                        transparent
+                        polygonOffset
+                        polygonOffsetFactor={-5}
+                        polygonOffsetUnits={-1}
+                        map={texturesArray[index]}
+                        depthTest={true}
+                        depthWrite={false}
+                        side={THREE.FrontSide}
+                        emissive={isSelected ? new THREE.Color(0x8b5cf6) : new THREE.Color(0x000000)}
+                        emissiveIntensity={isSelected ? 0.15 : 0}
+                    />
+                </Decal>
+            )
+        })
+
     return (
         <group
             dispose={null}
             onPointerDown={handlePointerDown}
             onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
         >
             <group ref={modelRef} {...props}>
                 <mesh
@@ -260,26 +409,7 @@ export function Microphone(props: GroupProps) {
                     onClick={(e) => handleClick(e, "Top Handle")}
                     castShadow
                 >
-                    {logos.map((logo, index) => (
-                        <Decal
-                            key={logo.id}
-                            position={position(logo)}
-                            rotation={rotation(logo)}
-                            scale={scale(logo)}
-                        >
-                            <meshStandardMaterial
-                                roughness={1}
-                                transparent
-                                polygonOffset
-                                polygonOffsetFactor={-5}
-                                polygonOffsetUnits={-1}
-                                map={texturesArray[index]}
-                                depthTest={true}
-                                depthWrite={false}
-                                side={THREE.FrontSide}
-                            />
-                        </Decal>
-                    ))}
+                    {renderDecals("top")}
                 </mesh>
                 <mesh
                     geometry={nodes.Shureobj001_1.geometry}
@@ -287,29 +417,9 @@ export function Microphone(props: GroupProps) {
                     onClick={(e) => handleClick(e, "Bottom Handle")}
                     castShadow
                 >
-                    {logos.map((logo, index) => (
-                        <Decal
-                            key={logo.id}
-                            position={position(logo)}
-                            rotation={rotation(logo)}
-                            scale={scale(logo)}
-                        >
-                            <meshStandardMaterial
-                                roughness={1}
-                                transparent
-                                polygonOffset
-                                polygonOffsetFactor={-5}
-                                polygonOffsetUnits={-1}
-                                map={texturesArray[index]}
-                                depthTest={true}
-                                depthWrite={false}
-                                side={THREE.FrontSide}
-                            />
-                        </Decal>
-                    ))}
+                    {renderDecals("bottom")}
                 </mesh>
 
-                {/* Microphone Base */}
                 <mesh
                     geometry={nodes.Shureobj001.geometry}
                     material={materials["Bottom handle"]}

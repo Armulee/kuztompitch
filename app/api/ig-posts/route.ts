@@ -1,8 +1,14 @@
 import { NextResponse } from "next/server"
 
 export async function POST() {
-    const url =
-        "https://script.google.com/macros/s/AKfycbzYr-dsJFxt_TAl6eRYWEaqbTnH6HKsQ9f6-5tefQal3z8Fmpdld_CZGR5p6TCNQ8OLGg/exec"
+    const url = process.env.GOOGLE_SHEET_URL_APP_SCRIPT
+    if (!url) {
+        console.error("[ig-posts] GOOGLE_SHEET_URL_APP_SCRIPT is not set")
+        return NextResponse.json(
+            { success: false, message: "Server configuration error" },
+            { status: 500 },
+        )
+    }
 
     try {
         const response = await fetch(url, {
@@ -21,32 +27,44 @@ export async function POST() {
         const responseText = await response.text()
 
         // Check if response is HTML (error page from Google Apps Script)
-        if (!isJson || responseText.trim().startsWith("<!DOCTYPE") || responseText.trim().startsWith("<html")) {
+        if (
+            !isJson ||
+            responseText.trim().startsWith("<!DOCTYPE") ||
+            responseText.trim().startsWith("<html")
+        ) {
             console.error("[ig-posts] Received HTML response instead of JSON")
             console.error("[ig-posts] Response status:", response.status)
             console.error("[ig-posts] Full response content:", responseText)
 
             // Try to extract error message from HTML
             let errorMessage = "Google Apps Script returned an error page"
-            
+
             // Google Apps Script error pages typically have:
             // 1. Error message in a div with class "errorMessage"
-            const errorMessageDivMatch = responseText.match(/<div[^>]*class=["']errorMessage["'][^>]*>([^<]+)<\/div>/i)
+            const errorMessageDivMatch = responseText.match(
+                /<div[^>]*class=["']errorMessage["'][^>]*>([^<]+)<\/div>/i,
+            )
             // 2. Error message in body text content
-            const bodyTextMatch = responseText.match(/<body[^>]*>[\s\S]*?<div[^>]*>[\s\S]*?<div[^>]*>([^<]+)<\/div>/i)
+            const bodyTextMatch = responseText.match(
+                /<body[^>]*>[\s\S]*?<div[^>]*>[\s\S]*?<div[^>]*>([^<]+)<\/div>/i,
+            )
             // 3. Title tag
-            const titleMatch = responseText.match(/<title[^>]*>([^<]+)<\/title>/i)
+            const titleMatch = responseText.match(
+                /<title[^>]*>([^<]+)<\/title>/i,
+            )
             // 4. Any text between divs in the body
-            const bodyDivMatch = responseText.match(/<body[^>]*>[\s\S]*?<div[^>]*>[\s\S]*?<div[^>]*>[\s\S]*?<div[^>]*>([^<]+)<\/div>/i)
+            const bodyDivMatch = responseText.match(
+                /<body[^>]*>[\s\S]*?<div[^>]*>[\s\S]*?<div[^>]*>[\s\S]*?<div[^>]*>([^<]+)<\/div>/i,
+            )
             // 5. Extract all text content from body (remove HTML tags)
             const bodyTextContent = responseText
-                .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
-                .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+                .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
+                .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "")
                 .match(/<body[^>]*>([\s\S]*)<\/body>/i)?.[1]
-                ?.replace(/<[^>]+>/g, ' ')
-                .replace(/\s+/g, ' ')
+                ?.replace(/<[^>]+>/g, " ")
+                .replace(/\s+/g, " ")
                 .trim()
-            
+
             // Try to find the actual error message
             if (errorMessageDivMatch && errorMessageDivMatch[1]) {
                 errorMessage = errorMessageDivMatch[1].trim()
@@ -58,13 +76,16 @@ export async function POST() {
                 // Extract meaningful text (skip common UI text)
                 const meaningfulText = bodyTextContent
                     .split(/\s+/)
-                    .filter(text => 
-                        text.length > 3 && 
-                        !text.match(/^(google|apps|script|error|the|and|for|are|with)$/i)
+                    .filter(
+                        (text) =>
+                            text.length > 3 &&
+                            !text.match(
+                                /^(google|apps|script|error|the|and|for|are|with)$/i,
+                            ),
                     )
                     .slice(0, 20)
-                    .join(' ')
-                
+                    .join(" ")
+
                 if (meaningfulText) {
                     errorMessage = meaningfulText
                 }
@@ -79,11 +100,12 @@ export async function POST() {
                 {
                     success: false,
                     message: errorMessage,
-                    details: "The Google Apps Script returned an HTML error page instead of JSON. Please check the script configuration and ensure it's deployed correctly.",
+                    details:
+                        "The Google Apps Script returned an HTML error page instead of JSON. Please check the script configuration and ensure it's deployed correctly.",
                     statusCode: response.status,
                     rawHtml: responseText.substring(0, 1000), // Include first 1000 chars for debugging
                 },
-                { status: response.status >= 400 ? response.status : 500 }
+                { status: response.status >= 400 ? response.status : 500 },
             )
         }
 
@@ -93,14 +115,17 @@ export async function POST() {
             data = JSON.parse(responseText)
         } catch {
             console.error("[ig-posts] Failed to parse JSON response")
-            console.error("[ig-posts] Response text:", responseText.substring(0, 500))
+            console.error(
+                "[ig-posts] Response text:",
+                responseText.substring(0, 500),
+            )
             return NextResponse.json(
                 {
                     success: false,
                     message: "Failed to parse response from Google Apps Script",
                     details: "The response was not valid JSON.",
                 },
-                { status: 500 }
+                { status: 500 },
             )
         }
 
@@ -111,7 +136,7 @@ export async function POST() {
                     message: data.message || "Failed to fetch Instagram posts",
                     data: data,
                 },
-                { status: response.status }
+                { status: response.status },
             )
         }
 
@@ -126,7 +151,7 @@ export async function POST() {
                 message: "Internal Server Error",
                 details: errorMessage,
             },
-            { status: 500 }
+            { status: 500 },
         )
     }
 }

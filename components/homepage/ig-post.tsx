@@ -1,7 +1,7 @@
 import Image from "next/image"
 import { InstagramPostType } from "./news"
-import { useEffect, useRef } from "react"
-import { FaPlay } from "react-icons/fa"
+import { useEffect, useRef, useState } from "react"
+import { FaPlay, FaInstagram } from "react-icons/fa"
 
 const InstagramPost = ({
     post,
@@ -11,6 +11,7 @@ const InstagramPost = ({
     isActive?: boolean
 }) => {
     const videoRef = useRef<HTMLVideoElement>(null)
+    const [imgError, setImgError] = useState(false)
 
     useEffect(() => {
         if (videoRef.current && post.type === "VIDEO") {
@@ -30,19 +31,25 @@ const InstagramPost = ({
         }
     }
 
+    const MediaFallback = () => (
+        <div className='w-full h-full bg-surface flex flex-col items-center justify-center gap-3'>
+            <FaInstagram className='text-4xl text-zinc-600' />
+            <span className='text-sm text-zinc-500 font-medium'>View on Instagram</span>
+        </div>
+    )
+
     return (
         <div
-            className={`bg-white rounded-lg shadow-lg overflow-hidden max-w-sm mx-auto border border-gray-200 flex flex-col h-[500px] ${
+            className={`bg-surface-light rounded-2xl overflow-hidden max-w-sm mx-auto border border-white/[0.06] flex flex-col h-[500px] transition-all duration-300 ${
                 post.permalink
-                    ? "cursor-pointer hover:shadow-xl transition-shadow"
+                    ? "cursor-pointer hover:border-white/15 hover:shadow-[0_0_30px_rgba(139,92,246,0.1)]"
                     : ""
-            }`}
+            } ${isActive ? "border-white/15 shadow-[0_0_30px_rgba(139,92,246,0.08)]" : ""}`}
             onClick={handleClick}
         >
             {/* Header */}
-            <div className='flex items-center p-3 border-b border-gray-200 flex-shrink-0 h-[60px]'>
-                {/* Avatar - black rounded div with logo centered */}
-                <div className='w-8 h-8 rounded-full bg-black flex items-center justify-center mr-3 flex-shrink-0'>
+            <div className='flex items-center p-3 border-b border-white/[0.06] flex-shrink-0 h-[60px]'>
+                <div className='w-8 h-8 rounded-full bg-gradient-accent flex items-center justify-center mr-3 flex-shrink-0'>
                     <Image
                         width={16}
                         height={16}
@@ -52,18 +59,20 @@ const InstagramPost = ({
                     />
                 </div>
                 <div className='flex-1 min-w-0'>
-                    <p className='font-semibold text-sm text-black truncate'>
+                    <p className='font-semibold text-sm text-white truncate'>
                         kuztompitch
                     </p>
                 </div>
-                <span className='text-gray-600 text-xs flex-shrink-0 ml-2'>
+                <span className='text-zinc-500 text-xs flex-shrink-0 ml-2'>
                     {post.timestamp}
                 </span>
             </div>
 
-            {/* Media - Image or Video */}
+            {/* Media */}
             <div className='relative flex-shrink-0 h-80'>
-                {post.type === "VIDEO" ? (
+                {imgError ? (
+                    <MediaFallback />
+                ) : post.type === "VIDEO" ? (
                     <div className='relative w-full h-full'>
                         <video
                             ref={videoRef}
@@ -72,6 +81,7 @@ const InstagramPost = ({
                             loop
                             muted
                             playsInline
+                            onError={() => setImgError(true)}
                             onMouseEnter={(e) => {
                                 if (isActive && e.currentTarget) {
                                     e.currentTarget.play().catch(() => {})
@@ -84,7 +94,7 @@ const InstagramPost = ({
                             }}
                         />
                         <div className='absolute inset-0 flex items-center justify-center pointer-events-none'>
-                            <FaPlay className='text-black text-4xl opacity-80' />
+                            <FaPlay className='text-white text-3xl opacity-70 drop-shadow-lg' />
                         </div>
                     </div>
                 ) : (
@@ -95,18 +105,19 @@ const InstagramPost = ({
                         alt={post.caption || "Instagram post"}
                         className='w-full h-full object-cover'
                         unoptimized
+                        onError={() => setImgError(true)}
                     />
                 )}
             </div>
 
             {/* Caption */}
-            <div className='px-3 pt-3 pb-2 border-t border-gray-200 flex-shrink-0 flex-1 min-h-0 overflow-hidden'>
+            <div className='px-3 pt-3 pb-2 border-t border-white/[0.06] flex-shrink-0 flex-1 min-h-0 overflow-hidden'>
                 <div className='text-sm h-full flex flex-col'>
                     <div className='line-clamp-3 overflow-hidden whitespace-pre-wrap break-words'>
-                        <span className='font-semibold mr-1 text-black'>
+                        <span className='font-semibold mr-1 text-white'>
                             kuztompitch
                         </span>
-                        <span className='text-gray-700'>{post.caption}</span>
+                        <span className='text-zinc-400'>{post.caption}</span>
                     </div>
                 </div>
             </div>

@@ -59,6 +59,8 @@ export type CustomizeContextType = {
     setEditLogo: React.Dispatch<React.SetStateAction<boolean>>
     model: string
     setModel: React.Dispatch<React.SetStateAction<string>>
+    isDraggingDecal: boolean
+    setIsDraggingDecal: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export type Material = {
