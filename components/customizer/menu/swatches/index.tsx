@@ -41,34 +41,41 @@ const ColorSwatch = ({
 
     const { style } = useCustomizeContext()
     return (
-        <div className='mt-2'>
-            <span>{shade}</span>
+        <div className='mt-1 sm:mt-2'>
+            <span className='text-xs sm:text-sm text-zinc-400'>{shade}</span>
             <Swiper
-                className='pt-1 pb-3 my-3'
+                className='pt-1 pb-2 sm:pb-3 my-2 sm:my-3'
                 slidesPerView={15}
-                spaceBetween={20}
+                spaceBetween={12}
                 mousewheel={{ releaseOnEdges: true, forceToAxis: true }}
                 breakpoints={{
                     320: {
-                        slidesPerView: 5.5,
+                        slidesPerView: 5,
+                        spaceBetween: 8,
+                    },
+                    400: {
+                        slidesPerView: 6,
+                        spaceBetween: 10,
                     },
                     480: {
                         slidesPerView: 6.5,
+                        spaceBetween: 12,
                     },
                     640: {
                         slidesPerView: 7.5,
+                        spaceBetween: 14,
                     },
                     800: {
                         slidesPerView: 8.5,
                     },
                     960: {
-                        slidesPerView: 9.5,
+                        slidesPerView: 9,
                     },
                     1120: {
-                        slidesPerView: 10.5,
+                        slidesPerView: 9.5,
                     },
                     1280: {
-                        slidesPerView: 11.5,
+                        slidesPerView: 10,
                     },
                 }}
                 direction='horizontal'
@@ -83,7 +90,7 @@ const ColorSwatch = ({
                                 background: `linear-gradient(135deg, ${c.color[0]} 0%, ${c.color[1]} 100%)`,
                             }}
                             onClick={() => handleClick({ ...c, style })}
-                            className={`rounded-md !min-w-[20px] !min-h-[30px] border`}
+                            className='rounded-md !min-w-[18px] sm:!min-w-[20px] !min-h-[26px] sm:!min-h-[30px] border border-white/10 cursor-pointer hover:scale-110 transition-transform'
                         />
                     ) : (
                         <SwiperSlide
@@ -92,7 +99,7 @@ const ColorSwatch = ({
                                 background: `${c.color}`,
                             }}
                             onClick={() => handleClick({ ...c, style })}
-                            className={`rounded-md !min-w-[20px] !min-h-[30px] border relative`}
+                            className='rounded-md !min-w-[18px] sm:!min-w-[20px] !min-h-[26px] sm:!min-h-[30px] border border-white/10 relative cursor-pointer hover:scale-110 transition-transform'
                         ></SwiperSlide>
                     )
                 )}

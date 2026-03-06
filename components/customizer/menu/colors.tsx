@@ -17,6 +17,16 @@ const shades: Shade[] = [
     "Blue",
 ]
 
+const shadeColorMap: Record<Shade, string> = {
+    Monochromatics: "#a1a1aa",
+    Yellow: "#facc15",
+    Orange: "#fb923c",
+    Red: "#f87171",
+    Pink: "#f472b6",
+    Violet: "#a78bfa",
+    Blue: "#60a5fa",
+}
+
 const Colors = ({
     setColor,
 }: {
@@ -39,22 +49,25 @@ const Colors = ({
 
     return (
         <>
-            <div className='flex justify-between items-center pt-4'>
-                <div id='styles' className='flex justify-start items-center'>
+            <div className='flex items-center justify-between px-1 pt-2 sm:pt-3 pb-1'>
+                <div id='styles' className='flex items-center gap-1.5 sm:gap-2'>
                     {styles.map((s) => (
-                        <div
+                        <button
                             key={`style-${s}`}
                             onClick={() => setStyle(s)}
-                            className={`px-5 py-1.5 text-sm mr-3 mb-3 transition duration-500 ease cursor-pointer ${
+                            className={`px-3 sm:px-4 py-1 sm:py-1.5 text-[11px] sm:text-xs font-medium transition-all duration-300 cursor-pointer rounded-full border ${
                                 style === s
-                                    ? "bg-white text-black"
-                                    : "bg-transparent text-[#aaaaaa]"
-                            } rounded-full border border-[#aaaaaa]`}
+                                    ? "bg-gradient-accent text-white border-transparent shadow-[0_0_15px_rgba(139,92,246,0.3)]"
+                                    : "bg-transparent text-zinc-500 border-white/[0.08] hover:border-white/20 hover:text-zinc-300"
+                            }`}
                         >
                             {s}
-                        </div>
+                        </button>
                     ))}
                 </div>
+                <span className='text-[9px] sm:text-[10px] text-zinc-600 font-medium tracking-wider uppercase pr-1'>
+                    {shades[swiperIndex]}
+                </span>
             </div>
 
             <Swiper
@@ -68,45 +81,35 @@ const Colors = ({
                 direction='vertical'
                 modules={[Mousewheel]}
                 mousewheel={{ forceToAxis: true }}
-                className='h-[12vh] border-0 border-y border-white/50'
+                className='h-[9vh] sm:h-[10vh] lg:h-[11vh] border-y border-white/[0.06]'
             >
-                {/* Monochromatics #9a9a9a */}
-                {/* Yellow #fee715 */}
-                {/* Orange #f36944 */}
-                {/* Red #f36944 */}
-                {/* Pink #d32e5e */}
-                {/* Violet #773376 */}
-                {/* Blue #5b7ebd */}
                 {shades.map((shade) => (
                     <SwiperSlide key={`shade-${shade}`}>
                         <ColorSwatch shade={shade} handleClick={handleClick} />
                     </SwiperSlide>
                 ))}
             </Swiper>
-            <div className='max-w-md m-auto flex items-center justify-around pt-3'>
+
+            <div className='flex items-center justify-between px-3 sm:px-4 pt-2 sm:pt-2.5'>
                 <button
                     type='button'
-                    className={`w-fit flex items-center gap-3 text-xs text-zinc-300`}
+                    className='flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-[11px] transition-colors disabled:opacity-30'
                     onClick={() => swiper?.slidePrev()}
+                    disabled={swiperIndex === 0}
+                    style={{ color: swiperIndex > 0 ? shadeColorMap[shades[swiperIndex - 1]] : undefined }}
                 >
-                    <FaChevronUp
-                        className={`${
-                            swiperIndex === 0 ? "text-white/50" : "text-white"
-                        }`}
-                    />
-                    {shades[swiperIndex - 1]}
+                    <FaChevronUp />
+                    <span className='min-w-[60px] sm:min-w-[80px]'>{shades[swiperIndex - 1] || ""}</span>
                 </button>
                 <button
                     type='button'
-                    className={`w-fit flex items-center gap-3 text-xs text-zinc-300`}
+                    className='flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-[11px] transition-colors disabled:opacity-30'
                     onClick={() => swiper?.slideNext()}
+                    disabled={swiperIndex === shades.length - 1}
+                    style={{ color: swiperIndex < shades.length - 1 ? shadeColorMap[shades[swiperIndex + 1]] : undefined }}
                 >
-                    {shades[swiperIndex + 1]}
-                    <FaChevronDown
-                        className={`${
-                            swiperIndex === 6 ? "text-white/50" : "text-white"
-                        }`}
-                    />
+                    <span className='min-w-[60px] sm:min-w-[80px] text-right'>{shades[swiperIndex + 1] || ""}</span>
+                    <FaChevronDown />
                 </button>
             </div>
         </>

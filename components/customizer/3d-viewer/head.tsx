@@ -26,21 +26,27 @@ const Head = () => {
     return (
         <div
             id='head'
-            className='w-full text-center mb-2 flex justify-center items-center z-10 absolute bottom-0'
+            className='w-full mb-3 flex justify-center items-center z-10 absolute bottom-0'
         >
-            <FaChevronLeft
-                className={`${
-                    part === "Capsule" ? "text-[#dddddd]" : "text-black"
-                }`}
-                onClick={prev}
-            />
-            <b className='text-black mx-4 text-sm'>{part}</b>
-            <FaChevronRight
-                className={`${
-                    part === "Bottom Handle" ? "text-[#dddddd]" : "text-black"
-                }`}
-                onClick={next}
-            />
+            <div className='flex items-center gap-0.5 sm:gap-1 bg-white/[0.06] backdrop-blur-md rounded-full px-0.5 sm:px-1 py-0.5 sm:py-1 border border-white/[0.08]'>
+                <button
+                    onClick={prev}
+                    disabled={part === "Capsule"}
+                    className='w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center transition-all disabled:opacity-20 hover:bg-white/10'
+                >
+                    <FaChevronLeft className='w-2.5 h-2.5 sm:w-3 sm:h-3 text-white/80' />
+                </button>
+                <span className='text-white text-[10px] sm:text-xs font-medium px-2 sm:px-3 min-w-[80px] sm:min-w-[100px] text-center'>
+                    {part}
+                </span>
+                <button
+                    onClick={next}
+                    disabled={part === "Bottom Handle"}
+                    className='w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center transition-all disabled:opacity-20 hover:bg-white/10'
+                >
+                    <FaChevronRight className='w-2.5 h-2.5 sm:w-3 sm:h-3 text-white/80' />
+                </button>
+            </div>
         </div>
     )
 }

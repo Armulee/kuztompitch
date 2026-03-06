@@ -1,9 +1,16 @@
 "use client"
 
 import { Canvas } from "@react-three/fiber"
-import { Suspense } from "react"
+import { Suspense, useContext } from "react"
 import { ContactShadows, Environment, OrbitControls } from "@react-three/drei"
 import Capture from "./capture"
+import { CustomizeContext } from "../provider"
+
+function SmartOrbitControls({ noOrbit }: { noOrbit: boolean }) {
+    const context = useContext(CustomizeContext)
+    const isDragging = context?.isDraggingDecal ?? false
+    return <OrbitControls enabled={!noOrbit && !isDragging} />
+}
 
 type ViewerProps = {
     noOrbit?: boolean
@@ -13,7 +20,7 @@ type ViewerProps = {
 }
 
 const Viewer = ({
-    className = "bg-[#efefef]",
+    className = "bg-gradient-to-b from-[#141418] via-[#18181c] to-[#0a0a0a]",
     children,
     position,
     noOrbit = false,
@@ -29,29 +36,17 @@ const Viewer = ({
             shadows
         >
             <Suspense fallback={null}>
-                <ambientLight intensity={0.6} />
-                {/* Key Light */}
+                <ambientLight intensity={0.7} />
                 <directionalLight
                     position={[5, 5, 5]}
-                    intensity={2}
+                    intensity={2.2}
                     castShadow
-                    // shadow-mapSize-width={2048}
-                    // shadow-mapSize-height={2048}
-                    // shadow-camera-near={0.5}
-                    // shadow-camera-far={20}
-                    // shadow-camera-left={-10}
-                    // shadow-camera-right={10}
-                    // shadow-camera-top={10}
-                    // shadow-camera-bottom={-10}
                 />
-
-                {/* Fill Light */}
                 <directionalLight
                     position={[-5, 3, 10]}
                     intensity={2.8}
                     castShadow
                 />
-                {/* Dim Light */}
                 <directionalLight
                     position={[0, 5, -10]}
                     intensity={2}
@@ -60,19 +55,17 @@ const Viewer = ({
 
                 {children}
 
-                {/* Optional: Contact shadows for soft base shadows */}
                 <ContactShadows
                     position={[0, -1.5, 0]}
-                    opacity={0.4}
+                    opacity={0.5}
                     scale={10}
-                    blur={2}
+                    blur={2.5}
                     far={5}
                 />
 
-                {/* Optional: HDR environment reflections */}
                 <Environment preset='studio' />
 
-                <OrbitControls enabled={!noOrbit} />
+                <SmartOrbitControls noOrbit={noOrbit} />
 
                 <Capture />
             </Suspense>

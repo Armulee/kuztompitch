@@ -197,6 +197,7 @@ const useProviderSetup = () => {
         }
     }
     const [editLogo, setEditLogo] = useState<boolean>(false)
+    const [isDraggingDecal, setIsDraggingDecal] = useState<boolean>(false)
     const [bgOffsetY, setBgOffsetY] = useState<number>(-260)
     const [capturing, setCapturing] = useState<boolean>(false)
     const [snapshot, setSnapshot] = useState<string>("")
@@ -251,6 +252,8 @@ const useProviderSetup = () => {
         setBgOffsetY,
         model,
         setModel,
+        isDraggingDecal,
+        setIsDraggingDecal,
     }
 
     return value

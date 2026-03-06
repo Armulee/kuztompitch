@@ -23,6 +23,16 @@ const HomePage = () => {
         if (bottomHandle) {
             localStorage.removeItem("bottomHandle")
         }
+
+        if (window.location.hash) {
+            const id = window.location.hash.slice(1)
+            setTimeout(() => {
+                const section = document.getElementById(id)
+                if (section) {
+                    section.scrollIntoView({ behavior: "smooth", block: "start" })
+                }
+            }, 300)
+        }
     }, [])
 
     return (

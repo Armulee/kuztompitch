@@ -9,6 +9,10 @@ import {
     FaUser,
 } from "react-icons/fa6"
 
+const inputClass = 'w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:ring-2 focus:ring-accent-purple/50 focus:border-accent-purple/50 outline-none transition-all'
+const iconClass = 'absolute left-3 top-3 h-4 w-4 text-zinc-500'
+const labelClass = 'block text-sm font-medium text-zinc-300'
+
 const Address = ({
     setFullName,
     setEmail,
@@ -34,30 +38,27 @@ const Address = ({
     }, [addr, subDistrict, district, province, postal, setAddress])
 
     return (
-        <div className='bg-white rounded-xl shadow-sm border border-slate-200'>
-            <div className='p-6 border-b border-slate-200'>
-                <h2 className='flex items-center gap-2 text-xl font-semibold text-slate-900'>
-                    <FaUser className='h-5 w-5 text-purple-600' />
+        <div className='bg-surface-light rounded-2xl border border-white/[0.06]'>
+            <div className='p-6 border-b border-white/[0.06]'>
+                <h2 className='flex items-center gap-2 text-xl font-semibold text-white'>
+                    <FaUser className='h-5 w-5 text-accent-purple' />
                     Delivery Details
                 </h2>
             </div>
             <div className='p-6 space-y-6'>
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                     <div className='space-y-2'>
-                        <label
-                            htmlFor='name'
-                            className='block text-sm font-medium text-slate-700'
-                        >
-                            Full Name <span className='text-red-500'>*</span>
+                        <label htmlFor='name' className={labelClass}>
+                            Full Name <span className='text-red-400'>*</span>
                         </label>
                         <div className='relative'>
-                            <FaUser className='absolute left-3 top-3 h-4 w-4 text-slate-400' />
+                            <FaUser className={iconClass} />
                             <input
                                 required
                                 id='name'
                                 name='fullName'
                                 type='text'
-                                className='w-full pl-10 pr-4 py-2 border text-slate-700 border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-colors'
+                                className={inputClass}
                                 placeholder='Enter your full name'
                                 onChange={(e) => setFullName(e.target.value)}
                             />
@@ -65,21 +66,17 @@ const Address = ({
                     </div>
 
                     <div className='space-y-2'>
-                        <label
-                            htmlFor='email'
-                            className='block text-sm font-medium text-slate-700'
-                        >
-                            Email Address{" "}
-                            <span className='text-red-500'>*</span>
+                        <label htmlFor='email' className={labelClass}>
+                            Email Address <span className='text-red-400'>*</span>
                         </label>
                         <div className='relative'>
-                            <FaEnvelope className='absolute left-3 top-3 h-4 w-4 text-slate-400' />
+                            <FaEnvelope className={iconClass} />
                             <input
                                 required
                                 id='email'
                                 name='email'
                                 type='email'
-                                className='w-full pl-10 pr-4 py-2 text-slate-700 border border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-colors'
+                                className={inputClass}
                                 placeholder='your@email.com'
                                 onChange={(e) => setEmail(e.target.value)}
                             />
@@ -87,20 +84,17 @@ const Address = ({
                     </div>
 
                     <div className='space-y-2'>
-                        <label
-                            htmlFor='phone'
-                            className='block text-sm font-medium text-slate-700'
-                        >
-                            Phone Number <span className='text-red-500'>*</span>
+                        <label htmlFor='phone' className={labelClass}>
+                            Phone Number <span className='text-red-400'>*</span>
                         </label>
                         <div className='relative'>
-                            <FaPhone className='absolute left-3 top-3 h-4 w-4 text-slate-400' />
+                            <FaPhone className={iconClass} />
                             <input
                                 required
                                 id='phone'
                                 name='telephone'
                                 type='tel'
-                                className='w-full pl-10 pr-4 py-2 text-slate-700 border border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-colors'
+                                className={inputClass}
                                 placeholder='0XX-XXX-XXXX'
                                 onChange={(e) => setTelephone(e.target.value)}
                             />
@@ -108,20 +102,17 @@ const Address = ({
                     </div>
 
                     <div className='space-y-2'>
-                        <label
-                            htmlFor='address'
-                            className='block text-sm font-medium text-slate-700'
-                        >
-                            Address <span className='text-red-500'>*</span>
+                        <label htmlFor='address' className={labelClass}>
+                            Address <span className='text-red-400'>*</span>
                         </label>
                         <div className='relative'>
-                            <FaRoad className='absolute left-3 top-3 h-4 w-4 text-slate-400' />
+                            <FaRoad className={iconClass} />
                             <input
                                 required
                                 id='address'
                                 name='address'
                                 type='text'
-                                className='w-full pl-10 pr-4 py-2 text-slate-700 border border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-colors'
+                                className={inputClass}
                                 placeholder='Address'
                                 onChange={(e) => setAddr(e.target.value)}
                             />
@@ -129,20 +120,17 @@ const Address = ({
                     </div>
 
                     <div className='space-y-2'>
-                        <label
-                            htmlFor='district'
-                            className='block text-sm font-medium text-slate-700'
-                        >
-                            District <span className='text-red-500'>*</span>
+                        <label htmlFor='district' className={labelClass}>
+                            District <span className='text-red-400'>*</span>
                         </label>
                         <div className='relative'>
-                            <FaMapPin className='absolute left-3 top-3 h-4 w-4 text-slate-400' />
+                            <FaMapPin className={iconClass} />
                             <input
                                 required
                                 id='district'
                                 name='district'
                                 type='text'
-                                className='w-full pl-10 pr-4 py-2 text-slate-700 border border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-colors'
+                                className={inputClass}
                                 placeholder='District'
                                 onChange={(e) => setDistrict(e.target.value)}
                             />
@@ -150,20 +138,17 @@ const Address = ({
                     </div>
 
                     <div className='space-y-2'>
-                        <label
-                            htmlFor='subDistrict'
-                            className='block text-sm font-medium text-slate-700'
-                        >
-                            Sub district <span className='text-red-500'>*</span>
+                        <label htmlFor='subDistrict' className={labelClass}>
+                            Sub district <span className='text-red-400'>*</span>
                         </label>
                         <div className='relative'>
-                            <FaMapPin className='absolute left-3 top-3 h-4 w-4 text-slate-400' />
+                            <FaMapPin className={iconClass} />
                             <input
                                 required
                                 id='subDstrict'
                                 name='subDistrict'
                                 type='text'
-                                className='w-full pl-10 pr-4 py-2 text-slate-700 border border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-colors'
+                                className={inputClass}
                                 placeholder='Sub District'
                                 onChange={(e) => setSubDistrict(e.target.value)}
                             />
@@ -171,20 +156,17 @@ const Address = ({
                     </div>
 
                     <div className='space-y-2'>
-                        <label
-                            htmlFor='province'
-                            className='block text-sm font-medium text-slate-700'
-                        >
-                            Province <span className='text-red-500'>*</span>
+                        <label htmlFor='province' className={labelClass}>
+                            Province <span className='text-red-400'>*</span>
                         </label>
                         <div className='relative'>
-                            <FaMapMarkerAlt className='absolute left-3 top-3 h-4 w-4 text-slate-400' />
+                            <FaMapMarkerAlt className={iconClass} />
                             <input
                                 required
                                 id='province'
                                 name='province'
                                 type='text'
-                                className='w-full pl-10 pr-4 py-2 text-slate-700 border border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-colors'
+                                className={inputClass}
                                 placeholder='Bangkok'
                                 onChange={(e) => setProvince(e.target.value)}
                             />
@@ -192,19 +174,16 @@ const Address = ({
                     </div>
 
                     <div className='space-y-2'>
-                        <label
-                            htmlFor='postal'
-                            className='block text-sm font-medium text-slate-700'
-                        >
-                            Postal Code <span className='text-red-500'>*</span>
+                        <label htmlFor='postal' className={labelClass}>
+                            Postal Code <span className='text-red-400'>*</span>
                         </label>
                         <div className='relative'>
-                            <FaHashtag className='absolute left-3 top-3 h-4 w-4 text-slate-400' />
+                            <FaHashtag className={iconClass} />
                             <input
                                 required
                                 id='postal'
                                 type='text'
-                                className='w-full pl-10 pr-4 py-2 text-slate-700 border border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-colors'
+                                className={inputClass}
                                 placeholder='10110'
                                 onChange={(e) => setPostal(e.target.value)}
                             />

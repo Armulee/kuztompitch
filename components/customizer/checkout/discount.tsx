@@ -10,14 +10,12 @@ const Discount = ({
     const [discountCode, setDiscountCode] = React.useState<string>("")
     const [error, setError] = React.useState<boolean | null>(null)
     useEffect(() => {
-        // start a timer whenever discountCode changes
         const handler = setTimeout(() => {
             if (!discountCode) {
                 setError(null)
                 setDiscount(0)
                 return
             }
-            // this will only run 500 ms *after* the last keypress
             fetch(`/api/discount/${encodeURIComponent(discountCode)}`)
                 .then((res) => res.json())
                 .then((data) => {
@@ -35,31 +33,30 @@ const Discount = ({
                 })
         }, 500)
 
-        // if discountCode changes *again* before the 500 ms is up, clear this timer
         return () => clearTimeout(handler)
     }, [discountCode, setDiscount])
 
     return (
-        <div className='bg-white rounded-xl shadow-sm border border-slate-200'>
-            <div className='p-6 border-b border-slate-200'>
-                <h2 className='flex items-center gap-2 text-xl font-semibold text-slate-900'>
-                    <MdDiscount className='h-5 w-5 text-orange-600' />
+        <div className='bg-surface-light rounded-2xl border border-white/[0.06]'>
+            <div className='p-6 border-b border-white/[0.06]'>
+                <h2 className='flex items-center gap-2 text-xl font-semibold text-white'>
+                    <MdDiscount className='h-5 w-5 text-accent-cyan' />
                     Discount
                 </h2>
             </div>
             <div className='p-6'>
                 <label
-                    htmlFor='postal'
-                    className='block text-sm font-medium text-slate-700'
+                    htmlFor='discount'
+                    className='block text-sm font-medium text-zinc-300 mb-2'
                 >
                     Discount Code
                 </label>
                 <div className='relative'>
-                    <MdDiscount className='absolute left-3 top-3 h-4 w-4 text-zinc-400' />
+                    <MdDiscount className='absolute left-3 top-3 h-4 w-4 text-zinc-500' />
                     <input
                         id='discount'
                         type='text'
-                        className='w-full pl-10 pr-4 py-2 text-slate-700 border border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-colors'
+                        className='w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:ring-2 focus:ring-accent-purple/50 focus:border-accent-purple/50 outline-none transition-all'
                         placeholder='EXAMPLE100'
                         onChange={(e) => setDiscountCode(e.target.value)}
                     />
@@ -68,7 +65,7 @@ const Discount = ({
                             <FaX className='w-3 h-3' />
                         </div>
                     ) : (
-                        <div className='absolute top-1/2 -translate-y-1/2 right-4 rounded-full bg-green-500 text-white w-5 h-5 flex items-center justify-center text-center'>
+                        <div className='absolute top-1/2 -translate-y-1/2 right-4 rounded-full bg-emerald-500 text-white w-5 h-5 flex items-center justify-center text-center'>
                             <FaCheck className='w-3 h-3' />
                         </div>
                     )}

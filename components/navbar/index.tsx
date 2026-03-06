@@ -74,6 +74,11 @@ export default function Navbar() {
     const [active, setActive] = useState<string>("")
 
     const pathname = usePathname()
+
+    useEffect(() => {
+        setMenu(false)
+    }, [pathname])
+
     if (pathname.includes("/customize")) {
         return
     }
@@ -111,6 +116,8 @@ export const smoothScrollTo = (id: string) => {
 
     const section = document.getElementById(id)
     if (section) {
-        smoothScroll(section.offsetTop - 80) // slower, smooth scroll
+        smoothScroll(section.offsetTop - 80)
+    } else if (window.location.pathname !== "/") {
+        window.location.href = `/#${id}`
     }
 }

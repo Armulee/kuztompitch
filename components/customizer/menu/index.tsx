@@ -27,7 +27,6 @@ const Menu = () => {
         setColorName,
         setIsRotating,
         editLogo,
-        isIphone,
     } = useCustomizeContext()
 
     const [color, setColor] = useState<Color>(null)
@@ -119,7 +118,7 @@ const Menu = () => {
                 }
             }
         },
-        [part, style, setCapsule, setTopHandle, setBottomHandle, setIsRotating]
+        [part, style, setCapsule, setTopHandle, setBottomHandle, setIsRotating],
     )
 
     // // when click the color
@@ -150,8 +149,8 @@ const Menu = () => {
     ])
 
     return (
-        <div className={`h-full bg-black relative`}>
-            <div className={`${isIphone ? "p-2" : "p-0"} h-full `}>
+        <div className='bg-[#0a0a0a] relative'>
+            <div className={`p-4`}>
                 {!editLogo ? <Colors setColor={setColor} /> : <EditLogo />}
             </div>
         </div>

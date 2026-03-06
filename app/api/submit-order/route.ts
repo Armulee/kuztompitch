@@ -20,7 +20,7 @@ export async function POST(req: Request) {
         console.error("[submit-order] Handler exception", err)
         return NextResponse.json(
             { success: false, message: "Internal Server Error" },
-            { status: 500 }
+            { status: 500 },
         )
     }
 }

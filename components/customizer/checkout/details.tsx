@@ -1,9 +1,7 @@
-// import { MdDiscount } from "react-icons/md"
 import Image from "next/image"
 import { useCustomizeContext } from "../provider"
 import Skeleton from "react-loading-skeleton"
 import { FaBox } from "react-icons/fa6"
-// import { FaMapPin } from "react-icons/fa6"
 
 const models = ["SM58", "BETA58", "KSM8", "NXN8"]
 const Details = () => {
@@ -19,82 +17,82 @@ const Details = () => {
     } = useCustomizeContext()
     const parts = [capsule, topHandle, bottomHandle]
     return (
-        <div className='bg-white rounded-xl shadow-sm border border-slate-200'>
-            <div className='p-6 border-b border-slate-200'>
-                <h2 className='flex items-center gap-2 text-xl font-semibold text-slate-900'>
-                    <FaBox className='h-5 w-5 text-blue-600' />
+        <div className='bg-surface-light rounded-2xl border border-white/[0.06]'>
+            <div className='p-6 border-b border-white/[0.06]'>
+                <h2 className='flex items-center gap-2 text-xl font-semibold text-white'>
+                    <FaBox className='h-5 w-5 text-accent-purple' />
                     Your Custom Microphone
                 </h2>
             </div>
-            <div className='p-6'>
-                <div className='flex gap-6'>
-                    <div className='relative'>
+            <div className='p-4 sm:p-6'>
+                <div className='flex flex-col sm:flex-row gap-4 sm:gap-6'>
+                    <div className='relative mx-auto sm:mx-0 flex-shrink-0'>
                         <Image
                             width={150}
                             height={200}
-                            className='h-[200px] w-[150px] object-cover bg-white border border-slate-200 rounded-xl shadow-sm'
+                            className='h-[160px] w-[120px] sm:h-[200px] sm:w-[150px] object-cover bg-surface border border-white/10 rounded-xl'
                             src={snapshot || "/placeholder.svg"}
-                            alt='Custom Shure SM50'
+                            alt='Custom Microphone'
                         />
-                        <span className='absolute -top-2 -right-2 bg-blue-600 text-white text-xs font-semibold px-2 py-1 rounded-full'>
+                        <span className='absolute -top-2 -right-2 bg-gradient-accent text-white text-[10px] sm:text-xs font-semibold px-2 py-0.5 sm:py-1 rounded-full'>
                             Custom
                         </span>
                     </div>
 
-                    <div className='flex-1 space-y-4'>
+                    <div className='flex-1 space-y-3 sm:space-y-4 text-center sm:text-left'>
                         <div>
-                            <div className='w-[180px]'>
-                                <label className='mr-2 text-black'>
+                            <div className='w-full sm:w-[180px]'>
+                                <label className='mr-2 text-zinc-300 text-sm'>
                                     Select your model:{" "}
-                                    <span className='text-red-500'>*</span>
+                                    <span className='text-red-400'>*</span>
                                 </label>
 
                                 <select
                                     required
                                     onChange={(e) => setModel(e.target.value)}
                                     value={model}
-                                    className='text-slate-900 mb-2 border border-black border-2 rounded'
+                                    className='text-white mb-2 bg-white/5 border border-white/10 rounded-lg px-2 py-1 outline-none focus:border-accent-purple transition-colors'
                                 >
                                     {models.map((m, index) => (
-                                        <option key={index} value={m}>
+                                        <option key={index} value={m} className='bg-surface-light text-white'>
                                             {m}
                                         </option>
                                     ))}
                                 </select>
                             </div>
-                            <p className='text-slate-600'>
+                            <p className='text-zinc-400 text-sm'>
                                 Professional Dynamic Microphone
                             </p>
                         </div>
 
-                        <div className='pt-2'>
-                            <span className='text-3xl font-bold text-slate-900'>
-                                {pricing.toLocaleString()}฿
+                        <div className='pt-1 sm:pt-2'>
+                            <span className='text-2xl sm:text-3xl font-bold gradient-text'>
+                                {pricing.toLocaleString()}&#3647;
                             </span>
                         </div>
                     </div>
                 </div>
 
                 <div className='space-y-3 mt-4'>
-                    <h4 className='font-semibold text-slate-900'>
+                    <h4 className='font-semibold text-white'>
                         Customizations:
                     </h4>
                     {loading ? (
                         <div className='space-y-2'>
-                            <Skeleton count={3} height={20} />
+                            <Skeleton count={3} height={20} baseColor='#1a1a1a' highlightColor='#2a2a2a' />
                         </div>
                     ) : (
                         <div className='space-y-2'>
                             {parts.map((part, index) => (
                                 <div
                                     key={index}
-                                    className='w-fit flex items-center gap-3 p-2 bg-slate-50 rounded-lg'
+                                    className='w-fit flex items-center gap-3 p-2 bg-white/5 rounded-lg'
                                 >
-                                    <span className='font-medium text-slate-700 min-w-[80px]'>
+                                    <span className='font-medium text-zinc-300 min-w-[80px] text-sm'>
                                         {part.name}:
                                     </span>
                                     <div
-                                        className='w-6 h-6 rounded-full border-2 border-white shadow-sm'
+                                        className='w-6 h-6 rounded-full border-2 border-white/20'
                                         style={{
                                             backgroundColor: Array.isArray(
                                                 part.displayColor
@@ -103,7 +101,7 @@ const Details = () => {
                                                 : part.displayColor,
                                         }}
                                     />
-                                    <span className='text-slate-600'>
+                                    <span className='text-zinc-400 text-sm'>
                                         {part.colorName}
                                     </span>
                                 </div>

@@ -15,22 +15,17 @@ export default function Checkout() {
     const [discount, setDiscount] = useState<number>(0)
     const [totalDiscount, setTotalDiscount] = useState<number>(0)
 
-    // make a total discount
     useEffect(() => {
         setTotalDiscount(pricing * discount)
     }, [discount, pricing])
 
-    // get the total value by model price, deducted with discount and plus delivery fee
     useEffect(() => {
         setTotal(pricing - totalDiscount + 100)
     }, [pricing, totalDiscount])
 
     return (
-        <section
-            className='bg-[#efefef] relative'
-            // 'bg-gradient-to-br from-slate-50 to-slate-100'
-        >
-            <div className='mx-auto max-w-4xl min-h-screen p-4'>
+        <section className='bg-[#0a0a0a] relative'>
+            <div className='mx-auto max-w-4xl min-h-screen px-3 sm:px-4 py-4'>
                 {submitted ? (
                     <PaymentInfo orderNumber={orderNumber} total={total} />
                 ) : (
@@ -46,10 +41,10 @@ export default function Checkout() {
             </div>
 
             {loading && (
-                <div className='fixed inset-0 z-50 flex items-center justify-center bg-white/70 backdrop-blur-sm'>
-                    <div className='text-center text-gray-800 font-medium'>
-                        <ClipLoader />
-                        <p>Submitting your order…</p>
+                <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm'>
+                    <div className='text-center text-white font-medium'>
+                        <ClipLoader color='#8b5cf6' />
+                        <p className='mt-3 text-zinc-300'>Submitting your order...</p>
                     </div>
                 </div>
             )}

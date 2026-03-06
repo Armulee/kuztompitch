@@ -1,35 +1,50 @@
 import Link from "next/link"
 import SocialMedias from "./social-medias"
+import { smoothScrollTo } from "../navbar"
 
 const Hero = () => {
     return (
         <section
             id='home'
-            className='w-full h-[100vh] overflow-hidden flex flex-col justify-center items-center relative'
+            className='w-full h-[100dvh] overflow-hidden flex flex-col justify-center items-center relative'
         >
+            {/* Decorative gradient orbs */}
+            <div className='absolute top-[10%] left-[15%] w-[500px] h-[500px] rounded-full bg-accent-purple/10 blur-[120px] animate-glow-pulse pointer-events-none' />
+            <div
+                className='absolute bottom-[20%] right-[10%] w-[400px] h-[400px] rounded-full bg-accent-cyan/10 blur-[100px] animate-glow-pulse pointer-events-none'
+                style={{ animationDelay: "2s" }}
+            />
+
             <div className='z-30 absolute top-[18%] md:top-1/2 md:left-1/2 md:-translate-y-1/2'>
-                <div className='w-full flex-col justify-center items-center mb-4'>
-                    <h1 className='text-[40px] md:text-5xl lg:text-7xl text-center md:text-start text-white'>
+                <div className='w-full flex-col justify-center items-center mb-6'>
+                    <h1 className='text-[44px] md:text-6xl lg:text-8xl text-center md:text-start font-display text-white leading-tight tracking-tight'>
                         Kuztom Pitch
                     </h1>
-                    <h5 className='text-slate-400 text-[20px] md:text-2xl lg:text-4xl text-center md:text-start'>
+                    <h5 className='text-zinc-400 text-[18px] md:text-2xl lg:text-3xl text-center md:text-start tracking-wide mt-2'>
                         Band Equipment Customize
                     </h5>
                 </div>
-                <div className='flex justify-center items-center gap-8'>
+                <div className='flex justify-center md:justify-start items-center gap-4'>
                     <Link href={"/customize"}>
-                        <button className='rounded-full bg-slate-500 px-8 py-2 text-white'>
+                        <button className='rounded-full bg-gradient-accent px-8 py-3 text-white font-medium hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] transition-all duration-300 hover:scale-105'>
                             Try Customize
                         </button>
                     </Link>
-                    <SocialMedias className='hidden absolute right-4 top-1/2 md:flex relative translate-y-0 z-50' />
+                    <button
+                        onClick={() => smoothScrollTo("about-us")}
+                        className='rounded-full px-8 py-3 text-white/80 font-medium border border-white/20 hover:border-white/40 hover:text-white transition-all duration-300 backdrop-blur-sm'
+                    >
+                        Learn More
+                    </button>
                 </div>
             </div>
-            <SocialMedias className='md:hidden absolute right-4 top-1/2 -translate-y-1/2 flex-col z-30' />
 
-            {/* Video Overlay  */}
-            <div className='bg-black/20 md:bg-black/20 absolute w-full h-full z-20' />
-            {/* MP4 */}
+            {/* Social medias at bottom center */}
+            <SocialMedias className='absolute bottom-8 right-4 -translate-x-1/2 z-30 flex-col' />
+
+            {/* Video Overlay */}
+            <div className='absolute w-full h-full z-20 bg-gradient-to-b from-[#050505]/60 via-transparent to-[#050505]' />
+            {/* Video */}
             <video
                 className='absolute -bottom-1/2 right-10 translate-x-0 md:left-1/4 md:-bottom-[25%] md:-translate-x-1/2 w-full h-[120vh] object-cover -z-10'
                 autoPlay
@@ -39,7 +54,6 @@ const Hero = () => {
             >
                 <source src='/assets/hero.webm' type='video/webm' />
             </video>
-            {/* <div className='absolute bottom-0 w-full h-[70px] bg-gradient-to-t from-white to-black opacity-50 -z-20' /> */}
         </section>
     )
 }

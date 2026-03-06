@@ -2,32 +2,31 @@ import { FaCreditCard } from "react-icons/fa6"
 
 const Payment = () => {
     return (
-        <div className='bg-white rounded-xl shadow-sm border border-slate-200'>
-            <div className='p-6 border-b border-slate-200'>
-                <h2 className='flex items-center gap-2 text-xl font-semibold text-slate-900'>
-                    <FaCreditCard className='h-5 w-5 text-orange-600' />
+        <div className='bg-surface-light rounded-2xl border border-white/[0.06]'>
+            <div className='p-6 border-b border-white/[0.06]'>
+                <h2 className='flex items-center gap-2 text-xl font-semibold text-white'>
+                    <FaCreditCard className='h-5 w-5 text-amber-400' />
                     Payment Method
                 </h2>
             </div>
             <div className='p-6'>
-                <label className='flex items-center space-x-3 p-4 border border-slate-200 rounded-xl hover:border-orange-300 transition-colors cursor-pointer'>
+                <label className='flex items-center space-x-3 p-4 border border-white/10 rounded-xl hover:border-amber-500/30 transition-colors cursor-pointer bg-white/[0.02]'>
                     <input
                         type='radio'
                         name='payment'
                         value='bank-transfer'
                         defaultChecked={true}
-                        // onChange={(e) => setSelectedPayment(e.target.value)}
-                        className='w-4 h-4 text-orange-600 border-gray-300 focus:ring-orange-500'
+                        className='w-4 h-4 text-amber-500 border-zinc-600 focus:ring-amber-500 bg-transparent'
                     />
                     <div className='flex-1'>
-                        <div className='font-semibold text-slate-900'>
+                        <div className='font-semibold text-white'>
                             Bank Transfer
                         </div>
-                        <p className='text-sm text-slate-600'>
+                        <p className='text-sm text-zinc-400'>
                             Please show us your payment slip when complete
                         </p>
                     </div>
-                    <FaCreditCard className='h-5 w-5 text-orange-600' />
+                    <FaCreditCard className='h-5 w-5 text-amber-400' />
                 </label>
             </div>
         </div>

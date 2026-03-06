@@ -43,45 +43,34 @@ const PaginationDots = ({
     if (totalSlides <= 1) return null
 
     const getVisibleDots = () => {
-        const delta = 2 // Show 2 dots on each side of active = 4 total visible around active
+        const delta = 2
         const dots: (number | string)[] = []
-
-        // Always show first dot
         dots.push(0)
-
-        // Calculate range around current slide
         const start = Math.max(1, currentSlide - delta)
         const end = Math.min(totalSlides - 2, currentSlide + delta)
 
-        // Add ellipsis before if there's a gap
         if (start > 2) {
             dots.push("...")
         } else if (start === 2) {
-            // Show dot 1 if we're close enough
             dots.push(1)
         }
 
-        // Add dots in range around current slide
         for (let i = start; i <= end; i++) {
             if (i > 0 && i < totalSlides - 1) {
                 dots.push(i)
             }
         }
 
-        // Add ellipsis after if there's a gap
         if (end < totalSlides - 3) {
             dots.push("...")
         } else if (end === totalSlides - 3 && totalSlides > 3) {
-            // Show second-to-last if we're close enough
             dots.push(totalSlides - 2)
         }
 
-        // Always show last dot if there's more than one slide
         if (totalSlides > 1) {
             dots.push(totalSlides - 1)
         }
 
-        // Remove duplicates while preserving order
         const seen = new Set()
         return dots.filter((dot) => {
             if (dot === "...") return true
@@ -94,13 +83,13 @@ const PaginationDots = ({
     const visibleDots = getVisibleDots()
 
     return (
-        <div className='flex justify-center items-center mt-6 space-x-2'>
+        <div className='flex justify-center items-center mt-8 space-x-2'>
             {visibleDots.map((dot, index) => {
                 if (dot === "...") {
                     return (
                         <span
                             key={`ellipsis-${index}`}
-                            className='px-2 text-gray-400 text-sm'
+                            className='px-2 text-zinc-600 text-sm'
                         >
                             ...
                         </span>
@@ -116,8 +105,8 @@ const PaginationDots = ({
                         onClick={() => onDotClick(dotIndex)}
                         className={`transition-all duration-300 rounded-full ${
                             isActive
-                                ? "w-8 h-2 bg-gradient-to-r from-purple-500 to-pink-500"
-                                : "w-2 h-2 bg-gray-600 hover:bg-gray-500"
+                                ? "w-8 h-2 bg-gradient-accent"
+                                : "w-2 h-2 bg-zinc-700 hover:bg-zinc-600"
                         }`}
                         aria-label={`Go to slide ${dotIndex + 1}`}
                     />
@@ -147,38 +136,51 @@ const News = () => {
                     },
                 })
 
-                const data: GASResponse | { success: false; message: string; details?: string; statusCode?: number; rawHtml?: string } = await response.json()
+                const data:
+                    | GASResponse
+                    | {
+                          success: false
+                          message: string
+                          details?: string
+                          statusCode?: number
+                          rawHtml?: string
+                      } = await response.json()
 
                 if (!response.ok || !data.success) {
-                    const errorData = data as { success: false; message: string; details?: string; statusCode?: number; rawHtml?: string }
-                    let errorMessage = errorData.message || "Failed to fetch Instagram posts"
-                    
+                    const errorData = data as {
+                        success: false
+                        message: string
+                        details?: string
+                        statusCode?: number
+                        rawHtml?: string
+                    }
+                    let errorMessage =
+                        errorData.message || "Failed to fetch Instagram posts"
+
                     if (errorData.details) {
                         errorMessage = `${errorMessage}\n${errorData.details}`
                     }
-                    
+
                     if (errorData.rawHtml) {
                         errorMessage = `${errorMessage}\n\nRaw HTML (first 1000 chars):\n${errorData.rawHtml}`
                     }
-                    
+
                     throw new Error(errorMessage)
                 }
 
                 if (data.success && data.posts) {
-                    // Map GAS response to InstagramPostType
                     const mappedPosts: InstagramPostType[] = data.posts.map(
                         (post) => ({
                             id: post.id,
                             imageUrl: post.media_url,
                             caption: post.caption || "",
                             username: "kuztompitch",
-                            userAvatar:
-                                "/assets/dummy-profile-pic.jpg",
-                            likes: 0, // Default value since GAS doesn't provide likes
+                            userAvatar: "/assets/dummy-profile-pic.jpg",
+                            likes: 0,
                             timestamp: post.timestamp || "",
                             permalink: post.permalink,
                             type: post.type || "IMAGE",
-                        })
+                        }),
                     )
 
                     setPosts(mappedPosts)
@@ -190,7 +192,7 @@ const News = () => {
                 setError(
                     err instanceof Error
                         ? err.message
-                        : "Failed to load Instagram posts"
+                        : "Failed to load Instagram posts",
                 )
             } finally {
                 setLoading(false)
@@ -215,13 +217,20 @@ const News = () => {
     }
 
     return (
-        <section className='py-16 bg-black'>
+        <section className='py-20 relative'>
+            <div className='absolute inset-0 pointer-events-none'>
+                <div className='absolute top-1/3 left-0 w-[500px] h-[500px] rounded-full bg-accent-purple/5 blur-[150px]' />
+            </div>
+
             <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-                <div className='text-center mb-12'>
-                    <h2 className='text-3xl font-bold text-white mb-4'>
+                <div className='text-center mb-14'>
+                    <span className='inline-block px-4 py-1.5 rounded-full text-xs font-medium tracking-wider uppercase bg-white/5 border border-white/10 text-accent-purple mb-4'>
+                        Our Feed
+                    </span>
+                    <h2 className='text-4xl font-bold gradient-text font-display mb-4'>
                         Latest from Our Instagram
                     </h2>
-                    <p className='text-lg text-slate-400'>
+                    <p className='text-lg text-zinc-400'>
                         Follow our journey and see our latest Kuztom Pitch
                         creations
                     </p>
@@ -229,16 +238,16 @@ const News = () => {
 
                 {loading ? (
                     <div className='flex justify-center items-center py-20'>
-                        <div className='animate-spin rounded-full h-12 w-12 border-4 border-gray-300 border-t-purple-500 border-r-pink-500'></div>
+                        <div className='animate-spin rounded-full h-12 w-12 border-2 border-transparent border-t-accent-purple border-r-accent-cyan'></div>
                     </div>
                 ) : error ? (
                     <div className='flex flex-col justify-center items-center py-20 px-4'>
                         <div className='max-w-2xl w-full'>
-                            <div className='bg-red-900/20 border border-red-500/50 rounded-lg p-6'>
+                            <div className='bg-red-500/10 border border-red-500/20 rounded-2xl p-6'>
                                 <h3 className='text-red-400 text-xl font-semibold mb-2'>
                                     Error Loading Instagram Posts
                                 </h3>
-                                <p className='text-red-300 text-sm whitespace-pre-wrap break-words'>
+                                <p className='text-red-300/80 text-sm whitespace-pre-wrap break-words'>
                                     {error}
                                 </p>
                             </div>
@@ -246,7 +255,7 @@ const News = () => {
                     </div>
                 ) : posts.length === 0 ? (
                     <div className='flex justify-center items-center py-20'>
-                        <div className='text-white text-lg'>
+                        <div className='text-zinc-400 text-lg'>
                             No posts available
                         </div>
                     </div>
@@ -282,8 +291,8 @@ const News = () => {
                         >
                             {posts.map((post, index) => (
                                 <SwiperSlide key={post.id}>
-                                    <InstagramPost 
-                                        post={post} 
+                                    <InstagramPost
+                                        post={post}
                                         isActive={currentSlide === index}
                                     />
                                 </SwiperSlide>
@@ -298,12 +307,12 @@ const News = () => {
                     </>
                 )}
 
-                <div className='text-center mt-8'>
+                <div className='text-center mt-10'>
                     <a
-                        href='https://instagram.com/kuztompitch_official'
+                        href='https://instagram.com/kuztompitch'
                         target='_blank'
                         rel='noopener noreferrer'
-                        className='inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-300'
+                        className='inline-flex items-center px-7 py-3 bg-gradient-accent text-white font-medium rounded-full hover:shadow-[0_0_25px_rgba(139,92,246,0.3)] transition-all duration-300 hover:scale-105'
                     >
                         <svg
                             className='w-5 h-5 mr-2 text-white'
