@@ -32,6 +32,7 @@ export default function MainCheckout({
         snapshot,
         logos,
         model,
+        clearCheckoutStorage,
     } = useCustomizeContext()
     const [fullName, setFullName] = useState<string>("")
     const [email, setEmail] = useState<string>("")
@@ -79,6 +80,7 @@ export default function MainCheckout({
 
             const result = await response.json()
             if (result.success) {
+                clearCheckoutStorage()
                 setSubmitted(true)
                 setOrderNumber(result.orderNumber)
             } else {

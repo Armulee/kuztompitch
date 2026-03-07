@@ -429,4 +429,4 @@ export function Microphone(props: GroupProps) {
     )
 }
 
-useGLTF.preload("assets/normal-microphone.glb")
+useGLTF.preload("/assets/normal-microphone.glb")

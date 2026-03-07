@@ -2,8 +2,14 @@ import { NextResponse } from "next/server"
 
 export async function POST(req: Request) {
     const data = await req.json()
-    const url =
-        "https://script.google.com/macros/s/REDACTED/exec"
+    const url = process.env.GOOGLE_SHEET_URL_APP_SCRIPT
+    if (!url) {
+        console.error("[submit-order] GOOGLE_SHEET_URL_APP_SCRIPT is not set")
+        return NextResponse.json(
+            { success: false, message: "Server configuration error" },
+            { status: 500 },
+        )
+    }
     try {
         const response = await fetch(url, {
             method: "POST",

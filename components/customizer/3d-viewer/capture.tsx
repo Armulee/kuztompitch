@@ -32,6 +32,13 @@ const Capture = () => {
                 const dataUrl = gl.domElement.toDataURL("image/png")
 
                 setSnapshot(dataUrl)
+                if (typeof window !== "undefined") {
+                    try {
+                        sessionStorage.setItem("checkout-snapshot", dataUrl)
+                    } catch {
+                        // QuotaExceededError - snapshot too large, skip persist
+                    }
+                }
                 setCapturing(false)
 
                 renderTarget.dispose()
