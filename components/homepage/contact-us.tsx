@@ -123,6 +123,35 @@ const ContactUs = () => {
                     <SocialMedias />
                 </div>
             </div>
+            
+            {/* Footer Links */}
+            <div className="mt-16 pt-8 border-t border-gray-700">
+                <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div className="text-gray-400 text-sm">
+                        © 2024 Kuztompitch. All rights reserved.
+                    </div>
+                    <div className="flex flex-wrap gap-6 text-sm">
+                        <a 
+                            href="/support" 
+                            className="text-gray-400 hover:text-white transition-colors"
+                        >
+                            Support
+                        </a>
+                        <a 
+                            href="/privacy-policy" 
+                            className="text-gray-400 hover:text-white transition-colors"
+                        >
+                            Privacy Policy
+                        </a>
+                        <a 
+                            href="/terms-of-service" 
+                            className="text-gray-400 hover:text-white transition-colors"
+                        >
+                            Terms of Service
+                        </a>
+                    </div>
+                </div>
+            </div>
         </section>
     )
 }
