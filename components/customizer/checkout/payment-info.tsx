@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation"
 import { FaInfoCircle, FaUniversity } from "react-icons/fa"
 import { FaArrowRight, FaChevronLeft } from "react-icons/fa6"
 import kbankLogo from "@/public/assets/kbank-logo.png"
-import { useCustomizeContext } from "../provider"
 
 export default function PaymentInfo({
     orderNumber,
@@ -14,7 +13,6 @@ export default function PaymentInfo({
     total: number
 }) {
     const router = useRouter()
-    const { pricing } = useCustomizeContext()
 
     return (
         <div className='min-h-screen'>
@@ -49,9 +47,7 @@ export default function PaymentInfo({
                 <div className='bg-surface-light rounded-2xl border border-white/[0.06] mb-6'>
                     <div className='p-6'>
                         <div className='flex justify-between items-center mb-4'>
-                            <span className='text-zinc-400'>
-                                Order Number:
-                            </span>
+                            <span className='text-zinc-400'>Order Number:</span>
                             <span className='font-semibold text-white'>
                                 {orderNumber}
                             </span>
@@ -94,9 +90,16 @@ export default function PaymentInfo({
                                         102-3-21860-3
                                     </span>
                                     <br />
-                                    <span className='text-zinc-400'>&#xe1a;&#xe08;&#xe01;. &#xe04;&#xe31;&#xe2a;&#xe15;&#xe49;&#xe2d;&#xe21; &#xe1e;&#xe34;&#xe17;&#xe0a;&#xe4c;</span>
+                                    <span className='text-zinc-400'>
+                                        &#xe1a;&#xe08;&#xe01;.
+                                        &#xe04;&#xe31;&#xe2a;&#xe15;&#xe49;&#xe2d;&#xe21;
+                                        &#xe1e;&#xe34;&#xe17;&#xe0a;&#xe4c;
+                                    </span>
                                     <br />
-                                    <span className='text-zinc-400'>&#xe40;&#xe14;&#xe2d;&#xe30;&#xe21;&#xe2d;&#xe25;&#xe25;&#xe4c; &#xe07;&#xe32;&#xe21;&#xe27;&#xe07;&#xe28;&#xe4c;&#xe27;&#xe32;&#xe19;</span>
+                                    <span className='text-zinc-400'>
+                                        &#xe40;&#xe14;&#xe2d;&#xe30;&#xe21;&#xe2d;&#xe25;&#xe25;&#xe4c;
+                                        &#xe07;&#xe32;&#xe21;&#xe27;&#xe07;&#xe28;&#xe4c;&#xe27;&#xe32;&#xe19;
+                                    </span>
                                 </p>
                             </div>
                         </div>
@@ -113,7 +116,9 @@ export default function PaymentInfo({
                             <ul className='text-sm text-amber-200/70 space-y-1'>
                                 <li>
                                     - Please transfer the exact amount:{" "}
-                                    <strong className='text-amber-200'>{pricing.toLocaleString()}&#3647;</strong>
+                                    <strong className='text-amber-200'>
+                                        {total.toLocaleString()}&#3647;
+                                    </strong>
                                 </li>
                                 <li>
                                     - Keep your payment slip for confirmation

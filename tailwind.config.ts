@@ -30,8 +30,13 @@ const config: Config = {
         "fade-in-up": "fadeInUp 0.6s ease-out forwards",
         "glow-pulse": "glowPulse 4s ease-in-out infinite",
         "float": "float 6s ease-in-out infinite",
+        "sparkle": "sparkle 1.5s ease-in-out infinite",
       },
       keyframes: {
+        sparkle: {
+          "0%, 100%": { opacity: "1", transform: "scale(1)" },
+          "50%": { opacity: "0.6", transform: "scale(1.15)" },
+        },
         fadeInUp: {
           "0%": { opacity: "0", transform: "translateY(30px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },

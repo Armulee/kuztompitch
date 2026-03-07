@@ -48,8 +48,10 @@ const Display = () => {
                         className='inline-flex gap-3 sm:gap-5 items-center px-4 sm:px-6 py-1.5 sm:py-2 border border-white/[0.06] rounded-b-2xl backdrop-blur-md'
                     >
                         <div className='flex flex-col items-center'>
-                            <span className='text-[6px] sm:text-[7px] text-zinc-600 uppercase tracking-[0.15em] font-medium'>Style</span>
-                            <span style={{ color: color() }} className='text-[10px] sm:text-xs font-semibold mt-0.5'>
+                            <span className='text-[6px] sm:text-[7px] text-white/60 uppercase tracking-[0.15em] font-medium'>
+                                Style
+                            </span>
+                            <span className='text-[10px] text-white sm:text-xs font-semibold mt-0.5'>
                                 {displayStyle}
                             </span>
                         </div>
@@ -57,8 +59,10 @@ const Display = () => {
                         <div className='w-px h-5 sm:h-6 bg-white/[0.06]' />
 
                         <div className='flex flex-col items-center'>
-                            <span className='text-[6px] sm:text-[7px] text-zinc-600 uppercase tracking-[0.15em] font-medium'>Color</span>
-                            <span style={{ color: color() }} className='text-[10px] sm:text-xs font-semibold mt-0.5'>
+                            <span className='text-[6px] sm:text-[7px] text-white/60 uppercase tracking-[0.15em] font-medium'>
+                                Color
+                            </span>
+                            <span className='text-[10px] text-white sm:text-xs font-semibold mt-0.5'>
                                 {colorName}
                             </span>
                         </div>

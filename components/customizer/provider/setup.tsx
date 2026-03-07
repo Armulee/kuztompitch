@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { Material } from "./types"
 import { useMediaQuery } from "react-responsive"
 
@@ -11,7 +11,7 @@ const useProviderSetup = () => {
     const [displayStyle, setDisplayStyle] = useState<string>("Glossy")
     const [colorName, setColorName] = useState("Default")
     const [displayColor, setDisplayColor] = useState<string | string[]>(
-        "#9a9a9a"
+        "#9a9a9a",
     )
     const [style, setStyle] = useState<string>("Glossy")
     const [capsule, setCapsule] = useState<Material>({
@@ -98,7 +98,7 @@ const useProviderSetup = () => {
         if (bottomHandle.colorName !== "Default") {
             window.localStorage.setItem(
                 "bottomHandle",
-                JSON.stringify(bottomHandle)
+                JSON.stringify(bottomHandle),
             )
         }
     }, [capsule, topHandle, bottomHandle])
@@ -163,7 +163,7 @@ const useProviderSetup = () => {
                 flipVertical: boolean
             },
             "id"
-        >
+        >,
     ) => {
         const newId = Date.now().toString()
         const newLogo = { ...logoData, id: newId }
@@ -181,12 +181,12 @@ const useProviderSetup = () => {
             scale: number
             flipHorizontal: boolean
             flipVertical: boolean
-        }>
+        }>,
     ) => {
         setLogos((prev) =>
             prev.map((logo) =>
-                logo.id === id ? { ...logo, ...updates } : logo
-            )
+                logo.id === id ? { ...logo, ...updates } : logo,
+            ),
         )
     }
 
@@ -202,6 +202,20 @@ const useProviderSetup = () => {
     const [capturing, setCapturing] = useState<boolean>(false)
     const [snapshot, setSnapshot] = useState<string>("")
     const [checkout, setCheckout] = useState<boolean>(false)
+
+    // Restore checkout snapshot from sessionStorage (survives refresh on checkout page)
+    // Note: logos are not persisted - base64 images exceed sessionStorage quota
+    useEffect(() => {
+        if (typeof window === "undefined") return
+        const savedSnapshot = sessionStorage.getItem("checkout-snapshot")
+        if (savedSnapshot) setSnapshot(savedSnapshot)
+    }, [])
+
+    const clearCheckoutStorage = useCallback(() => {
+        if (typeof window !== "undefined") {
+            sessionStorage.removeItem("checkout-snapshot")
+        }
+    }, [])
 
     const value = {
         part,
@@ -254,6 +268,7 @@ const useProviderSetup = () => {
         setModel,
         isDraggingDecal,
         setIsDraggingDecal,
+        clearCheckoutStorage,
     }
 
     return value

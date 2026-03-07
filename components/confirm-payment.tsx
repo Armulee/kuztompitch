@@ -14,9 +14,8 @@ import {
     FaCopy,
     FaCheck,
 } from "react-icons/fa"
-import { FaChevronLeft, FaBuilding } from "react-icons/fa6"
+import { FaBuilding } from "react-icons/fa6"
 import Image from "next/image"
-import { useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import kbankLogo from "@/public/assets/kbank-logo.png"
 
@@ -24,7 +23,8 @@ const bank = {
     id: "kbank",
     name: "Kasikorn Bank",
     account: "102-3-21860-3",
-    company: "\u0e1a\u0e08\u0e01. \u0e04\u0e31\u0e2a\u0e15\u0e49\u0e2d\u0e21 \u0e1e\u0e34\u0e17\u0e0a\u0e4c",
+    company:
+        "\u0e1a\u0e08\u0e01. \u0e04\u0e31\u0e2a\u0e15\u0e49\u0e2d\u0e21 \u0e1e\u0e34\u0e17\u0e0a\u0e4c",
     branch: "\u0e40\u0e14\u0e2d\u0e30\u0e21\u0e2d\u0e25\u0e25\u0e4c \u0e07\u0e32\u0e21\u0e27\u0e07\u0e28\u0e4c\u0e27\u0e32\u0e19",
     logo: kbankLogo,
 }
@@ -36,7 +36,6 @@ const steps = [
 ]
 
 export default function ConfirmPayment() {
-    const router = useRouter()
     const fileInputRef = useRef<HTMLInputElement>(null)
     const [formData, setFormData] = useState<{
         orderNumber: string
@@ -56,7 +55,7 @@ export default function ConfirmPayment() {
     const currentStep = isSubmitted ? 2 : previewImage ? 1 : 0
 
     const handleInputChange = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+        e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
     ) => {
         const { name, value } = e.target
         setFormData((prev) => ({ ...prev, [name]: value }))
@@ -131,25 +130,14 @@ export default function ConfirmPayment() {
                 <div className='absolute bottom-[10%] left-[5%] w-[500px] h-[500px] rounded-full bg-accent-cyan/[0.04] blur-[160px]' />
             </div>
 
-            {/* Top bar */}
-            <div className='relative z-10 border-b border-white/[0.04]'>
-                <div className='max-w-3xl mx-auto px-6 py-4 flex items-center justify-between'>
-                    <button
-                        onClick={() => router.push("/")}
-                        className='flex items-center gap-2 text-sm text-zinc-500 hover:text-white transition-colors group'
-                    >
-                        <FaChevronLeft className='w-3 h-3 group-hover:-translate-x-0.5 transition-transform' />
-                        Back
-                    </button>
-                    <span className='text-sm text-zinc-600'>Kuztom Pitch</span>
-                </div>
-            </div>
-
-            <div className='max-w-xl mx-auto px-6 pt-10 pb-20 relative z-10'>
+            <div className='max-w-xl mx-auto px-6 pt-32 pb-20 relative z-10'>
                 {/* Step indicator */}
                 <div className='flex items-center justify-center gap-2 mb-10'>
                     {steps.map((step, i) => (
-                        <div key={step.label} className='flex items-center gap-2'>
+                        <div
+                            key={step.label}
+                            className='flex items-center gap-2'
+                        >
                             <div
                                 className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-500 ${
                                     i <= currentStep
@@ -157,11 +145,17 @@ export default function ConfirmPayment() {
                                         : "bg-white/[0.02] text-zinc-600"
                                 }`}
                             >
-                                <step.icon className={`w-3 h-3 ${i < currentStep ? "text-emerald-400" : i === currentStep ? "text-accent-purple" : ""}`} />
-                                <span className='hidden sm:inline'>{step.label}</span>
+                                <step.icon
+                                    className={`w-3 h-3 ${i < currentStep ? "text-emerald-400" : i === currentStep ? "text-accent-purple" : ""}`}
+                                />
+                                <span className='hidden sm:inline'>
+                                    {step.label}
+                                </span>
                             </div>
                             {i < steps.length - 1 && (
-                                <div className={`w-8 h-px transition-colors duration-500 ${i < currentStep ? "bg-emerald-400/40" : "bg-white/[0.06]"}`} />
+                                <div
+                                    className={`w-8 h-px transition-colors duration-500 ${i < currentStep ? "bg-emerald-400/40" : "bg-white/[0.06]"}`}
+                                />
                             )}
                         </div>
                     ))}
@@ -187,13 +181,15 @@ export default function ConfirmPayment() {
                                 Payment Confirmed
                             </h1>
                             <p className='text-zinc-500 text-sm max-w-sm mx-auto mb-8'>
-                                We&apos;ll verify your payment and update your order
-                                status within 24 hours.
+                                We&apos;ll verify your payment and update your
+                                order status within 24 hours.
                             </p>
 
                             <div className='bg-surface-light rounded-2xl border border-white/[0.06] p-5 mb-8 text-left'>
                                 <div className='flex items-center justify-between mb-3'>
-                                    <span className='text-xs text-zinc-600 uppercase tracking-wider'>Order</span>
+                                    <span className='text-xs text-zinc-600 uppercase tracking-wider'>
+                                        Order
+                                    </span>
                                     <span className='text-xs text-emerald-400/80 flex items-center gap-1'>
                                         <span className='w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block animate-pulse' />
                                         Pending verification
@@ -202,7 +198,9 @@ export default function ConfirmPayment() {
                                 <p className='text-white font-mono text-lg'>
                                     #{formData.orderNumber}
                                 </p>
-                                <p className='text-zinc-600 text-xs mt-1'>{formData.email}</p>
+                                <p className='text-zinc-600 text-xs mt-1'>
+                                    {formData.email}
+                                </p>
                             </div>
 
                             <button
@@ -225,7 +223,8 @@ export default function ConfirmPayment() {
                                     Confirm Payment
                                 </h1>
                                 <p className='text-zinc-500 text-sm'>
-                                    Transfer to the account below, then upload your slip.
+                                    Transfer to the account below, then upload
+                                    your slip.
                                 </p>
                             </div>
 
@@ -250,7 +249,9 @@ export default function ConfirmPayment() {
                                 </div>
                                 <div className='flex items-center justify-between bg-black/30 rounded-xl px-4 py-3'>
                                     <div>
-                                        <span className='text-xs text-zinc-600 block mb-0.5'>Account Number</span>
+                                        <span className='text-xs text-zinc-600 block mb-0.5'>
+                                            Account Number
+                                        </span>
                                         <span className='text-white font-mono text-lg tracking-wider'>
                                             {bank.account}
                                         </span>
@@ -261,12 +262,18 @@ export default function ConfirmPayment() {
                                         className='p-2 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-all'
                                         title='Copy account number'
                                     >
-                                        {copied ? <FaCheck className='w-3.5 h-3.5 text-emerald-400' /> : <FaCopy className='w-3.5 h-3.5' />}
+                                        {copied ? (
+                                            <FaCheck className='w-3.5 h-3.5 text-emerald-400' />
+                                        ) : (
+                                            <FaCopy className='w-3.5 h-3.5' />
+                                        )}
                                     </button>
                                 </div>
                                 <div className='flex items-center gap-1.5 mt-3'>
                                     <FaBuilding className='w-3 h-3 text-zinc-600' />
-                                    <span className='text-xs text-zinc-500'>{bank.company}</span>
+                                    <span className='text-xs text-zinc-500'>
+                                        {bank.company}
+                                    </span>
                                 </div>
                             </div>
 
@@ -278,7 +285,10 @@ export default function ConfirmPayment() {
                                             htmlFor='orderNumber'
                                             className='block text-xs font-medium text-zinc-400 uppercase tracking-wider'
                                         >
-                                            Order Number <span className='text-red-400'>*</span>
+                                            Order Number{" "}
+                                            <span className='text-red-400'>
+                                                *
+                                            </span>
                                         </label>
                                         <div className='relative'>
                                             <FaHashtag className='absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-zinc-600' />
@@ -300,7 +310,10 @@ export default function ConfirmPayment() {
                                             htmlFor='email'
                                             className='block text-xs font-medium text-zinc-400 uppercase tracking-wider'
                                         >
-                                            Email <span className='text-red-400'>*</span>
+                                            Email{" "}
+                                            <span className='text-red-400'>
+                                                *
+                                            </span>
                                         </label>
                                         <div className='relative'>
                                             <FaEnvelope className='absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-zinc-600' />
@@ -321,20 +334,26 @@ export default function ConfirmPayment() {
                                 {/* File upload */}
                                 <div className='space-y-1.5'>
                                     <label className='block text-xs font-medium text-zinc-400 uppercase tracking-wider'>
-                                        Payment Slip <span className='text-red-400'>*</span>
+                                        Payment Slip{" "}
+                                        <span className='text-red-400'>*</span>
                                     </label>
                                     <div
                                         className={`relative rounded-2xl border-2 border-dashed transition-all duration-300 overflow-hidden ${
                                             isDragging
                                                 ? "border-accent-purple/60 bg-accent-purple/5"
                                                 : previewImage
-                                                ? "border-white/10 bg-white/[0.02]"
-                                                : "border-white/[0.08] bg-white/[0.02] hover:border-white/15"
+                                                  ? "border-white/10 bg-white/[0.02]"
+                                                  : "border-white/[0.08] bg-white/[0.02] hover:border-white/15"
                                         }`}
-                                        onDragOver={(e) => { e.preventDefault(); setIsDragging(true) }}
+                                        onDragOver={(e) => {
+                                            e.preventDefault()
+                                            setIsDragging(true)
+                                        }}
                                         onDragLeave={() => setIsDragging(false)}
                                         onDrop={handleDrop}
-                                        onClick={() => fileInputRef.current?.click()}
+                                        onClick={() =>
+                                            fileInputRef.current?.click()
+                                        }
                                     >
                                         <input
                                             ref={fileInputRef}
@@ -354,7 +373,10 @@ export default function ConfirmPayment() {
                                                         alt='Payment slip preview'
                                                         width={200}
                                                         height={300}
-                                                        style={{ width: "auto", height: "auto" }}
+                                                        style={{
+                                                            width: "auto",
+                                                            height: "auto",
+                                                        }}
                                                         className='rounded-xl max-h-52 object-contain'
                                                     />
                                                     <span className='text-xs text-zinc-600 mt-3'>
@@ -401,9 +423,10 @@ export default function ConfirmPayment() {
                             <div className='mt-6 flex items-start gap-3 text-xs text-zinc-600'>
                                 <FaShieldAlt className='w-3.5 h-3.5 mt-0.5 text-zinc-700 flex-shrink-0' />
                                 <p>
-                                    Our team will verify your payment within 24 hours.
-                                    You&apos;ll receive an email once your payment is
-                                    confirmed and your order is processed.
+                                    Our team will verify your payment within 24
+                                    hours. You&apos;ll receive an email once
+                                    your payment is confirmed and your order is
+                                    processed.
                                 </p>
                             </div>
                         </motion.div>

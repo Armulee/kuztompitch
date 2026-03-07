@@ -66,7 +66,11 @@ export async function POST(request: NextRequest) {
             )
         }
 
-        let result: { success?: boolean; message?: string; [key: string]: unknown }
+        let result: {
+            success?: boolean
+            message?: string
+            [key: string]: unknown
+        }
         try {
             result = JSON.parse(rawText)
         } catch {

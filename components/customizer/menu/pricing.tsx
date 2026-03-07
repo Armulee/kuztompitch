@@ -2,6 +2,7 @@ import { useCustomizeContext } from "../provider"
 import { useRef, useState, useEffect } from "react"
 import { FaTrash, FaChevronDown, FaPlus } from "react-icons/fa6"
 import { FaImage } from "react-icons/fa"
+import { ClipLoader } from "react-spinners"
 import { createImageWithPadding } from "../../../utils/imageProcessing"
 import { useRouter } from "next/navigation"
 
@@ -19,9 +20,12 @@ const Pricing = () => {
 
     const router = useRouter()
     const [showDropdown, setShowDropdown] = useState(false)
+    const [isPreparing, setIsPreparing] = useState(false)
     const selectedLogo = logos.find(logo => logo.id === selectedLogoId)
     const dropdownRef = useRef<HTMLDivElement>(null)
     const handleClick = () => {
+        if (isPreparing) return
+        setIsPreparing(true)
         setCapturing(true)
         // Capture the latest 3D snapshot before navigating to checkout page.
         window.setTimeout(() => {
@@ -217,9 +221,17 @@ const Pricing = () => {
                         <button
                             id='checkout'
                             onClick={handleClick}
-                            className='px-6 py-2 bg-gradient-accent text-white rounded-full text-xs font-semibold hover:shadow-[0_0_20px_rgba(139,92,246,0.3)] transition-all duration-300 hover:scale-[1.03]'
+                            disabled={isPreparing}
+                            className='flex items-center justify-center gap-2 px-6 py-2 bg-gradient-accent text-white rounded-full text-xs font-semibold hover:shadow-[0_0_20px_rgba(139,92,246,0.3)] transition-all duration-300 hover:scale-[1.03] disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100'
                         >
-                            Checkout
+                            {isPreparing ? (
+                                <>
+                                    <ClipLoader color='#ffffff' size={14} />
+                                    Preparing
+                                </>
+                            ) : (
+                                "Checkout"
+                            )}
                         </button>
                     )}
                 </div>

@@ -61,6 +61,7 @@ export type CustomizeContextType = {
     setModel: React.Dispatch<React.SetStateAction<string>>
     isDraggingDecal: boolean
     setIsDraggingDecal: React.Dispatch<React.SetStateAction<boolean>>
+    clearCheckoutStorage: () => void
 }
 
 export type Material = {

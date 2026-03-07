@@ -1,7 +1,8 @@
 import Image from "next/image"
+import Link from "next/link"
 import { useCustomizeContext } from "../provider"
 import Skeleton from "react-loading-skeleton"
-import { FaBox } from "react-icons/fa6"
+import { FaBox, FaPencil } from "react-icons/fa6"
 
 const models = ["SM58", "BETA58", "KSM8", "NXN8"]
 const Details = () => {
@@ -14,6 +15,7 @@ const Details = () => {
         bottomHandle,
         model,
         setModel,
+        logos,
     } = useCustomizeContext()
     const parts = [capsule, topHandle, bottomHandle]
     return (
@@ -74,9 +76,18 @@ const Details = () => {
                 </div>
 
                 <div className='space-y-3 mt-4'>
-                    <h4 className='font-semibold text-white'>
-                        Customizations:
-                    </h4>
+                    <div className='flex items-center gap-2'>
+                        <h4 className='font-semibold text-white'>
+                            Customizations:
+                        </h4>
+                        <Link
+                            href='/customize'
+                            className='flex items-center gap-1.5 px-2 py-1 text-xs font-medium text-accent-purple hover:text-accent-purple/80 transition-colors'
+                        >
+                            <FaPencil className='h-3.5 w-3.5' />
+                            Edit
+                        </Link>
+                    </div>
                     {loading ? (
                         <div className='space-y-2'>
                             <Skeleton count={3} height={20} baseColor='#1a1a1a' highlightColor='#2a2a2a' />
@@ -106,6 +117,16 @@ const Details = () => {
                                     </span>
                                 </div>
                             ))}
+                            {logos.length > 0 && (
+                                <Link
+                                    href='/customize/checkout/decals'
+                                    className='block w-fit p-2 bg-white/5 rounded-lg hover:bg-white/10 transition-colors'
+                                >
+                                    <span className='text-sm text-accent-purple hover:underline'>
+                                        View {logos.length} decal image{logos.length !== 1 ? "s" : ""} →
+                                    </span>
+                                </Link>
+                            )}
                         </div>
                     )}
                 </div>

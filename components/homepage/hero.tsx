@@ -6,7 +6,7 @@ const Hero = () => {
     return (
         <section
             id='home'
-            className='w-full h-[100dvh] overflow-hidden flex flex-col justify-center items-center relative'
+            className='w-full h-[100vh] overflow-hidden flex flex-col justify-center items-center relative'
         >
             {/* Decorative gradient orbs */}
             <div className='absolute top-[10%] left-[15%] w-[500px] h-[500px] rounded-full bg-accent-purple/10 blur-[120px] animate-glow-pulse pointer-events-none' />
@@ -40,13 +40,13 @@ const Hero = () => {
             </div>
 
             {/* Social medias at bottom center */}
-            <SocialMedias className='absolute bottom-8 right-4 -translate-x-1/2 z-30 flex-col' />
+            <SocialMedias className='absolute bottom-16 right-4 -translate-x-1/2 z-30 flex-col' />
 
             {/* Video Overlay */}
             <div className='absolute w-full h-full z-20 bg-gradient-to-b from-[#050505]/60 via-transparent to-[#050505]' />
             {/* Video */}
             <video
-                className='absolute -bottom-1/2 right-10 translate-x-0 md:left-1/4 md:-bottom-[25%] md:-translate-x-1/2 w-full h-[120vh] object-cover -z-10'
+                className='absolute -bottom-1/2 right-10 translate-x-0 md:left-1/4 md:-bottom-[25%] md:-translate-x-1/2 w-full h-[120dvh] object-cover -z-10'
                 autoPlay
                 muted
                 playsInline
