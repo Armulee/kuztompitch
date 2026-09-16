@@ -42,14 +42,14 @@ const InstagramPost = ({
         <div
             className={`bg-surface-light rounded-2xl overflow-hidden max-w-sm mx-auto border border-white/[0.06] flex flex-col h-[500px] transition-all duration-300 ${
                 post.permalink
-                    ? "cursor-pointer hover:border-white/15 hover:shadow-[0_0_30px_rgba(139,92,246,0.1)]"
+                    ? "cursor-pointer hover:border-white/15 hover:shadow-[0_0_30px_rgba(255,255,255,0.1)]"
                     : ""
-            } ${isActive ? "border-white/15 shadow-[0_0_30px_rgba(139,92,246,0.08)]" : ""}`}
+            } ${isActive ? "border-white/15 shadow-[0_0_30px_rgba(255,255,255,0.08)]" : ""}`}
             onClick={handleClick}
         >
             {/* Header */}
             <div className='flex items-center p-3 border-b border-white/[0.06] flex-shrink-0 h-[60px]'>
-                <div className='w-8 h-8 rounded-full bg-gradient-accent flex items-center justify-center mr-3 flex-shrink-0'>
+                <div className='w-8 h-8 rounded-full bg-white/10 border border-white/15 flex items-center justify-center mr-3 flex-shrink-0'>
                     <Image
                         width={16}
                         height={16}

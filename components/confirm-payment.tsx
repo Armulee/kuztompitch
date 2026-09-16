@@ -126,8 +126,8 @@ export default function ConfirmPayment() {
         <div className='min-h-screen bg-[#050505] relative'>
             {/* Background effects */}
             <div className='absolute inset-0 pointer-events-none overflow-hidden'>
-                <div className='absolute top-[10%] right-[15%] w-[600px] h-[600px] rounded-full bg-accent-purple/[0.04] blur-[180px]' />
-                <div className='absolute bottom-[10%] left-[5%] w-[500px] h-[500px] rounded-full bg-accent-cyan/[0.04] blur-[160px]' />
+                <div className='absolute top-[10%] right-[15%] w-[600px] h-[600px] rounded-full bg-white/[0.04] blur-[180px]' />
+                <div className='absolute bottom-[10%] left-[5%] w-[500px] h-[500px] rounded-full bg-white/[0.04] blur-[160px]' />
             </div>
 
             <div className='max-w-xl mx-auto px-6 pt-32 pb-20 relative z-10'>
@@ -146,7 +146,7 @@ export default function ConfirmPayment() {
                                 }`}
                             >
                                 <step.icon
-                                    className={`w-3 h-3 ${i < currentStep ? "text-emerald-400" : i === currentStep ? "text-accent-purple" : ""}`}
+                                    className={`w-3 h-3 ${i < currentStep ? "text-emerald-400" : i === currentStep ? "text-white" : ""}`}
                                 />
                                 <span className='hidden sm:inline'>
                                     {step.label}
@@ -299,7 +299,7 @@ export default function ConfirmPayment() {
                                                 required
                                                 value={formData.orderNumber}
                                                 onChange={handleInputChange}
-                                                className='w-full pl-9 pr-4 py-3 bg-white/[0.03] border border-white/[0.08] rounded-xl text-white text-sm placeholder:text-zinc-700 focus:ring-1 focus:ring-accent-purple/40 focus:border-accent-purple/30 outline-none transition-all'
+                                                className='w-full pl-9 pr-4 py-3 bg-white/[0.03] border border-white/[0.08] rounded-xl text-white text-sm placeholder:text-zinc-700 focus:ring-1 focus:ring-white/40 focus:border-white/30 outline-none transition-all'
                                                 placeholder='e.g. 000000'
                                             />
                                         </div>
@@ -324,7 +324,7 @@ export default function ConfirmPayment() {
                                                 required
                                                 value={formData.email}
                                                 onChange={handleInputChange}
-                                                className='w-full pl-9 pr-4 py-3 bg-white/[0.03] border border-white/[0.08] rounded-xl text-white text-sm placeholder:text-zinc-700 focus:ring-1 focus:ring-accent-purple/40 focus:border-accent-purple/30 outline-none transition-all'
+                                                className='w-full pl-9 pr-4 py-3 bg-white/[0.03] border border-white/[0.08] rounded-xl text-white text-sm placeholder:text-zinc-700 focus:ring-1 focus:ring-white/40 focus:border-white/30 outline-none transition-all'
                                                 placeholder='jane@example.com'
                                             />
                                         </div>
@@ -340,7 +340,7 @@ export default function ConfirmPayment() {
                                     <div
                                         className={`relative rounded-2xl border-2 border-dashed transition-all duration-300 overflow-hidden ${
                                             isDragging
-                                                ? "border-accent-purple/60 bg-accent-purple/5"
+                                                ? "border-white/60 bg-white/5"
                                                 : previewImage
                                                   ? "border-white/10 bg-white/[0.02]"
                                                   : "border-white/[0.08] bg-white/[0.02] hover:border-white/15"
@@ -389,7 +389,7 @@ export default function ConfirmPayment() {
                                                         <FaUpload className='w-5 h-5 text-zinc-600' />
                                                     </div>
                                                     <p className='text-sm text-zinc-400'>
-                                                        <span className='text-accent-purple font-medium'>
+                                                        <span className='text-white font-medium'>
                                                             Click to upload
                                                         </span>{" "}
                                                         or drag and drop
@@ -406,7 +406,7 @@ export default function ConfirmPayment() {
                                 <button
                                     type='submit'
                                     disabled={isSubmitting}
-                                    className='w-full bg-gradient-accent hover:shadow-[0_0_30px_rgba(139,92,246,0.25)] disabled:opacity-40 text-white font-semibold py-3.5 rounded-xl transition-all duration-300 hover:scale-[1.01] disabled:transform-none disabled:cursor-not-allowed focus:outline-none text-sm'
+                                    className='w-full bg-white text-black hover:bg-white/90 hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] disabled:opacity-40 font-semibold py-3.5 rounded-xl transition-all duration-300 hover:scale-[1.01] disabled:transform-none disabled:cursor-not-allowed focus:outline-none text-sm'
                                 >
                                     {isSubmitting ? (
                                         <span className='flex items-center justify-center gap-2'>

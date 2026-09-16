@@ -222,8 +222,8 @@ export function Microphone(props: GroupProps) {
                     : null
 
             if (partMat) {
-                // Use accent glow instead of white to avoid bright flash artifacts.
-                partMat.emissive = new THREE.Color(0x8b5cf6)
+                // Use a dimmed neutral glow instead of pure white to avoid bright flash artifacts.
+                partMat.emissive = new THREE.Color(0xd4d4d8)
                 partMat.emissiveIntensity = 0.06 + glowStrength * 0.16
             }
 
@@ -382,7 +382,7 @@ export function Microphone(props: GroupProps) {
                         depthTest={true}
                         depthWrite={false}
                         side={THREE.FrontSide}
-                        emissive={isSelected ? new THREE.Color(0x8b5cf6) : new THREE.Color(0x000000)}
+                        emissive={isSelected ? new THREE.Color(0xd4d4d8) : new THREE.Color(0x000000)}
                         emissiveIntensity={isSelected ? 0.15 : 0}
                     />
                 </Decal>

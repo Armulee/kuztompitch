@@ -22,7 +22,7 @@ const Menu = ({
             }`}
             style={{
                 background:
-                    "radial-gradient(ellipse at 30% 20%, rgba(139,92,246,0.15), transparent 50%), radial-gradient(ellipse at 70% 80%, rgba(6,182,212,0.1), transparent 50%), #050505",
+                    "radial-gradient(ellipse at 30% 20%, rgba(255,255,255,0.15), transparent 50%), radial-gradient(ellipse at 70% 80%, rgba(255,255,255,0.1), transparent 50%), #050505",
             }}
         >
             <li
@@ -64,7 +64,7 @@ const Menu = ({
 
             <li>
                 <Link href={"/customize"}>
-                    <button className='bg-gradient-accent text-white text-lg px-10 py-3 rounded-full font-medium hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] transition-all duration-300 hover:scale-105'>
+                    <button className='bg-white text-black text-lg px-10 py-3 rounded-full font-medium hover:bg-white/90 hover:shadow-[0_0_30px_rgba(255,255,255,0.25)] transition-all duration-300 hover:scale-105'>
                         Try Customize
                     </button>
                 </Link>

@@ -105,7 +105,7 @@ const PaginationDots = ({
                         onClick={() => onDotClick(dotIndex)}
                         className={`transition-all duration-300 rounded-full ${
                             isActive
-                                ? "w-8 h-2 bg-gradient-accent"
+                                ? "w-8 h-2 bg-white"
                                 : "w-2 h-2 bg-zinc-700 hover:bg-zinc-600"
                         }`}
                         aria-label={`Go to slide ${dotIndex + 1}`}
@@ -219,12 +219,12 @@ const News = () => {
     return (
         <section className='py-20 relative'>
             <div className='absolute inset-0 pointer-events-none'>
-                <div className='absolute top-1/3 left-0 w-[500px] h-[500px] rounded-full bg-accent-purple/5 blur-[150px]' />
+                <div className='absolute top-1/3 left-0 w-[500px] h-[500px] rounded-full bg-white/5 blur-[150px]' />
             </div>
 
             <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
                 <div className='text-center mb-14'>
-                    <span className='inline-block px-4 py-1.5 rounded-full text-xs font-medium tracking-wider uppercase bg-white/5 border border-white/10 text-accent-purple mb-4'>
+                    <span className='inline-block px-4 py-1.5 rounded-full text-xs font-medium tracking-wider uppercase bg-white/5 border border-white/10 text-white/70 mb-4'>
                         Our Feed
                     </span>
                     <h2 className='text-4xl font-bold gradient-text font-display mb-4'>
@@ -238,7 +238,7 @@ const News = () => {
 
                 {loading ? (
                     <div className='flex justify-center items-center py-20'>
-                        <div className='animate-spin rounded-full h-12 w-12 border-2 border-transparent border-t-accent-purple border-r-accent-cyan'></div>
+                        <div className='animate-spin rounded-full h-12 w-12 border-2 border-transparent border-t-white border-r-white'></div>
                     </div>
                 ) : error ? (
                     <div className='flex flex-col justify-center items-center py-20 px-4'>
@@ -312,10 +312,10 @@ const News = () => {
                         href='https://instagram.com/kuztompitch'
                         target='_blank'
                         rel='noopener noreferrer'
-                        className='inline-flex items-center px-7 py-3 bg-gradient-accent text-white font-medium rounded-full hover:shadow-[0_0_25px_rgba(139,92,246,0.3)] transition-all duration-300 hover:scale-105'
+                        className='inline-flex items-center px-7 py-3 bg-white text-black font-medium rounded-full hover:bg-white/90 hover:shadow-[0_0_25px_rgba(255,255,255,0.25)] transition-all duration-300 hover:scale-105'
                     >
                         <svg
-                            className='w-5 h-5 mr-2 text-white'
+                            className='w-5 h-5 mr-2 text-black'
                             fill='currentColor'
                             viewBox='0 0 24 24'
                         >

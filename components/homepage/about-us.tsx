@@ -8,7 +8,7 @@ const AboutUs = () => {
     return (
         <section id='about-us' className='flex flex-col md:flex-row shrink-0 relative'>
             <div className='absolute inset-0 pointer-events-none'>
-                <div className='absolute top-1/2 left-1/4 w-[500px] h-[500px] rounded-full bg-accent-purple/5 blur-[150px]' />
+                <div className='absolute top-1/2 left-1/4 w-[500px] h-[500px] rounded-full bg-white/5 blur-[150px]' />
             </div>
             <div className='w-full'>
                 <div className='flex flex-col justify-center items-start'>
@@ -26,7 +26,7 @@ const AboutUs = () => {
                         viewport={{ once: true, margin: "-100px" }}
                         transition={{ duration: 0.7, ease: "easeOut" }}
                     >
-                        <span className='inline-block px-4 py-1.5 rounded-full text-xs font-medium tracking-wider uppercase bg-white/5 border border-white/10 text-accent-purple mb-6'>
+                        <span className='inline-block px-4 py-1.5 rounded-full text-xs font-medium tracking-wider uppercase bg-white/5 border border-white/10 text-white/70 mb-6'>
                             About Us
                         </span>
                         <p className='text-white text-lg md:text-xl mb-5 leading-relaxed max-w-3xl'>

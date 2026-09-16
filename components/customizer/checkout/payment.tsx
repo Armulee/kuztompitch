@@ -16,7 +16,7 @@ const Payment = () => {
                         name='payment'
                         value='bank-transfer'
                         defaultChecked={true}
-                        className='w-4 h-4 text-amber-500 border-zinc-600 focus:ring-amber-500 bg-transparent'
+                        className='w-4 h-4 accent-white text-white border-zinc-600 focus:ring-white/50 bg-transparent'
                     />
                     <div className='flex-1'>
                         <div className='font-semibold text-white'>

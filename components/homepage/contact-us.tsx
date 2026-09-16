@@ -10,7 +10,7 @@ const ContactUs = () => {
     return (
         <section id='contact-us' className='relative py-20'>
             <div className='absolute inset-0 pointer-events-none'>
-                <div className='absolute bottom-0 right-1/4 w-[500px] h-[500px] rounded-full bg-accent-cyan/5 blur-[150px]' />
+                <div className='absolute bottom-0 right-1/4 w-[500px] h-[500px] rounded-full bg-white/5 blur-[150px]' />
             </div>
 
             <div className='container'>
@@ -21,7 +21,7 @@ const ContactUs = () => {
                     viewport={{ once: true, margin: "-80px" }}
                     transition={{ duration: 0.6 }}
                 >
-                    <span className='inline-block px-4 py-1.5 rounded-full text-xs font-medium tracking-wider uppercase bg-white/5 border border-white/10 text-accent-cyan mb-4'>
+                    <span className='inline-block px-4 py-1.5 rounded-full text-xs font-medium tracking-wider uppercase bg-white/5 border border-white/10 text-white/70 mb-4'>
                         Get In Touch
                     </span>
                     <h6 className='font-bold text-4xl mb-6 gradient-text font-display'>
@@ -54,8 +54,8 @@ const ContactUs = () => {
                     >
                         <div className='p-6 rounded-2xl bg-white/[0.03] border border-white/[0.06] hover:border-white/10 transition-colors'>
                             <div className='flex items-start gap-4'>
-                                <div className='w-10 h-10 rounded-xl bg-gradient-accent flex items-center justify-center flex-shrink-0'>
-                                    <FaMapMarkerAlt className='text-white w-4 h-4' />
+                                <div className='w-10 h-10 rounded-xl bg-white flex items-center justify-center flex-shrink-0'>
+                                    <FaMapMarkerAlt className='text-black w-4 h-4' />
                                 </div>
                                 <div>
                                     <span className='font-bold text-lg text-white block mb-1'>
@@ -72,8 +72,8 @@ const ContactUs = () => {
 
                         <div className='p-6 rounded-2xl bg-white/[0.03] border border-white/[0.06] hover:border-white/10 transition-colors'>
                             <div className='flex items-start gap-4'>
-                                <div className='w-10 h-10 rounded-xl bg-gradient-accent flex items-center justify-center flex-shrink-0'>
-                                    <FaEnvelope className='text-white w-4 h-4' />
+                                <div className='w-10 h-10 rounded-xl bg-white flex items-center justify-center flex-shrink-0'>
+                                    <FaEnvelope className='text-black w-4 h-4' />
                                 </div>
                                 <div>
                                     <span className='font-bold text-lg text-white block mb-1'>
@@ -88,16 +88,15 @@ const ContactUs = () => {
 
                         <div className='p-6 rounded-2xl bg-white/[0.03] border border-white/[0.06] hover:border-white/10 transition-colors'>
                             <div className='flex items-start gap-4'>
-                                <div className='w-10 h-10 rounded-xl bg-gradient-accent flex items-center justify-center flex-shrink-0'>
-                                    <FaPhone className='text-white w-4 h-4' />
+                                <div className='w-10 h-10 rounded-xl bg-white flex items-center justify-center flex-shrink-0'>
+                                    <FaPhone className='text-black w-4 h-4' />
                                 </div>
                                 <div>
                                     <span className='font-bold text-lg text-white block mb-1'>
                                         Phone
                                     </span>
-                                    <div className='text-zinc-400 text-sm space-y-0.5'>
-                                        <div>+66 6737 7160</div>
-                                        <div>+66 2591 7175</div>
+                                    <div className='text-zinc-400 text-sm'>
+                                        +66 9 5704 0902
                                     </div>
                                 </div>
                             </div>

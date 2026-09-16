@@ -31,7 +31,7 @@ const Header = ({
                     <ul className='md:flex gap-6 hidden text-sm items-center'>
                         <li className="relative group after:content-[''] after:absolute after:top-full after:left-0 after:w-full after:h-2">
                             <div
-                                className='cursor-pointer text-white/90 hover:text-white flex items-center gap-1.5 transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-gradient-to-r after:from-accent-purple after:to-accent-cyan after:transition-all after:duration-300 group-hover:after:w-full'
+                                className='cursor-pointer text-white/90 hover:text-white flex items-center gap-1.5 transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-white after:transition-all after:duration-300 group-hover:after:w-full'
                                 onClick={() => smoothScrollTo("home")}
                             >
                                 Home
@@ -57,7 +57,7 @@ const Header = ({
                         <li>
                             <Link
                                 href={"/confirm-payment"}
-                                className='cursor-pointer text-white/60 hover:text-white transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-gradient-to-r after:from-accent-purple after:to-accent-cyan after:transition-all after:duration-300 hover:after:w-full'
+                                className='cursor-pointer text-white/60 hover:text-white transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-white after:transition-all after:duration-300 hover:after:w-full'
                             >
                                 Confirm Payment
                             </Link>
@@ -65,7 +65,7 @@ const Header = ({
 
                         <li>
                             <Link href={"/customize"}>
-                                <button className='bg-gradient-accent text-white px-6 py-2 rounded-full text-sm font-medium hover:shadow-[0_0_20px_rgba(139,92,246,0.4)] transition-all duration-300 hover:scale-105'>
+                                <button className='bg-white text-black px-6 py-2 rounded-full text-sm font-medium hover:bg-white/90 hover:shadow-[0_0_20px_rgba(255,255,255,0.25)] transition-all duration-300 hover:scale-105'>
                                     Customize
                                 </button>
                             </Link>

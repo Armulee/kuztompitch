@@ -30,7 +30,7 @@ const SideMenu = () => {
                         onClick={(e) => handleClick(e, p.name)}
                         className={`flex items-center gap-1.5 sm:gap-2 rounded-lg sm:rounded-xl px-2 py-1.5 sm:px-3 sm:py-2 cursor-pointer transition-all duration-300 ${
                             part === p.name
-                                ? "bg-white/15 border border-accent-purple/50 shadow-[0_0_12px_rgba(139,92,246,0.25)]"
+                                ? "bg-white/15 border border-white/50 shadow-[0_0_12px_rgba(255,255,255,0.25)]"
                                 : "bg-black/30 backdrop-blur-sm border border-white/[0.08] hover:bg-white/10 hover:border-white/15"
                         }`}
                     >

@@ -9,9 +9,9 @@ const Hero = () => {
             className='w-full h-[100vh] overflow-hidden flex flex-col justify-center items-center relative'
         >
             {/* Decorative gradient orbs */}
-            <div className='absolute top-[10%] left-[15%] w-[500px] h-[500px] rounded-full bg-accent-purple/10 blur-[120px] animate-glow-pulse pointer-events-none' />
+            <div className='absolute top-[10%] left-[15%] w-[500px] h-[500px] rounded-full bg-white/10 blur-[120px] animate-glow-pulse pointer-events-none' />
             <div
-                className='absolute bottom-[20%] right-[10%] w-[400px] h-[400px] rounded-full bg-accent-cyan/10 blur-[100px] animate-glow-pulse pointer-events-none'
+                className='absolute bottom-[20%] right-[10%] w-[400px] h-[400px] rounded-full bg-white/10 blur-[100px] animate-glow-pulse pointer-events-none'
                 style={{ animationDelay: "2s" }}
             />
 
@@ -26,7 +26,7 @@ const Hero = () => {
                 </div>
                 <div className='flex justify-center md:justify-start items-center gap-4'>
                     <Link href={"/customize"}>
-                        <button className='rounded-full bg-gradient-accent px-8 py-3 text-white font-medium hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] transition-all duration-300 hover:scale-105'>
+                        <button className='rounded-full bg-white px-8 py-3 text-black font-medium hover:bg-white/90 hover:shadow-[0_0_30px_rgba(255,255,255,0.25)] transition-all duration-300 hover:scale-105'>
                             Try Customize
                         </button>
                     </Link>

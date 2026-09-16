@@ -52,8 +52,8 @@ const StickyImage = ({ src }: { src: StaticImageData | string }) => {
                 width={1920}
                 height={1080}
             />
-            {/* Gradient overlay blending purple-cyan with dark */}
-            <div className='absolute inset-0 bg-gradient-to-br from-accent-purple/20 via-transparent to-accent-cyan/10' />
+            {/* Gradient overlay darkening the image so the white copy stays legible */}
+            <div className='absolute inset-0 bg-gradient-to-br from-black/40 via-black/25 to-black/40' />
             <motion.div
                 className='absolute inset-0 bg-[#050505]/70'
                 style={{
@@ -89,10 +89,10 @@ const OverlayCopy = ({
             ref={targetRef}
             className='absolute left-0 top-0 flex h-[70vh] w-full flex-col items-center justify-center text-white px-4'
         >
-            <p className='mb-2 text-center text-xl md:mb-4 md:text-3xl text-zinc-300'>
+            <p className='mb-2 text-center text-xl md:mb-4 md:text-3xl text-zinc-200 [text-shadow:0_2px_16px_rgba(0,0,0,0.9)]'>
                 {subheading}
             </p>
-            <p className='text-center text-4xl font-bold md:text-7xl gradient-text-light font-display'>
+            <p className='text-center text-4xl font-bold md:text-7xl gradient-text-light font-display [text-shadow:0_2px_24px_rgba(0,0,0,0.95),0_0_60px_rgba(0,0,0,0.7)]'>
                 {heading}
             </p>
         </motion.div>

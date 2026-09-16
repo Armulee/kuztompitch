@@ -43,7 +43,7 @@ export default function Checkout() {
             {loading && (
                 <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm'>
                     <div className='text-center text-white font-medium'>
-                        <ClipLoader color='#8b5cf6' />
+                        <ClipLoader color='#ffffff' />
                         <p className='mt-3 text-zinc-300'>Submitting your order...</p>
                     </div>
                 </div>

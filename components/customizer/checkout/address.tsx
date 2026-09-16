@@ -9,7 +9,7 @@ import {
     FaUser,
 } from "react-icons/fa6"
 
-const inputClass = 'w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:ring-2 focus:ring-accent-purple/50 focus:border-accent-purple/50 outline-none transition-all'
+const inputClass = 'w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:ring-2 focus:ring-white/50 focus:border-white/50 outline-none transition-all'
 const iconClass = 'absolute left-3 top-3 h-4 w-4 text-zinc-500'
 const labelClass = 'block text-sm font-medium text-zinc-300'
 
@@ -41,7 +41,7 @@ const Address = ({
         <div className='bg-surface-light rounded-2xl border border-white/[0.06]'>
             <div className='p-6 border-b border-white/[0.06]'>
                 <h2 className='flex items-center gap-2 text-xl font-semibold text-white'>
-                    <FaUser className='h-5 w-5 text-accent-purple' />
+                    <FaUser className='h-5 w-5 text-white' />
                     Delivery Details
                 </h2>
             </div>
