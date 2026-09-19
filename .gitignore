@@ -16,6 +16,11 @@
 # production
 /build
 
+# local env files - never commit these
+.env
+.env.*
+!.env.example
+
 # misc
 .DS_Store
 *.pem
