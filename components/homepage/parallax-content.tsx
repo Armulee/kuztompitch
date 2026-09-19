@@ -51,6 +51,7 @@ const StickyImage = ({ src }: { src: StaticImageData | string }) => {
                 src={src}
                 width={1920}
                 height={1080}
+                sizes='100vw'
             />
             {/* Gradient overlay darkening the image so the white copy stays legible */}
             <div className='absolute inset-0 bg-gradient-to-br from-black/40 via-black/25 to-black/40' />
@@ -77,8 +78,12 @@ const OverlayCopy = ({
         offset: ["start end", "end start"],
     })
 
-    const y = useTransform(scrollYProgress, [0, 1], [250, -250])
-    const opacity = useTransform(scrollYProgress, [0.25, 0.5, 0.75], [0, 1, 0])
+    const y = useTransform(scrollYProgress, [0, 1], [150, -150])
+    const opacity = useTransform(
+        scrollYProgress,
+        [0.1, 0.3, 0.75, 0.9],
+        [0, 1, 1, 0],
+    )
 
     return (
         <motion.div

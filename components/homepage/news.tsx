@@ -154,18 +154,16 @@ const News = () => {
                         statusCode?: number
                         rawHtml?: string
                     }
-                    let errorMessage =
-                        errorData.message || "Failed to fetch Instagram posts"
+                    console.error("[ig-posts] request failed", {
+                        message: errorData.message,
+                        details: errorData.details,
+                        statusCode: errorData.statusCode,
+                        rawHtml: errorData.rawHtml,
+                    })
 
-                    if (errorData.details) {
-                        errorMessage = `${errorMessage}\n${errorData.details}`
-                    }
-
-                    if (errorData.rawHtml) {
-                        errorMessage = `${errorMessage}\n\nRaw HTML (first 1000 chars):\n${errorData.rawHtml}`
-                    }
-
-                    throw new Error(errorMessage)
+                    throw new Error(
+                        errorData.message || "Failed to fetch Instagram posts",
+                    )
                 }
 
                 if (data.success && data.posts) {
@@ -241,16 +239,23 @@ const News = () => {
                         <div className='animate-spin rounded-full h-12 w-12 border-2 border-transparent border-t-white border-r-white'></div>
                     </div>
                 ) : error ? (
-                    <div className='flex flex-col justify-center items-center py-20 px-4'>
-                        <div className='max-w-2xl w-full'>
-                            <div className='bg-red-500/10 border border-red-500/20 rounded-2xl p-6'>
-                                <h3 className='text-red-400 text-xl font-semibold mb-2'>
-                                    Error Loading Instagram Posts
-                                </h3>
-                                <p className='text-red-300/80 text-sm whitespace-pre-wrap break-words'>
-                                    {error}
-                                </p>
-                            </div>
+                    <div className='flex flex-col justify-center items-center py-16 px-4'>
+                        <div className='max-w-md w-full text-center rounded-2xl border border-white/[0.06] bg-white/[0.03] p-8'>
+                            <p className='text-white font-medium mb-2'>
+                                Our feed is taking a break
+                            </p>
+                            <p className='text-zinc-400 text-sm mb-6'>
+                                We could not load the latest posts right now.
+                                You can still see everything on Instagram.
+                            </p>
+                            <a
+                                href='https://instagram.com/kuztompitch'
+                                target='_blank'
+                                rel='noopener noreferrer'
+                                className='inline-flex items-center px-6 py-2.5 bg-white text-black text-sm font-medium rounded-full hover:bg-white/90 transition-colors'
+                            >
+                                Open Instagram
+                            </a>
                         </div>
                     </div>
                 ) : posts.length === 0 ? (

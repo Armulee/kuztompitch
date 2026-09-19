@@ -12,7 +12,7 @@ const AboutUs = () => {
             </div>
             <div className='w-full'>
                 <div className='flex flex-col justify-center items-start'>
-                    <div className='w-full h-[70vh] relative'>
+                    <div className='w-full relative'>
                         <ParallaxContent
                             src={aboutUs}
                             heading='Through Luxury Customization.'
