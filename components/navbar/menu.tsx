@@ -63,7 +63,7 @@ const Menu = ({
             </li>
 
             <li>
-                <Link href={"/customize"}>
+                <Link href={"/customize"} prefetch={false}>
                     <button className='bg-white text-black text-lg px-10 py-3 rounded-full font-medium hover:bg-white/90 hover:shadow-[0_0_30px_rgba(255,255,255,0.25)] transition-all duration-300 hover:scale-105'>
                         Try Customize
                     </button>

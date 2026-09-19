@@ -71,7 +71,7 @@ const Hero = () => {
                     </h5>
                 </div>
                 <div className='flex justify-center md:justify-start items-center gap-4'>
-                    <Link href={"/customize"}>
+                    <Link href={"/customize"} prefetch={false}>
                         <button className='rounded-full bg-white px-8 py-3 text-black font-medium hover:bg-white/90 hover:shadow-[0_0_30px_rgba(255,255,255,0.25)] transition-all duration-300 hover:scale-105'>
                             Try Customize
                         </button>

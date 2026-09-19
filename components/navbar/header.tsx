@@ -64,7 +64,7 @@ const Header = ({
                         </li>
 
                         <li>
-                            <Link href={"/customize"}>
+                            <Link href={"/customize"} prefetch={false}>
                                 <button className='bg-white text-black px-6 py-2 rounded-full text-sm font-medium hover:bg-white/90 hover:shadow-[0_0_20px_rgba(255,255,255,0.25)] transition-all duration-300 hover:scale-105'>
                                     Customize
                                 </button>

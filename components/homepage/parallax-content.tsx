@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform } from "framer-motion"
 import Image, { StaticImageData } from "next/image"
 
 const IMG_PADDING = 12
+const PANEL_HEIGHT = "70vh"
 
 const ParallaxContent = ({
     src,
@@ -14,7 +15,7 @@ const ParallaxContent = ({
     heading: string
 }) => {
     return (
-        <div className='relative h-[150vh]'>
+        <div className='relative' style={{ height: PANEL_HEIGHT }}>
             <StickyImage src={src} />
             <OverlayCopy heading={heading} subheading={subheading} />
         </div>
@@ -34,7 +35,7 @@ const StickyImage = ({ src }: { src: StaticImageData | string }) => {
     return (
         <motion.div
             style={{
-                height: "70vh",
+                height: PANEL_HEIGHT,
                 top: IMG_PADDING,
                 scale,
             }}
@@ -90,9 +91,11 @@ const OverlayCopy = ({
             style={{
                 y,
                 opacity,
+                height: PANEL_HEIGHT,
             }}
             ref={targetRef}
-            className='absolute left-0 top-0 flex h-[70vh] w-full flex-col items-center justify-center text-white px-4'
+            className='absolute left-0 top-0 flex w-full flex-col items-center justify-center text-white px-4'
+            // matches the panel so the copy stays centred on the image
         >
             <p className='mb-2 text-center text-xl md:mb-4 md:text-3xl text-zinc-200 [text-shadow:0_2px_16px_rgba(0,0,0,0.9)]'>
                 {subheading}

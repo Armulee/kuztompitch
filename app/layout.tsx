@@ -16,6 +16,15 @@ const geistMono = localFont({
     variable: "--font-geist-mono",
     weight: "100 900",
 })
+const calSans = localFont({
+    src: [
+        { path: "./fonts/CalSans-latin.woff2" },
+        { path: "./fonts/CalSans-latin-ext.woff2" },
+    ],
+    variable: "--font-cal-sans",
+    weight: "400",
+    display: "swap",
+})
 
 export const metadata: Metadata = {
     title: "Kuztompitch | Custom Microphones & Band Equipment",
@@ -59,7 +68,7 @@ export default function RootLayout({
     return (
         <html lang='en'>
             <body
-                className={`${geistSans.variable} ${geistMono.variable} bg-[#000000] antialiased font-[family-name:var(--font-geist-sans)]`}
+                className={`${geistSans.variable} ${geistMono.variable} ${calSans.variable} bg-[#000000] antialiased font-[family-name:var(--font-geist-sans)]`}
             >
                 <Navbar />
                 {children}
