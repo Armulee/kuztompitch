@@ -17,13 +17,11 @@ const config: Config = {
           lighter: "#1a1a1a",
         },
         accent: {
-          purple: "#8b5cf6",
-          cyan: "#06b6d4",
+          DEFAULT: "#ffffff",
+          muted: "#a1a1aa",
         },
       },
       backgroundImage: {
-        "gradient-accent": "linear-gradient(135deg, #8b5cf6, #06b6d4)",
-        "gradient-accent-hover": "linear-gradient(135deg, #7c3aed, #0891b2)",
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
       },
       animation: {

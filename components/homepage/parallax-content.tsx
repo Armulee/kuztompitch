@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform } from "framer-motion"
 import Image, { StaticImageData } from "next/image"
 
 const IMG_PADDING = 12
+const PANEL_HEIGHT = "70vh"
 
 const ParallaxContent = ({
     src,
@@ -14,7 +15,7 @@ const ParallaxContent = ({
     heading: string
 }) => {
     return (
-        <div className='relative h-[150vh]'>
+        <div className='relative' style={{ height: PANEL_HEIGHT }}>
             <StickyImage src={src} />
             <OverlayCopy heading={heading} subheading={subheading} />
         </div>
@@ -34,7 +35,7 @@ const StickyImage = ({ src }: { src: StaticImageData | string }) => {
     return (
         <motion.div
             style={{
-                height: "70vh",
+                height: PANEL_HEIGHT,
                 top: IMG_PADDING,
                 scale,
             }}
@@ -51,9 +52,10 @@ const StickyImage = ({ src }: { src: StaticImageData | string }) => {
                 src={src}
                 width={1920}
                 height={1080}
+                sizes='100vw'
             />
-            {/* Gradient overlay blending purple-cyan with dark */}
-            <div className='absolute inset-0 bg-gradient-to-br from-accent-purple/20 via-transparent to-accent-cyan/10' />
+            {/* Gradient overlay darkening the image so the white copy stays legible */}
+            <div className='absolute inset-0 bg-gradient-to-br from-black/40 via-black/25 to-black/40' />
             <motion.div
                 className='absolute inset-0 bg-[#050505]/70'
                 style={{
@@ -77,22 +79,28 @@ const OverlayCopy = ({
         offset: ["start end", "end start"],
     })
 
-    const y = useTransform(scrollYProgress, [0, 1], [250, -250])
-    const opacity = useTransform(scrollYProgress, [0.25, 0.5, 0.75], [0, 1, 0])
+    const y = useTransform(scrollYProgress, [0, 1], [150, -150])
+    const opacity = useTransform(
+        scrollYProgress,
+        [0.1, 0.3, 0.75, 0.9],
+        [0, 1, 1, 0],
+    )
 
     return (
         <motion.div
             style={{
                 y,
                 opacity,
+                height: PANEL_HEIGHT,
             }}
             ref={targetRef}
-            className='absolute left-0 top-0 flex h-[70vh] w-full flex-col items-center justify-center text-white px-4'
+            className='absolute left-0 top-0 flex w-full flex-col items-center justify-center text-white px-4'
+            // matches the panel so the copy stays centred on the image
         >
-            <p className='mb-2 text-center text-xl md:mb-4 md:text-3xl text-zinc-300'>
+            <p className='mb-2 text-center text-xl md:mb-4 md:text-3xl text-zinc-200 [text-shadow:0_2px_16px_rgba(0,0,0,0.9)]'>
                 {subheading}
             </p>
-            <p className='text-center text-4xl font-bold md:text-7xl gradient-text-light font-display'>
+            <p className='text-center text-4xl font-bold md:text-7xl gradient-text-light font-display [text-shadow:0_2px_24px_rgba(0,0,0,0.95),0_0_60px_rgba(0,0,0,0.7)]'>
                 {heading}
             </p>
         </motion.div>

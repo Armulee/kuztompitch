@@ -55,7 +55,7 @@ const Delivery = ({
                             name='delivery'
                             value='ems'
                             defaultChecked={true}
-                            className='w-4 h-4 text-emerald-500 border-zinc-600 focus:ring-emerald-500 bg-transparent'
+                            className='w-4 h-4 accent-white text-white border-zinc-600 focus:ring-white/50 bg-transparent'
                         />
                         <FaTruck className='h-5 w-5 text-emerald-400' />
                         <div className='flex-1'>
@@ -78,7 +78,7 @@ const Delivery = ({
                         {!deliveryDate && (
                             <button
                                 type='button'
-                                className='underline text-accent-cyan hover:text-white mt-2 transition-colors'
+                                className='underline text-white/70 hover:text-white mt-2 transition-colors'
                                 onClick={() => setShowDatePicker((prev) => !prev)}
                             >
                                 {showDatePicker ? "Back" : "Specify a date"}
@@ -110,7 +110,7 @@ const Delivery = ({
                                     minDate={getMinDate()}
                                     placeholderText="dd/mm/yyyy"
                                     dateFormat="dd/MM/yyyy"
-                                    className="border border-white/10 rounded-xl px-3 py-2 text-white bg-white/5 w-full focus:ring-2 focus:ring-accent-purple focus:border-accent-purple outline-none placeholder:text-zinc-600"
+                                    className="border border-white/10 rounded-xl px-3 py-2 text-white bg-white/5 w-full focus:ring-2 focus:ring-white focus:border-white outline-none placeholder:text-zinc-600"
                                     showPopperArrow={false}
                                     popperClassName="react-datepicker-popper"
                                     calendarClassName="react-datepicker-calendar"

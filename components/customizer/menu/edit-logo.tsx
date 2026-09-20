@@ -504,7 +504,7 @@ const EditLogo = () => {
                     ref={containerRef}
                     className={`relative border-2 rounded-xl overflow-hidden ${
                         dragging
-                            ? "border-accent-purple/60 shadow-lg shadow-accent-purple/15"
+                            ? "border-white/60 shadow-lg shadow-white/15"
                             : hovering
                             ? "border-white/20 shadow-md"
                             : "border-white/10"
@@ -548,7 +548,7 @@ const EditLogo = () => {
                             {showResizers && (
                                 <>
                                     <div
-                                        className='absolute w-5 h-5 bg-accent-purple border-2 border-white rounded-full cursor-nw-resize hover:bg-accent-purple/80 transition-colors touch-manipulation shadow-md'
+                                        className='absolute w-5 h-5 bg-white border-2 border-black/70 rounded-full cursor-nw-resize hover:bg-white/80 transition-colors touch-manipulation shadow-md'
                                         style={{ top: "-10px", left: "-10px" }}
                                         onMouseDown={(e) =>
                                             handleResizeStart(e, "nw")
@@ -558,7 +558,7 @@ const EditLogo = () => {
                                         }
                                     />
                                     <div
-                                        className='absolute w-5 h-5 bg-accent-purple border-2 border-white rounded-full cursor-ne-resize hover:bg-accent-purple/80 transition-colors touch-manipulation shadow-md'
+                                        className='absolute w-5 h-5 bg-white border-2 border-black/70 rounded-full cursor-ne-resize hover:bg-white/80 transition-colors touch-manipulation shadow-md'
                                         style={{ top: "-10px", right: "-10px" }}
                                         onMouseDown={(e) =>
                                             handleResizeStart(e, "ne")
@@ -568,7 +568,7 @@ const EditLogo = () => {
                                         }
                                     />
                                     <div
-                                        className='absolute w-5 h-5 bg-accent-purple border-2 border-white rounded-full cursor-sw-resize hover:bg-accent-purple/80 transition-colors touch-manipulation shadow-md'
+                                        className='absolute w-5 h-5 bg-white border-2 border-black/70 rounded-full cursor-sw-resize hover:bg-white/80 transition-colors touch-manipulation shadow-md'
                                         style={{ bottom: "-10px", left: "-10px" }}
                                         onMouseDown={(e) =>
                                             handleResizeStart(e, "sw")
@@ -578,7 +578,7 @@ const EditLogo = () => {
                                         }
                                     />
                                     <div
-                                        className='absolute w-5 h-5 bg-accent-purple border-2 border-white rounded-full cursor-se-resize hover:bg-accent-purple/80 transition-colors touch-manipulation shadow-md'
+                                        className='absolute w-5 h-5 bg-white border-2 border-black/70 rounded-full cursor-se-resize hover:bg-white/80 transition-colors touch-manipulation shadow-md'
                                         style={{
                                             bottom: "-10px",
                                             right: "-10px",
@@ -630,7 +630,7 @@ const EditLogo = () => {
                             className='w-7 h-7 sm:w-8 sm:h-8 bg-white/[0.04] hover:bg-white/10 rounded-t-md sm:rounded-t-lg border border-white/[0.08] transition-all group flex items-center justify-center'
                             title='Move up'
                         >
-                            <FaChevronUp className='w-2 h-2 sm:w-2.5 sm:h-2.5 text-white/50 group-hover:text-accent-purple' />
+                            <FaChevronUp className='w-2 h-2 sm:w-2.5 sm:h-2.5 text-white/50 group-hover:text-white' />
                         </button>
                     </div>
 
@@ -640,7 +640,7 @@ const EditLogo = () => {
                             className='w-7 h-7 sm:w-8 sm:h-8 bg-white/[0.04] hover:bg-white/10 rounded-l-md sm:rounded-l-lg border border-white/[0.08] border-r-0 transition-all group flex items-center justify-center'
                             title='Move left'
                         >
-                            <FaChevronLeft className='w-2 h-2 sm:w-2.5 sm:h-2.5 text-white/50 group-hover:text-accent-purple' />
+                            <FaChevronLeft className='w-2 h-2 sm:w-2.5 sm:h-2.5 text-white/50 group-hover:text-white' />
                         </button>
 
                         <button
@@ -648,7 +648,7 @@ const EditLogo = () => {
                             className='w-7 h-7 sm:w-8 sm:h-8 bg-white/[0.02] hover:bg-white/10 border-y border-white/[0.08] flex items-center justify-center transition-all group'
                             title='Reset to center'
                         >
-                            <div className='w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white/20 group-hover:bg-accent-purple/60 rounded-full transition-colors'></div>
+                            <div className='w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white/20 group-hover:bg-white/60 rounded-full transition-colors'></div>
                         </button>
 
                         <button
@@ -656,7 +656,7 @@ const EditLogo = () => {
                             className='w-7 h-7 sm:w-8 sm:h-8 bg-white/[0.04] hover:bg-white/10 rounded-r-md sm:rounded-r-lg border border-white/[0.08] border-l-0 transition-all group flex items-center justify-center'
                             title='Move right'
                         >
-                            <FaChevronRight className='w-2 h-2 sm:w-2.5 sm:h-2.5 text-white/50 group-hover:text-accent-purple' />
+                            <FaChevronRight className='w-2 h-2 sm:w-2.5 sm:h-2.5 text-white/50 group-hover:text-white' />
                         </button>
                     </div>
 
@@ -666,7 +666,7 @@ const EditLogo = () => {
                             className='w-7 h-7 sm:w-8 sm:h-8 bg-white/[0.04] hover:bg-white/10 rounded-b-md sm:rounded-b-lg border border-white/[0.08] border-t-0 transition-all group flex items-center justify-center'
                             title='Move down'
                         >
-                            <FaChevronDown className='w-2 h-2 sm:w-2.5 sm:h-2.5 text-white/50 group-hover:text-accent-cyan' />
+                            <FaChevronDown className='w-2 h-2 sm:w-2.5 sm:h-2.5 text-white/50 group-hover:text-white' />
                         </button>
                     </div>
                 </div>

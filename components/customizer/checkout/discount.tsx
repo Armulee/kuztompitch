@@ -40,7 +40,7 @@ const Discount = ({
         <div className='bg-surface-light rounded-2xl border border-white/[0.06]'>
             <div className='p-6 border-b border-white/[0.06]'>
                 <h2 className='flex items-center gap-2 text-xl font-semibold text-white'>
-                    <MdDiscount className='h-5 w-5 text-accent-cyan' />
+                    <MdDiscount className='h-5 w-5 text-white' />
                     Discount
                 </h2>
             </div>
@@ -56,7 +56,7 @@ const Discount = ({
                     <input
                         id='discount'
                         type='text'
-                        className='w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:ring-2 focus:ring-accent-purple/50 focus:border-accent-purple/50 outline-none transition-all'
+                        className='w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-zinc-600 focus:ring-2 focus:ring-white/50 focus:border-white/50 outline-none transition-all'
                         placeholder='EXAMPLE100'
                         onChange={(e) => setDiscountCode(e.target.value)}
                     />

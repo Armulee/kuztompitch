@@ -22,7 +22,7 @@ const Details = () => {
         <div className='bg-surface-light rounded-2xl border border-white/[0.06]'>
             <div className='p-6 border-b border-white/[0.06]'>
                 <h2 className='flex items-center gap-2 text-xl font-semibold text-white'>
-                    <FaBox className='h-5 w-5 text-accent-purple' />
+                    <FaBox className='h-5 w-5 text-white' />
                     Your Custom Microphone
                 </h2>
             </div>
@@ -36,7 +36,7 @@ const Details = () => {
                             src={snapshot || "/placeholder.svg"}
                             alt='Custom Microphone'
                         />
-                        <span className='absolute -top-2 -right-2 bg-gradient-accent text-white text-[10px] sm:text-xs font-semibold px-2 py-0.5 sm:py-1 rounded-full'>
+                        <span className='absolute -top-2 -right-2 bg-white text-black text-[10px] sm:text-xs font-semibold px-2 py-0.5 sm:py-1 rounded-full'>
                             Custom
                         </span>
                     </div>
@@ -53,7 +53,7 @@ const Details = () => {
                                     required
                                     onChange={(e) => setModel(e.target.value)}
                                     value={model}
-                                    className='text-white mb-2 bg-white/5 border border-white/10 rounded-lg px-2 py-1 outline-none focus:border-accent-purple transition-colors'
+                                    className='text-white mb-2 bg-white/5 border border-white/10 rounded-lg px-2 py-1 outline-none focus:border-white transition-colors'
                                 >
                                     {models.map((m, index) => (
                                         <option key={index} value={m} className='bg-surface-light text-white'>
@@ -82,7 +82,7 @@ const Details = () => {
                         </h4>
                         <Link
                             href='/customize'
-                            className='flex items-center gap-1.5 px-2 py-1 text-xs font-medium text-accent-purple hover:text-accent-purple/80 transition-colors'
+                            className='flex items-center gap-1.5 px-2 py-1 text-xs font-medium text-white hover:text-white/80 transition-colors'
                         >
                             <FaPencil className='h-3.5 w-3.5' />
                             Edit
@@ -122,7 +122,7 @@ const Details = () => {
                                     href='/customize/checkout/decals'
                                     className='block w-fit p-2 bg-white/5 rounded-lg hover:bg-white/10 transition-colors'
                                 >
-                                    <span className='text-sm text-accent-purple hover:underline'>
+                                    <span className='text-sm text-white hover:underline'>
                                         View {logos.length} decal image{logos.length !== 1 ? "s" : ""} →
                                     </span>
                                 </Link>

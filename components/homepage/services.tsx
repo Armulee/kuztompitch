@@ -41,7 +41,7 @@ const Services = () => {
 
     return (
         <section id='services' className='container py-20 relative'>
-            <div className='absolute top-0 right-0 w-[400px] h-[400px] rounded-full bg-accent-cyan/5 blur-[150px] pointer-events-none' />
+            <div className='absolute top-0 right-0 w-[400px] h-[400px] rounded-full bg-white/5 blur-[150px] pointer-events-none' />
 
             <motion.div
                 initial={{ opacity: 0, y: 30 }}
@@ -49,7 +49,7 @@ const Services = () => {
                 viewport={{ once: true, margin: "-80px" }}
                 transition={{ duration: 0.6 }}
             >
-                <span className='inline-block px-4 py-1.5 rounded-full text-xs font-medium tracking-wider uppercase bg-white/5 border border-white/10 text-accent-cyan mb-4'>
+                <span className='inline-block px-4 py-1.5 rounded-full text-xs font-medium tracking-wider uppercase bg-white/5 border border-white/10 text-white/70 mb-4'>
                     What We Do
                 </span>
                 <h6 className='text-4xl font-bold mb-10 gradient-text font-display'>
@@ -76,7 +76,7 @@ const Services = () => {
                                 }}
                                 className='group flex flex-col justify-start gap-5 items-start rounded-2xl w-full p-8 bg-white/[0.03] border border-white/[0.06] hover:border-white/15 hover:bg-white/[0.05] transition-all duration-500 h-full'
                             >
-                                <div className='w-12 h-12 rounded-xl bg-gradient-accent flex items-center justify-center text-white text-xl group-hover:shadow-[0_0_20px_rgba(139,92,246,0.3)] transition-shadow duration-500'>
+                                <div className='w-12 h-12 rounded-xl bg-white flex items-center justify-center text-black text-xl group-hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-shadow duration-500'>
                                     {service.icon}
                                 </div>
                                 <div className='font-bold text-xl text-white'>

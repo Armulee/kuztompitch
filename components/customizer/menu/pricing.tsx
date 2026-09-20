@@ -222,11 +222,11 @@ const Pricing = () => {
                             id='checkout'
                             onClick={handleClick}
                             disabled={isPreparing}
-                            className='flex items-center justify-center gap-2 px-6 py-2 bg-gradient-accent text-white rounded-full text-xs font-semibold hover:shadow-[0_0_20px_rgba(139,92,246,0.3)] transition-all duration-300 hover:scale-[1.03] disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100'
+                            className='flex items-center justify-center gap-2 px-6 py-2 bg-white text-black rounded-full text-xs font-semibold hover:bg-white/90 hover:shadow-[0_0_20px_rgba(255,255,255,0.25)] transition-all duration-300 hover:scale-[1.03] disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100'
                         >
                             {isPreparing ? (
                                 <>
-                                    <ClipLoader color='#ffffff' size={14} />
+                                    <ClipLoader color='#000000' size={14} />
                                     Preparing
                                 </>
                             ) : (

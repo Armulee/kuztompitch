@@ -44,7 +44,7 @@ const Total = ({
                     <div className='space-y-3 pt-4'>
                         <button
                             type='submit'
-                            className='w-full bg-gradient-accent hover:shadow-[0_0_25px_rgba(139,92,246,0.3)] text-white font-semibold py-3 rounded-xl transition-all duration-300 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-accent-purple/50'
+                            className='w-full bg-white text-black hover:bg-white/90 hover:shadow-[0_0_25px_rgba(255,255,255,0.2)] font-semibold py-3 rounded-xl transition-all duration-300 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-surface'
                         >
                             Proceed to Payment
                         </button>
@@ -53,14 +53,14 @@ const Total = ({
                             By proceeding, you agree to our{" "}
                             <a
                                 href='#'
-                                className='text-accent-purple hover:underline'
+                                className='text-white hover:underline'
                             >
                                 Terms of Service
                             </a>{" "}
                             and{" "}
                             <a
                                 href='#'
-                                className='text-accent-purple hover:underline'
+                                className='text-white hover:underline'
                             >
                                 Privacy Policy
                             </a>

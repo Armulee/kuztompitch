@@ -57,7 +57,7 @@ const Colors = ({
                             onClick={() => setStyle(s)}
                             className={`px-3 sm:px-4 py-1 sm:py-1.5 text-[11px] sm:text-xs font-medium transition-all duration-300 cursor-pointer rounded-full border ${
                                 style === s
-                                    ? "bg-gradient-accent text-white border-transparent shadow-[0_0_15px_rgba(139,92,246,0.3)]"
+                                    ? "bg-white text-black border-transparent shadow-[0_0_15px_rgba(255,255,255,0.25)]"
                                     : "bg-transparent text-zinc-500 border-white/[0.08] hover:border-white/20 hover:text-zinc-300"
                             }`}
                         >

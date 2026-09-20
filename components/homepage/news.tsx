@@ -105,7 +105,7 @@ const PaginationDots = ({
                         onClick={() => onDotClick(dotIndex)}
                         className={`transition-all duration-300 rounded-full ${
                             isActive
-                                ? "w-8 h-2 bg-gradient-accent"
+                                ? "w-8 h-2 bg-white"
                                 : "w-2 h-2 bg-zinc-700 hover:bg-zinc-600"
                         }`}
                         aria-label={`Go to slide ${dotIndex + 1}`}
@@ -154,18 +154,16 @@ const News = () => {
                         statusCode?: number
                         rawHtml?: string
                     }
-                    let errorMessage =
-                        errorData.message || "Failed to fetch Instagram posts"
+                    console.error("[ig-posts] request failed", {
+                        message: errorData.message,
+                        details: errorData.details,
+                        statusCode: errorData.statusCode,
+                        rawHtml: errorData.rawHtml,
+                    })
 
-                    if (errorData.details) {
-                        errorMessage = `${errorMessage}\n${errorData.details}`
-                    }
-
-                    if (errorData.rawHtml) {
-                        errorMessage = `${errorMessage}\n\nRaw HTML (first 1000 chars):\n${errorData.rawHtml}`
-                    }
-
-                    throw new Error(errorMessage)
+                    throw new Error(
+                        errorData.message || "Failed to fetch Instagram posts",
+                    )
                 }
 
                 if (data.success && data.posts) {
@@ -219,12 +217,12 @@ const News = () => {
     return (
         <section className='py-20 relative'>
             <div className='absolute inset-0 pointer-events-none'>
-                <div className='absolute top-1/3 left-0 w-[500px] h-[500px] rounded-full bg-accent-purple/5 blur-[150px]' />
+                <div className='absolute top-1/3 left-0 w-[500px] h-[500px] rounded-full bg-white/5 blur-[150px]' />
             </div>
 
             <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
                 <div className='text-center mb-14'>
-                    <span className='inline-block px-4 py-1.5 rounded-full text-xs font-medium tracking-wider uppercase bg-white/5 border border-white/10 text-accent-purple mb-4'>
+                    <span className='inline-block px-4 py-1.5 rounded-full text-xs font-medium tracking-wider uppercase bg-white/5 border border-white/10 text-white/70 mb-4'>
                         Our Feed
                     </span>
                     <h2 className='text-4xl font-bold gradient-text font-display mb-4'>
@@ -238,19 +236,26 @@ const News = () => {
 
                 {loading ? (
                     <div className='flex justify-center items-center py-20'>
-                        <div className='animate-spin rounded-full h-12 w-12 border-2 border-transparent border-t-accent-purple border-r-accent-cyan'></div>
+                        <div className='animate-spin rounded-full h-12 w-12 border-2 border-transparent border-t-white border-r-white'></div>
                     </div>
                 ) : error ? (
-                    <div className='flex flex-col justify-center items-center py-20 px-4'>
-                        <div className='max-w-2xl w-full'>
-                            <div className='bg-red-500/10 border border-red-500/20 rounded-2xl p-6'>
-                                <h3 className='text-red-400 text-xl font-semibold mb-2'>
-                                    Error Loading Instagram Posts
-                                </h3>
-                                <p className='text-red-300/80 text-sm whitespace-pre-wrap break-words'>
-                                    {error}
-                                </p>
-                            </div>
+                    <div className='flex flex-col justify-center items-center py-16 px-4'>
+                        <div className='max-w-md w-full text-center rounded-2xl border border-white/[0.06] bg-white/[0.03] p-8'>
+                            <p className='text-white font-medium mb-2'>
+                                Our feed is taking a break
+                            </p>
+                            <p className='text-zinc-400 text-sm mb-6'>
+                                We could not load the latest posts right now.
+                                You can still see everything on Instagram.
+                            </p>
+                            <a
+                                href='https://instagram.com/kuztompitch'
+                                target='_blank'
+                                rel='noopener noreferrer'
+                                className='inline-flex items-center px-6 py-2.5 bg-white text-black text-sm font-medium rounded-full hover:bg-white/90 transition-colors'
+                            >
+                                Open Instagram
+                            </a>
                         </div>
                     </div>
                 ) : posts.length === 0 ? (
@@ -312,10 +317,10 @@ const News = () => {
                         href='https://instagram.com/kuztompitch'
                         target='_blank'
                         rel='noopener noreferrer'
-                        className='inline-flex items-center px-7 py-3 bg-gradient-accent text-white font-medium rounded-full hover:shadow-[0_0_25px_rgba(139,92,246,0.3)] transition-all duration-300 hover:scale-105'
+                        className='inline-flex items-center px-7 py-3 bg-white text-black font-medium rounded-full hover:bg-white/90 hover:shadow-[0_0_25px_rgba(255,255,255,0.25)] transition-all duration-300 hover:scale-105'
                     >
                         <svg
-                            className='w-5 h-5 mr-2 text-white'
+                            className='w-5 h-5 mr-2 text-black'
                             fill='currentColor'
                             viewBox='0 0 24 24'
                         >

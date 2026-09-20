@@ -124,10 +124,10 @@ const Customizer = () => {
 
                         {isDragActive && (
                             <div className='absolute inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-50'>
-                                <div className='p-10 rounded-3xl text-center border-2 border-dashed border-accent-purple/40 bg-accent-purple/[0.06]'>
-                                    <div className='w-14 h-14 rounded-2xl bg-accent-purple/10 flex items-center justify-center mx-auto mb-4'>
+                                <div className='p-10 rounded-3xl text-center border-2 border-dashed border-white/40 bg-white/[0.06]'>
+                                    <div className='w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center mx-auto mb-4'>
                                         <svg
-                                            className='w-7 h-7 text-accent-purple'
+                                            className='w-7 h-7 text-white'
                                             fill='none'
                                             viewBox='0 0 24 24'
                                             stroke='currentColor'
