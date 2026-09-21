@@ -131,12 +131,7 @@ const News = () => {
                 setLoading(true)
                 setError(null)
 
-                const response = await fetch("/api/ig-posts", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                })
+                const response = await fetch("/api/ig-posts")
 
                 const data:
                     | GASResponse

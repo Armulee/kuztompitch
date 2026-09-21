@@ -117,7 +117,9 @@ const PerfOverlay = () => {
                     label: "วิดีโอ hero",
                     value: video
                         ? `${Math.round((video.transferSize || 0) / 1024)} KB`
-                        : "ข้าม (เน็ตช้า)",
+                        : conn && (conn.saveData || conn.effectiveType !== "4g")
+                          ? "ข้าม (เน็ตช้า)"
+                          : "ไม่ได้โหลด",
                 },
                 {
                     label: "โหลดรวม",

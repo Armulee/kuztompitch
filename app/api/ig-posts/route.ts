@@ -1,12 +1,22 @@
 import { NextResponse } from "next/server"
 
-export async function POST() {
+// The Apps Script call takes seconds. The feed itself changes at most once an
+// hour, so every visitor can be served from the edge while the refresh happens
+// in the background - only a request that finds an empty cache ever waits.
+const CACHED = {
+    "Cache-Control": "public, s-maxage=300, stale-while-revalidate=3600",
+}
+// Never cache a failure: a transient Apps Script error would otherwise stick
+// around for the full window.
+const NOT_CACHED = { "Cache-Control": "no-store" }
+
+export async function GET() {
     const url = process.env.GOOGLE_SHEET_URL_APP_SCRIPT
     if (!url) {
         console.error("[ig-posts] GOOGLE_SHEET_URL_APP_SCRIPT is not set")
         return NextResponse.json(
             { success: false, message: "Server configuration error" },
-            { status: 500 },
+            { status: 500, headers: NOT_CACHED },
         )
     }
 
@@ -105,7 +115,7 @@ export async function POST() {
                     statusCode: response.status,
                     rawHtml: responseText.substring(0, 1000), // Include first 1000 chars for debugging
                 },
-                { status: response.status >= 400 ? response.status : 500 },
+                { status: response.status >= 400 ? response.status : 500, headers: NOT_CACHED },
             )
         }
 
@@ -125,7 +135,7 @@ export async function POST() {
                     message: "Failed to parse response from Google Apps Script",
                     details: "The response was not valid JSON.",
                 },
-                { status: 500 },
+                { status: 500, headers: NOT_CACHED },
             )
         }
 
@@ -136,11 +146,11 @@ export async function POST() {
                     message: data.message || "Failed to fetch Instagram posts",
                     data: data,
                 },
-                { status: response.status },
+                { status: response.status, headers: NOT_CACHED },
             )
         }
 
-        return NextResponse.json(data, { status: 200 })
+        return NextResponse.json(data, { status: 200, headers: CACHED })
     } catch (err) {
         console.error("[ig-posts] Handler exception", err)
         const errorMessage =
@@ -151,7 +161,7 @@ export async function POST() {
                 message: "Internal Server Error",
                 details: errorMessage,
             },
-            { status: 500 },
+            { status: 500, headers: NOT_CACHED },
         )
     }
 }
