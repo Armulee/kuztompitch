@@ -5,6 +5,7 @@ import "swiper/css"
 import "swiper/css/free-mode"
 import "react-loading-skeleton/dist/skeleton.css"
 import Navbar from "@/components/navbar"
+import PerfOverlay from "@/components/perf-overlay"
 
 const geistSans = localFont({
     src: "./fonts/GeistVF.woff2",
@@ -67,6 +68,7 @@ export default function RootLayout({
             >
                 <Navbar />
                 {children}
+                <PerfOverlay />
             </body>
         </html>
     )
