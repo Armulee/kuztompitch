@@ -20,6 +20,17 @@ const Hero = () => {
         ).matches
         if (reduceMotion) return
 
+        // 1.1MB of decoration is not worth it on a metered or slow connection -
+        // the poster already shows the microphone. Browsers without the
+        // Network Information API (Safari) fall through and load as before.
+        const conn = (
+            navigator as Navigator & {
+                connection?: { saveData?: boolean; effectiveType?: string }
+            }
+        ).connection
+        if (conn?.saveData) return
+        if (conn?.effectiveType && conn.effectiveType !== "4g") return
+
         let idleId: number | undefined
         const startLoading = () => {
             el.src = "/assets/hero.webm"

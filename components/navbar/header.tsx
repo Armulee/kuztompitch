@@ -57,6 +57,7 @@ const Header = ({
                         <li>
                             <Link
                                 href={"/confirm-payment"}
+                                prefetch={false}
                                 className='cursor-pointer text-white/60 hover:text-white transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-white after:transition-all after:duration-300 hover:after:w-full'
                             >
                                 Confirm Payment

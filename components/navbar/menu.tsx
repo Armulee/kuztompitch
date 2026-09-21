@@ -56,6 +56,7 @@ const Menu = ({
             <li className='text-lg'>
                 <Link
                     href={"/confirm-payment"}
+                                prefetch={false}
                     className='cursor-pointer text-white/60 hover:text-white transition-colors'
                 >
                     Confirm Payment

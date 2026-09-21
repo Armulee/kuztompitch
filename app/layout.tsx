@@ -7,13 +7,8 @@ import "react-loading-skeleton/dist/skeleton.css"
 import Navbar from "@/components/navbar"
 
 const geistSans = localFont({
-    src: "./fonts/GeistVF.woff",
+    src: "./fonts/GeistVF.woff2",
     variable: "--font-geist-sans",
-    weight: "100 900",
-})
-const geistMono = localFont({
-    src: "./fonts/GeistMonoVF.woff",
-    variable: "--font-geist-mono",
     weight: "100 900",
 })
 const calSans = localFont({
@@ -68,7 +63,7 @@ export default function RootLayout({
     return (
         <html lang='en'>
             <body
-                className={`${geistSans.variable} ${geistMono.variable} ${calSans.variable} bg-[#000000] antialiased font-[family-name:var(--font-geist-sans)]`}
+                className={`${geistSans.variable} ${calSans.variable} bg-[#000000] antialiased font-[family-name:var(--font-geist-sans)]`}
             >
                 <Navbar />
                 {children}
