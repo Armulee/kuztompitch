@@ -80,6 +80,12 @@ const PerfOverlay = () => {
             setRows([
                 { label: "เน็ต", value: conn?.effectiveType ?? "ไม่รู้" },
                 {
+                    label: "เบราว์เซอร์",
+                    value: navigator.userAgent
+                        .replace(/^Mozilla\/5\.0 /, "")
+                        .slice(0, 46),
+                },
+                {
                     label: "เล่น WebM ได้ไหม",
                     value: webm ? `ได้ (${webm})` : "ไม่ได้",
                     warn: !webm,

@@ -1,72 +1,8 @@
-"use client"
-
-import { useEffect, useRef } from "react"
 import Link from "next/link"
 import SocialMedias from "./social-medias"
 import { smoothScrollTo } from "../navbar"
 
 const Hero = () => {
-    const videoRef = useRef<HTMLVideoElement>(null)
-
-    // The background video is decorative, so it must never compete with the
-    // hero copy for bandwidth. The poster renders immediately and the video
-    // only starts downloading once the page itself has finished loading.
-    useEffect(() => {
-        const el = videoRef.current
-        if (!el) return
-
-        const reduceMotion = window.matchMedia(
-            "(prefers-reduced-motion: reduce)",
-        ).matches
-        if (reduceMotion) return
-
-        // 1.1MB of decoration is not worth it on a metered or slow connection -
-        // the poster already shows the microphone. Browsers without the
-        // Network Information API skip this check and are caught by the
-        // codec check below.
-        const conn = (
-            navigator as Navigator & {
-                connection?: { saveData?: boolean; effectiveType?: string }
-            }
-        ).connection
-        if (conn?.saveData) return
-        if (conn?.effectiveType && conn.effectiveType !== "4g") return
-
-        // Safari on iOS cannot decode WebM. Pointing a <video> at one there
-        // leaves a request that never settles, so the load event never fires
-        // and the browser shows a loading spinner on a page that is already
-        // painted. Leave the poster in place instead.
-        if (!el.canPlayType("video/webm")) return
-
-        let idleId: number | undefined
-        const startLoading = () => {
-            el.src = "/assets/hero.webm"
-            el.load()
-            el.play().catch(() => {
-                /* autoplay blocked - the poster stays, which is fine */
-            })
-        }
-
-        const schedule = () => {
-            idleId = window.requestIdleCallback
-                ? window.requestIdleCallback(startLoading, { timeout: 2000 })
-                : window.setTimeout(startLoading, 500)
-        }
-
-        if (document.readyState === "complete") {
-            schedule()
-        } else {
-            window.addEventListener("load", schedule, { once: true })
-        }
-
-        return () => {
-            window.removeEventListener("load", schedule)
-            if (idleId === undefined) return
-            if (window.cancelIdleCallback) window.cancelIdleCallback(idleId)
-            else window.clearTimeout(idleId)
-        }
-    }, [])
-
     return (
         <section
             id='home'
@@ -110,14 +46,16 @@ const Hero = () => {
             <div className='absolute w-full h-full z-20 bg-gradient-to-b from-[#050505]/60 via-transparent to-[#050505]' />
             {/* Video */}
             <video
-                ref={videoRef}
                 className='absolute -bottom-1/2 right-10 translate-x-0 md:left-1/4 md:-bottom-[25%] md:-translate-x-1/2 w-full h-[120dvh] object-cover -z-10'
                 poster='/assets/hero-poster.webp'
-                preload='none'
+                preload='metadata'
+                autoPlay
                 muted
                 playsInline
                 loop
-            />
+            >
+                <source src='/assets/hero.webm' type='video/webm' />
+            </video>
         </section>
     )
 }
