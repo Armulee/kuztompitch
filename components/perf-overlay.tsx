@@ -74,8 +74,16 @@ const PerfOverlay = () => {
                 }
             ).connection
 
+            const probe = document.createElement("video")
+            const webm = probe.canPlayType("video/webm")
+
             setRows([
                 { label: "เน็ต", value: conn?.effectiveType ?? "ไม่รู้" },
+                {
+                    label: "เล่น WebM ได้ไหม",
+                    value: webm ? `ได้ (${webm})` : "ไม่ได้",
+                    warn: !webm,
+                },
                 {
                     label: "CPU cores",
                     value: String(navigator.hardwareConcurrency ?? "?"),
@@ -101,7 +109,16 @@ const PerfOverlay = () => {
                     value: `${longTasks.length} ครั้ง`,
                     warn: longTasks.length > 5,
                 },
-                { label: "load เสร็จ", value: ms(nav?.loadEventEnd) },
+                {
+                    label: "load เสร็จ",
+                    // 0 means the event has not fired at all - the tab keeps
+                    // spinning even though the page is painted
+                    value: nav?.loadEventEnd
+                        ? ms(nav.loadEventEnd)
+                        : "ยังไม่ยิง ⚠",
+                    warn: !nav?.loadEventEnd,
+                },
+                { label: "readyState", value: document.readyState },
                 {
                     label: "API ฟีด IG",
                     value: api ? ms(api.duration) : "ยังไม่ถูกเรียก",
@@ -129,13 +146,13 @@ const PerfOverlay = () => {
         }
 
         // let the late stuff (video, IG fetch) land before reading the numbers
-        const t1 = window.setTimeout(collect, 3000)
-        const t2 = window.setTimeout(collect, 9000)
+        const timers = [800, 3000, 9000].map((d) =>
+            window.setTimeout(collect, d),
+        )
 
         return () => {
             observers.forEach((o) => o?.disconnect())
-            window.clearTimeout(t1)
-            window.clearTimeout(t2)
+            timers.forEach(window.clearTimeout)
         }
     }, [])
 

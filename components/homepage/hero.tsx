@@ -22,7 +22,8 @@ const Hero = () => {
 
         // 1.1MB of decoration is not worth it on a metered or slow connection -
         // the poster already shows the microphone. Browsers without the
-        // Network Information API (Safari) fall through and load as before.
+        // Network Information API skip this check and are caught by the
+        // codec check below.
         const conn = (
             navigator as Navigator & {
                 connection?: { saveData?: boolean; effectiveType?: string }
@@ -30,6 +31,12 @@ const Hero = () => {
         ).connection
         if (conn?.saveData) return
         if (conn?.effectiveType && conn.effectiveType !== "4g") return
+
+        // Safari on iOS cannot decode WebM. Pointing a <video> at one there
+        // leaves a request that never settles, so the load event never fires
+        // and the browser shows a loading spinner on a page that is already
+        // painted. Leave the poster in place instead.
+        if (!el.canPlayType("video/webm")) return
 
         let idleId: number | undefined
         const startLoading = () => {
