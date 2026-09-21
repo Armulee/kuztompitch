@@ -215,7 +215,7 @@ const News = () => {
     return (
         <section className='py-20 relative'>
             <div className='absolute inset-0 pointer-events-none'>
-                <div className='absolute top-1/3 left-0 w-[500px] h-[500px] rounded-full bg-white/5 blur-[150px]' />
+                <div className='absolute top-1/3 left-0 w-[500px] h-[500px] orb text-white/5' />
             </div>
 
             <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>

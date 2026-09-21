@@ -39,18 +39,45 @@ body {
   }
 }
 
+/* A soft ambient glow. Drawn as a gradient rather than a blurred circle:
+   blur-[150px] on a 500px element makes the browser rasterise a surface far
+   larger than the element and run a filter pass over it, and half a dozen of
+   those on one page exhaust the GPU memory iOS Safari allows, which shows up
+   as discarded layers - black gaps, half-painted sections, a tab that has to
+   be reloaded. The gradient looks the same and costs a plain paint.
+   Colour comes from `color`, so Tailwind's text-white/10 still tunes it. */
+.orb {
+  border-radius: 9999px;
+  background-image: radial-gradient(closest-side, currentColor, transparent);
+}
+
+/* The navbar sits over a playing video, so a backdrop-filter re-blurs its
+   whole area every frame of every scroll. Phones pay for that in GPU memory
+   and dropped frames, and over a near-black page it buys very little, so
+   touch devices get an opaque panel instead and pointer devices keep the
+   glass exactly as it was. */
 .glass {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: rgba(18, 18, 20, 0.86);
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .glass-strong {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  background: rgba(22, 22, 25, 0.94);
   border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .glass {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  .glass-strong {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+  }
 }
 
 .gradient-text {

@@ -4,8 +4,8 @@ export default function NotFound() {
     return (
         <main className='w-full h-screen flex flex-col items-center justify-center relative overflow-hidden'>
             <div className='absolute inset-0 pointer-events-none'>
-                <div className='absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-white/10 blur-[150px]' />
-                <div className='absolute bottom-1/4 right-1/3 w-[400px] h-[400px] rounded-full bg-white/[0.08] blur-[120px]' />
+                <div className='absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[600px] orb text-white/10' />
+                <div className='absolute bottom-1/4 right-1/3 w-[400px] h-[400px] orb text-white/[0.08]' />
             </div>
             <div className='relative text-center'>
                 <h2 className='text-8xl md:text-9xl font-bold gradient-text font-display mb-4'>

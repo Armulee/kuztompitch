@@ -8,7 +8,7 @@ const AboutUs = () => {
     return (
         <section id='about-us' className='flex flex-col md:flex-row shrink-0 relative'>
             <div className='absolute inset-0 pointer-events-none'>
-                <div className='absolute top-1/2 left-1/4 w-[500px] h-[500px] rounded-full bg-white/5 blur-[150px]' />
+                <div className='absolute top-1/2 left-1/4 w-[500px] h-[500px] orb text-white/5' />
             </div>
             <div className='w-full'>
                 <div className='flex flex-col justify-center items-start'>

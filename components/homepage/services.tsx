@@ -41,7 +41,7 @@ const Services = () => {
 
     return (
         <section id='services' className='container py-20 relative'>
-            <div className='absolute top-0 right-0 w-[400px] h-[400px] rounded-full bg-white/5 blur-[150px] pointer-events-none' />
+            <div className='absolute top-0 right-0 w-[400px] h-[400px] orb text-white/5 pointer-events-none' />
 
             <motion.div
                 initial={{ opacity: 0, y: 30 }}
