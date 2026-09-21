@@ -126,8 +126,8 @@ export default function ConfirmPayment() {
         <div className='min-h-screen bg-[#050505] relative'>
             {/* Background effects */}
             <div className='absolute inset-0 pointer-events-none overflow-hidden'>
-                <div className='absolute top-[10%] right-[15%] w-[600px] h-[600px] rounded-full bg-white/[0.04] blur-[180px]' />
-                <div className='absolute bottom-[10%] left-[5%] w-[500px] h-[500px] rounded-full bg-white/[0.04] blur-[160px]' />
+                <div className='absolute top-[10%] right-[15%] w-[600px] h-[600px] orb text-white/[0.04]' />
+                <div className='absolute bottom-[10%] left-[5%] w-[500px] h-[500px] orb text-white/[0.04]' />
             </div>
 
             <div className='max-w-xl mx-auto px-6 pt-32 pb-20 relative z-10'>

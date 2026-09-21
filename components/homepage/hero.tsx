@@ -55,9 +55,9 @@ const Hero = () => {
             className='w-full h-[100vh] overflow-hidden flex flex-col justify-center items-center relative'
         >
             {/* Decorative gradient orbs */}
-            <div className='absolute top-[10%] left-[15%] w-[500px] h-[500px] rounded-full bg-white/10 blur-[120px] animate-glow-pulse pointer-events-none' />
+            <div className='absolute top-[10%] left-[15%] w-[500px] h-[500px] orb text-white/10 animate-glow-pulse pointer-events-none' />
             <div
-                className='absolute bottom-[20%] right-[10%] w-[400px] h-[400px] rounded-full bg-white/10 blur-[100px] animate-glow-pulse pointer-events-none'
+                className='absolute bottom-[20%] right-[10%] w-[400px] h-[400px] orb text-white/10 animate-glow-pulse pointer-events-none'
                 style={{ animationDelay: "2s" }}
             />
 
