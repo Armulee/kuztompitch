@@ -10,7 +10,7 @@ const ContactUs = () => {
     return (
         <section id='contact-us' className='relative py-20'>
             <div className='absolute inset-0 pointer-events-none'>
-                <div className='absolute bottom-0 right-1/4 w-[500px] h-[500px] rounded-full bg-white/5 blur-[150px]' />
+                <div className='absolute bottom-0 right-1/4 w-[500px] h-[500px] orb text-white/5' />
             </div>
 
             <div className='container'>
