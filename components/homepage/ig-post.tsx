@@ -77,6 +77,8 @@ const InstagramPost = ({
                         <video
                             ref={videoRef}
                             src={post.imageUrl}
+                            poster={post.thumbnailUrl || undefined}
+                            preload='none'
                             className='w-full h-full object-cover'
                             loop
                             muted

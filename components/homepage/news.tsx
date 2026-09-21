@@ -8,6 +8,7 @@ import InstagramPost from "./ig-post"
 export interface InstagramPostType {
     id: string
     imageUrl: string
+    thumbnailUrl?: string
     caption: string
     username: string
     userAvatar: string
@@ -21,6 +22,7 @@ interface GASPost {
     id: string
     caption: string
     media_url: string
+    thumbnail_url?: string
     permalink: string
     type: string
     timestamp: string
@@ -171,6 +173,7 @@ const News = () => {
                         (post) => ({
                             id: post.id,
                             imageUrl: post.media_url,
+                            thumbnailUrl: post.thumbnail_url || "",
                             caption: post.caption || "",
                             username: "kuztompitch",
                             userAvatar: "/assets/dummy-profile-pic.jpg",
